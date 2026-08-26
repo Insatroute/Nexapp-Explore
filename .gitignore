@@ -1,0 +1,21 @@
+# Dependencies and build output
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+
+# Captured from the RUNNING console / platform, not authored here. Regenerate with
+# `npm run capture` and `npm run spec` — committing them would freeze a snapshot
+# that silently goes stale, which is the exact failure this project exists to avoid.
+nav-manifest.json
+openapi.json
+openapi.docs.json
+
+# Generated documentation pages. Every one is produced by the generators from the
+# platform; none is written by hand.
+content/docs/
+
+# Never commit console credentials — the crawler reads KB_USER / KB_PASSWORD
+# from the environment.
+.env
+.env.*
