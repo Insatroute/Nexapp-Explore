@@ -68,6 +68,7 @@ needed.
 | `npm run build` | regenerate everything + check links + build |
 | `npm run controller` | regenerate the controller handbook only |
 | `npm run check:links` | fail if any internal link is broken |
+| `npm run check:descriptions` | list descriptions whose source has changed |
 
 Two more, only useful when something looks wrong:
 
@@ -75,6 +76,21 @@ Two more, only useful when something looks wrong:
 npm run controller:nav      # the sidebar as the generator sees it
 npm run controller:routes   # routes, components and permissions
 ```
+
+---
+
+## Keeping descriptions honest
+
+The pages are generated, so structure cannot go stale. The **descriptions** are
+written by hand and can. Each is pinned to the source files it was written from:
+
+```bash
+npm run check:descriptions              # what has moved since it was written
+npm run check:descriptions -- --accept  # re-pin, after re-reading those pages
+```
+
+It reports rather than fails — a source change usually means a description is
+worth re-reading, not that it is wrong.
 
 ---
 

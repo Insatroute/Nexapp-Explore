@@ -1,0 +1,725 @@
+{
+  "/": {
+    "frontend/src/components/DonutCard.jsx": "c60743db2acc3841",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/GaugeCard.jsx": "078c5651928dfe44",
+    "frontend/src/components/InteractiveChart.jsx": "a7313539620b9f93",
+    "frontend/src/components/Panel.jsx": "94019000e9a6fd06",
+    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
+    "frontend/src/components/SiteMap.jsx": "277616f1b862906d",
+    "frontend/src/components/TrafficBars.jsx": "3627e81755976e02",
+    "frontend/src/components/dash/OnlineUsers.jsx": "371a7b790b17e7f9",
+    "frontend/src/components/dash/UplinkTable.jsx": "a067b8c2bbad9e30",
+    "frontend/src/components/dash/UsageTiles.jsx": "4a9a325c446256d2",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/hooks/useReveal.js": "d86914f07957b64f",
+    "frontend/src/pages/Dashboard.jsx": "e92b203164a9b873"
+  },
+  "/devices": {
+    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
+    "frontend/src/components/ApplyTemplateDrawer.jsx": "155afc663ad92c59",
+    "frontend/src/components/ChangeGroupDrawer.jsx": "764a06d91a53b05c",
+    "frontend/src/components/DeviceImportDrawer.jsx": "2f44e86fd95e8f52",
+    "frontend/src/components/DeviceRecoverModal.jsx": "ca155ec9f65d24a9",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/HealthDot.jsx": "2b27674448360da6",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
+    "frontend/src/components/StatusBadge.jsx": "ff3fbf0631fce66c",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/pages/DeviceList.jsx": "a25b395c2cacb5fd",
+    "frontend/src/utils/datetime.js": "c6d013767e6e3d91"
+  },
+  "/sdlan": {
+    "frontend/src/components/Drawer.jsx": "6865cc948eb1692e",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Field.jsx": "4ec9e7c56ae4fcf3",
+    "frontend/src/components/HealthDot.jsx": "2b27674448360da6",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/InfoTip.jsx": "b3dfc4eb5c07d585",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/hooks/useCurrentUser.js": "07ae92f70002218d",
+    "frontend/src/pages/Sdlan.jsx": "2924c79e768a4c93"
+  },
+  "/vpn": {
+    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
+    "frontend/src/components/BulkBar.jsx": "c184216a393254f0",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/hooks/useSelection.js": "746ecd8b82ef85ae",
+    "frontend/src/pages/VpnList.jsx": "5a198c4852383b3b"
+  },
+  "/templates": {
+    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
+    "frontend/src/components/BackupTemplateTable.jsx": "1d9e3fda2f920fc4",
+    "frontend/src/components/BulkBar.jsx": "c184216a393254f0",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
+    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
+    "frontend/src/components/Tabs.jsx": "665505d64888a341",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/hooks/useSelection.js": "746ecd8b82ef85ae",
+    "frontend/src/pages/TemplateList.jsx": "f06e2972ab15fe1f",
+    "frontend/src/utils/backends.js": "410f30b01a8a381a"
+  },
+  "/ha/devices": {
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
+    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/ha/HaSetupDrawer.jsx": "b07e66563df110a4",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/pages/HaDevices.jsx": "efc5b8c1001b76be",
+    "frontend/src/utils/datetime.js": "c6d013767e6e3d91"
+  },
+  "/ha/controller": {
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/features/ha/EventsTable.jsx": "a8ce118f0b440f9d",
+    "frontend/src/features/ha/NodeCard.jsx": "31afa2214362012e",
+    "frontend/src/features/ha/RepmgrTable.jsx": "8f16d6156c3dd04f",
+    "frontend/src/features/ha/haModel.js": "a20097dcb0ad3d6c",
+    "frontend/src/hooks/useCurrentUser.js": "07ae92f70002218d",
+    "frontend/src/pages/HaController.jsx": "333f79bb8dc7e729"
+  },
+  "/ha/dr": {
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/features/ha/EventsTable.jsx": "a8ce118f0b440f9d",
+    "frontend/src/features/ha/RepmgrTable.jsx": "8f16d6156c3dd04f",
+    "frontend/src/features/ha/haModel.js": "a20097dcb0ad3d6c",
+    "frontend/src/pages/HaDrPanel.jsx": "2d4e4384bf6c6b9f"
+  },
+  "/locations": {
+    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
+    "frontend/src/components/BulkBar.jsx": "c184216a393254f0",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/LocationFormDrawer.jsx": "b01386f09c2a65ec",
+    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
+    "frontend/src/components/SiteMap.jsx": "277616f1b862906d",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/scope/useScopeOrg.js": "a50387cfc59e7a83",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/pages/LocationList.jsx": "757d788dd378414b"
+  },
+  "/ipam/ip-addresses": {
+    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
+    "frontend/src/components/BulkBar.jsx": "c184216a393254f0",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
+    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/pages/IpAddressList.jsx": "a4742927eb0ff823",
+    "frontend/src/utils/datetime.js": "c6d013767e6e3d91"
+  },
+  "/ipam/subnets": {
+    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
+    "frontend/src/components/BulkBar.jsx": "c184216a393254f0",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
+    "frontend/src/components/SubnetImportModal.jsx": "e1c9495c63d1522c",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/pages/SubnetList.jsx": "1e3bde6fe9209fb9",
+    "frontend/src/utils/datetime.js": "c6d013767e6e3d91"
+  },
+  "/users": {
+    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
+    "frontend/src/components/BulkBar.jsx": "c184216a393254f0",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/components/RecoverModal.jsx": "a2f71971aa1286c9",
+    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
+    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
+    "frontend/src/components/crud/ColumnPicker.jsx": "2bd7e1d28f9c6fd3",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/hooks/useCurrentUser.js": "07ae92f70002218d",
+    "frontend/src/hooks/useSelection.js": "746ecd8b82ef85ae",
+    "frontend/src/pages/UserList.jsx": "1b14eb212216fcb1"
+  },
+  "/organizations": {
+    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
+    "frontend/src/components/BulkBar.jsx": "c184216a393254f0",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
+    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
+    "frontend/src/components/crud/ColumnPicker.jsx": "2bd7e1d28f9c6fd3",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/hooks/useSelection.js": "746ecd8b82ef85ae",
+    "frontend/src/pages/OrgList.jsx": "3a9c9567b415e807"
+  },
+  "/allowed-serials": {
+    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
+    "frontend/src/components/BoolPill.jsx": "e0bc4e75cf666a3a",
+    "frontend/src/components/BulkBar.jsx": "c184216a393254f0",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
+    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/features/serials/AllowedSerialDrawer.jsx": "8a0c2a582c907afd",
+    "frontend/src/features/serials/SerialCsvDrawer.jsx": "01668d58f05b18e1",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/hooks/useSelection.js": "746ecd8b82ef85ae",
+    "frontend/src/pages/AllowedSerialList.jsx": "880fe280795aa0fb"
+  },
+  "/groups": {
+    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
+    "frontend/src/components/BulkBar.jsx": "c184216a393254f0",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/RecoverModal.jsx": "a2f71971aa1286c9",
+    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
+    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
+    "frontend/src/components/crud/ColumnPicker.jsx": "2bd7e1d28f9c6fd3",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/hooks/useCurrentUser.js": "07ae92f70002218d",
+    "frontend/src/hooks/useSelection.js": "746ecd8b82ef85ae",
+    "frontend/src/pages/GroupList.jsx": "9dc2aa6bb149b576"
+  },
+  "/device-groups": {
+    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
+    "frontend/src/components/BulkBar.jsx": "c184216a393254f0",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
+    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
+    "frontend/src/components/crud/ColumnPicker.jsx": "2bd7e1d28f9c6fd3",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/devicegroups/DeviceGroupDrawer.jsx": "45c279aa570a0323",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/hooks/useSelection.js": "746ecd8b82ef85ae",
+    "frontend/src/pages/DeviceGroupList.jsx": "6d9cd2a05d540204",
+    "frontend/src/utils/format.js": "5b6467ca8589d460"
+  },
+  "/hierarchy": {
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/PanZoomCanvas.jsx": "e33a332beb45fc5a",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/Hierarchy.jsx": "a75996650d0de354"
+  },
+  "/license": {
+    "frontend/src/components/Drawer.jsx": "6865cc948eb1692e",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/pages/LicenseSubscription.jsx": "b6e2898c3b6c75f8",
+    "frontend/src/pages/licenseRelease.js": "d38cba2777abe772"
+  },
+  "/topologies": {
+    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
+    "frontend/src/components/BulkBar.jsx": "c184216a393254f0",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
+    "frontend/src/components/StatusBadge.jsx": "ff3fbf0631fce66c",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/sdwan/TopologyEditDrawer.jsx": "944cbd743325c59c",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/pages/TopologyList.jsx": "ff6b3f0f7e1ba90a"
+  },
+  "/network-topology/topologies": {
+    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
+    "frontend/src/components/BulkBar.jsx": "c184216a393254f0",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
+    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/nettopo/TopologyDrawer.jsx": "96219e9bf3c0b957",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/hooks/useSelection.js": "746ecd8b82ef85ae",
+    "frontend/src/pages/NetTopologyList.jsx": "fd126f4fb5d7fed4",
+    "frontend/src/utils/format.js": "5b6467ca8589d460"
+  },
+  "/network-topology/nodes": {
+    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
+    "frontend/src/components/BulkBar.jsx": "c184216a393254f0",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
+    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/nettopo/NodeDrawer.jsx": "09e1a54cb512df2d",
+    "frontend/src/features/nettopo/nettopoModel.js": "798558eb6b96edaf",
+    "frontend/src/features/nettopo/useNetTopologies.js": "fd291ec6cdf5f9f9",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/hooks/useSelection.js": "746ecd8b82ef85ae",
+    "frontend/src/pages/NetNodeList.jsx": "ebb087e864933cc9",
+    "frontend/src/utils/format.js": "5b6467ca8589d460"
+  },
+  "/network-topology/links": {
+    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
+    "frontend/src/components/BulkBar.jsx": "c184216a393254f0",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
+    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/nettopo/LinkDrawer.jsx": "63c5ed6512945c79",
+    "frontend/src/features/nettopo/nettopoModel.js": "798558eb6b96edaf",
+    "frontend/src/features/nettopo/useNetTopologies.js": "fd291ec6cdf5f9f9",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/hooks/useSelection.js": "746ecd8b82ef85ae",
+    "frontend/src/pages/NetLinkList.jsx": "df3c005754db7cc5",
+    "frontend/src/utils/format.js": "5b6467ca8589d460"
+  },
+  "/app-intelligence/applications": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/AppIntelHub.jsx": "8ad452f2daf9f664",
+    "frontend/src/pages/appintel/AppDatabase.jsx": "da86c476a0f2cde8",
+    "frontend/src/pages/appintel/tabs.js": "196258a9f3628b4b"
+  },
+  "/app-intelligence/traffic": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/AppIntelHub.jsx": "8ad452f2daf9f664",
+    "frontend/src/pages/appintel/AppDatabase.jsx": "da86c476a0f2cde8",
+    "frontend/src/pages/appintel/tabs.js": "196258a9f3628b4b"
+  },
+  "/app-intelligence/discovered": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/AppIntelHub.jsx": "8ad452f2daf9f664",
+    "frontend/src/pages/appintel/AppDatabase.jsx": "da86c476a0f2cde8",
+    "frontend/src/pages/appintel/tabs.js": "196258a9f3628b4b"
+  },
+  "/app-intelligence/snapshots": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/AppIntelHub.jsx": "8ad452f2daf9f664",
+    "frontend/src/pages/appintel/AppDatabase.jsx": "da86c476a0f2cde8",
+    "frontend/src/pages/appintel/tabs.js": "196258a9f3628b4b"
+  },
+  "/monitoring/wifi-sessions": {
+    "frontend/src/components/BoolPill.jsx": "e0bc4e75cf666a3a",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/MonitoringWifiSessions.jsx": "b98227eed94decfd",
+    "frontend/src/utils/datetime.js": "c6d013767e6e3d91"
+  },
+  "/monitoring/metrics": {
+    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
+    "frontend/src/components/BulkBar.jsx": "c184216a393254f0",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/pages/MonitoringMetrics.jsx": "417a03e69c1888f9",
+    "frontend/src/utils/datetime.js": "c6d013767e6e3d91"
+  },
+  "/monitoring/checks": {
+    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
+    "frontend/src/components/BulkBar.jsx": "c184216a393254f0",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
+    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/pages/MonitoringChecks.jsx": "0725a848ca3e8697",
+    "frontend/src/utils/datetime.js": "c6d013767e6e3d91"
+  },
+  "/policy-engine/qos": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/PolicyEngine.jsx": "9d586eaf506d5145",
+    "frontend/src/pages/policy/tabs.js": "4bd4a4f0300e71fa"
+  },
+  "/policy-engine/rip": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/PolicyEngine.jsx": "9d586eaf506d5145",
+    "frontend/src/pages/policy/tabs.js": "4bd4a4f0300e71fa"
+  },
+  "/policy-engine/bgp": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/PolicyEngine.jsx": "9d586eaf506d5145",
+    "frontend/src/pages/policy/tabs.js": "4bd4a4f0300e71fa"
+  },
+  "/policy-engine/ospf": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/PolicyEngine.jsx": "9d586eaf506d5145",
+    "frontend/src/pages/policy/tabs.js": "4bd4a4f0300e71fa"
+  },
+  "/policy-engine/pim": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/PolicyEngine.jsx": "9d586eaf506d5145",
+    "frontend/src/pages/policy/tabs.js": "4bd4a4f0300e71fa"
+  },
+  "/policy-engine/vrf": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/PolicyEngine.jsx": "9d586eaf506d5145",
+    "frontend/src/pages/policy/tabs.js": "4bd4a4f0300e71fa"
+  },
+  "/policy-engine/sla": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/PolicyEngine.jsx": "9d586eaf506d5145",
+    "frontend/src/pages/policy/tabs.js": "4bd4a4f0300e71fa"
+  },
+  "/policy-engine/steering": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/PolicyEngine.jsx": "9d586eaf506d5145",
+    "frontend/src/pages/policy/tabs.js": "4bd4a4f0300e71fa"
+  },
+  "/radius/nas": {
+    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
+    "frontend/src/components/BulkBar.jsx": "c184216a393254f0",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
+    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/radius/RadiusNasDrawer.jsx": "780c7d23bb6c9c76",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/hooks/useSelection.js": "746ecd8b82ef85ae",
+    "frontend/src/pages/RadiusNas.jsx": "881afbfa98427a04"
+  },
+  "/radius/group": {
+    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
+    "frontend/src/components/BulkBar.jsx": "c184216a393254f0",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
+    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/radius/RadiusGroupDrawer.jsx": "023e56425c8e8ecc",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/hooks/useSelection.js": "746ecd8b82ef85ae",
+    "frontend/src/pages/RadiusGroups.jsx": "e77973e06df115e2"
+  },
+  "/radius/check": {
+    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
+    "frontend/src/components/BulkBar.jsx": "c184216a393254f0",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
+    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/radius/RadiusAttrDrawer.jsx": "102fa43e4e61c7c8",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/hooks/useSelection.js": "746ecd8b82ef85ae",
+    "frontend/src/pages/RadiusChecks.jsx": "918fb59369c10689"
+  },
+  "/radius/reply": {
+    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
+    "frontend/src/components/BulkBar.jsx": "c184216a393254f0",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
+    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/radius/RadiusAttrDrawer.jsx": "102fa43e4e61c7c8",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/hooks/useSelection.js": "746ecd8b82ef85ae",
+    "frontend/src/pages/RadiusReplies.jsx": "43118c608f95856a"
+  },
+  "/radius/accounting": {
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
+    "frontend/src/pages/RadiusAccounting.jsx": "df61453383119ef1"
+  },
+  "/radius/post-auth": {
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
+    "frontend/src/pages/RadiusPostAuth.jsx": "4701f55456451940"
+  },
+  "/radius/batch": {
+    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
+    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/radius/RadiusBatchDrawer.jsx": "d4968a0d62d60f3d",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/pages/RadiusBatches.jsx": "19522aa25428a7d2"
+  },
+  "/tacacs/servers": {
+    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/features/tacacs/TacacsServerDrawer.jsx": "5eb4dc4b7cbaa1b6",
+    "frontend/src/features/tacacs/tacacsModel.js": "616c6f9f09c01f42",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/pages/TacacsServers.jsx": "348a0acbf59ce1fe"
+  },
+  "/tacacs/client": {
+    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/tacacs/TacacsClientDrawer.jsx": "ca5495b08d887bcc",
+    "frontend/src/features/tacacs/tacacsModel.js": "616c6f9f09c01f42",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/pages/TacacsClient.jsx": "8664d9412dfc4d8b"
+  },
+  "/tacacs/rules": {
+    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
+    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/tacacs/TacacsRuleDrawer.jsx": "47292661b2ce8273",
+    "frontend/src/features/tacacs/tacacsModel.js": "616c6f9f09c01f42",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/pages/TacacsRules.jsx": "fcfcd9ed5b2290a7"
+  },
+  "/tacacs/group-secrets": {
+    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/tacacs/TacacsGroupSettingsDrawer.jsx": "4129a3ac577023c4",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/pages/TacacsGroupSettings.jsx": "50c0a199c7299ce7"
+  },
+  "/tacacs/sessions": {
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
+    "frontend/src/features/tacacs/tacacsModel.js": "616c6f9f09c01f42",
+    "frontend/src/pages/TacacsSessions.jsx": "dfe147a5b261171b"
+  },
+  "/tacacs/accounting": {
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
+    "frontend/src/features/tacacs/tacacsModel.js": "616c6f9f09c01f42",
+    "frontend/src/pages/TacacsAccounting.jsx": "8d1ef6c8845156dc"
+  },
+  "/security/threatshield-ip": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/SecurityHub.jsx": "10ce124d46b228e6",
+    "frontend/src/pages/security/tabs.js": "02d2ce5175a1a118"
+  },
+  "/security/ips": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/SecurityHub.jsx": "10ce124d46b228e6",
+    "frontend/src/pages/security/tabs.js": "02d2ce5175a1a118"
+  },
+  "/security/antivirus": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/SecurityHub.jsx": "10ce124d46b228e6",
+    "frontend/src/pages/security/tabs.js": "02d2ce5175a1a118"
+  },
+  "/security/antispam": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/SecurityHub.jsx": "10ce124d46b228e6",
+    "frontend/src/pages/security/tabs.js": "02d2ce5175a1a118"
+  },
+  "/security/webfilter": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/SecurityHub.jsx": "10ce124d46b228e6",
+    "frontend/src/pages/security/tabs.js": "02d2ce5175a1a118"
+  },
+  "/security/address-group": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/SecurityHub.jsx": "10ce124d46b228e6",
+    "frontend/src/pages/security/tabs.js": "02d2ce5175a1a118"
+  },
+  "/security/profile": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/SecurityHub.jsx": "10ce124d46b228e6",
+    "frontend/src/pages/security/tabs.js": "02d2ce5175a1a118"
+  },
+  "/security/policy": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/SecurityHub.jsx": "10ce124d46b228e6",
+    "frontend/src/pages/security/tabs.js": "02d2ce5175a1a118"
+  },
+  "/credentials": {
+    "frontend/src/components/BoolPill.jsx": "e0bc4e75cf666a3a",
+    "frontend/src/components/BulkBar.jsx": "c184216a393254f0",
+    "frontend/src/components/CredentialFormModal.jsx": "7215eaea74f90c91",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/scope/useScopeOrg.js": "a50387cfc59e7a83",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/pages/CredentialList.jsx": "98c9ac4af34f0973",
+    "frontend/src/utils/datetime.js": "c6d013767e6e3d91"
+  },
+  "/pki/authorities": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/PkiHub.jsx": "b986303463225c4a",
+    "frontend/src/pages/pki/tabs.js": "e03324ac113add78"
+  },
+  "/pki/certificates": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/PkiHub.jsx": "b986303463225c4a",
+    "frontend/src/pages/pki/tabs.js": "e03324ac113add78"
+  },
+  "/firmware": {
+    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
+    "frontend/src/components/BulkBar.jsx": "c184216a393254f0",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
+    "frontend/src/components/StatusBadge.jsx": "ff3fbf0631fce66c",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/hooks/useSelection.js": "746ecd8b82ef85ae",
+    "frontend/src/pages/FirmwareHub.jsx": "b3060e51414462a3"
+  },
+  "/settings/site": {
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/pages/SiteSettings.jsx": "4be0c9682363cc48"
+  },
+  "/settings/email-alerts": {
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/emailalerts/AlertConfigTable.jsx": "d15b27e6c25ca189",
+    "frontend/src/components/emailalerts/AlertHistoryTable.jsx": "dfbc9c78c32fce51",
+    "frontend/src/components/emailalerts/EmailTemplatesTable.jsx": "7d250b8b7a69f838",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/pages/EmailAlerts.jsx": "2ea8c70b8bbf5df2"
+  },
+  "/settings/notifications": {
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/pages/NotificationPreferences.jsx": "ce32a0d1de31505b"
+  },
+  "/reports": {
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/reports/CustomizeWizard.jsx": "2c27884832f2fa94",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/pages/ReportsHub.jsx": "9ab4a6d87af57f1a",
+    "frontend/src/utils/reports.js": "45c6211315de10a4"
+  },
+  "/logs/access": {
+    "frontend/src/components/logs/LogTable.jsx": "51b4bcd80d0e0263",
+    "frontend/src/pages/logs/AccessLog.jsx": "00e2e2d2b10a641e"
+  },
+  "/logs/activity": {
+    "frontend/src/components/logs/LogTable.jsx": "51b4bcd80d0e0263",
+    "frontend/src/pages/logs/ActivityLog.jsx": "82b07dfeddafb64d"
+  },
+  "/logs/device": {
+    "frontend/src/components/logs/LogTable.jsx": "51b4bcd80d0e0263",
+    "frontend/src/pages/logs/DeviceLog.jsx": "3bdff38321af0156"
+  },
+  "/logs/firmware": {
+    "frontend/src/components/logs/LogTable.jsx": "51b4bcd80d0e0263",
+    "frontend/src/pages/logs/FirmwareLog.jsx": "d42becf944bc0bc6"
+  },
+  "/devices/:id": {
+    "frontend/src/components/BoolPill.jsx": "e0bc4e75cf666a3a",
+    "frontend/src/components/DeviceAlertsPanel.jsx": "231d0753effc5156",
+    "frontend/src/components/DeviceChecksPanel.jsx": "bb3c6d7dd148ed5f",
+    "frontend/src/components/DeviceCommandsPanel.jsx": "fc0d27423d65b4b6",
+    "frontend/src/components/DeviceConfigPanel.jsx": "e1786d26293e7c1e",
+    "frontend/src/components/DeviceConsoleModal.jsx": "87925331874b1e12",
+    "frontend/src/components/DeviceCredentialsPanel.jsx": "e407942e6536344a",
+    "frontend/src/components/DeviceDiagnosticsPanel.jsx": "6167713c6d7a85ec",
+    "frontend/src/components/DeviceEditDrawer.jsx": "a82ae07e8b71d3aa",
+    "frontend/src/components/DeviceEventsPanel.jsx": "79261efbffcfc411",
+    "frontend/src/components/DeviceFirmwarePanel.jsx": "a081ce638f27f2b1",
+    "frontend/src/components/DeviceMapPanel.jsx": "3fcc09065acbba9a",
+    "frontend/src/components/DeviceStatusPanel.jsx": "e27df098795cbcd7",
+    "frontend/src/components/DeviceTrafficPanel.jsx": "90fe8d7c647ea9ef",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/HealthDot.jsx": "2b27674448360da6",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/InteractiveChart.jsx": "a7313539620b9f93",
+    "frontend/src/components/Panel.jsx": "94019000e9a6fd06",
+    "frontend/src/components/SiteMap.jsx": "277616f1b862906d",
+    "frontend/src/components/StatusBadge.jsx": "ff3fbf0631fce66c",
+    "frontend/src/components/cpe/CpeShell.jsx": "4bfeb4cf59e73b84",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/hooks/useCurrentUser.js": "07ae92f70002218d",
+    "frontend/src/pages/DeviceDetail.jsx": "ede909fa72bf6a0f",
+    "frontend/src/utils/backends.js": "410f30b01a8a381a",
+    "frontend/src/utils/format.js": "5b6467ca8589d460"
+  }
+}

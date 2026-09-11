@@ -22,7 +22,8 @@
     "controller": "npm run controller:api && npm run controller:console",
     "controller:nav": "node --experimental-strip-types ./nexapp-controller/extract-nav.ts",
     "controller:routes": "node --experimental-strip-types ./nexapp-controller/extract-routes.ts",
-    "serve": "bash ./scripts/serve.sh"
+    "serve": "bash ./scripts/serve.sh",
+    "check:descriptions": "node --experimental-strip-types ./nexapp-controller/check-descriptions.ts"
   },
   "dependencies": {
     "fumadocs-core": "^16.15.7",

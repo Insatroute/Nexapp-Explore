@@ -207,6 +207,31 @@ async function resolveImport(fromFile: string, spec: string): Promise<string | u
  * One level deep only. Two levels reaches shared primitives (tables, pickers)
  * whose calls belong to those components rather than to this page.
  */
+/**
+ * Every file a page's documented facts were read from: its own component, plus
+ * the local components it opens.
+ *
+ * Exported because it is also the answer to a different question — "what would
+ * have to change for this page's description to be worth re-reading". The
+ * description was written from exactly these files, so hashing them is how
+ * staleness becomes detectable rather than a matter of trust.
+ */
+export async function sourceFilesFor(file: string): Promise<string[]> {
+  let src: string;
+  try {
+    src = await readFile(file, 'utf8');
+  } catch {
+    return [];
+  }
+  const out = [file];
+  for (const m of src.matchAll(/import\s+[^;]*?\s+from\s+'(\.[^']+)'/g)) {
+    const target = await resolveImport(file, m[1]);
+    if (!target || API_MODULE.test(target) || target === file) continue;
+    if (!out.includes(target)) out.push(target);
+  }
+  return out.sort();
+}
+
 export async function factsForFile(file: string): Promise<PageFacts | undefined> {
   let src: string;
   try {
