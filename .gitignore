@@ -10,10 +10,17 @@ out/
 nav-manifest.json
 openapi.json
 openapi.docs.json
+# The controller's equivalents. These were tracked by oversight — the ignore list
+# named the SDWAN Lite files but not the controller- prefixed ones, so 4.4 MB of
+# generated spec was being committed and re-committed on every refresh.
+controller-swagger.json
+controller-openapi.json
+controller-openapi.docs.json
 
 # Generated documentation pages. Every one is produced by the generators from the
 # platform; none is written by hand.
 content/docs/
+content/controller/
 
 # Never commit console credentials — the crawler reads KB_USER / KB_PASSWORD
 # from the environment.

@@ -1,9 +1,0 @@
-{
-  "title": "High Availability",
-  "pages": [
-    "index",
-    "ha-devices",
-    "ha-controller",
-    "dr-control-panel"
-  ]
-}
