@@ -1,0 +1,90 @@
+---
+title: "CPE pages"
+description: "Network › Devices › a device › the CPE tab — the router’s own UI, page for page."
+---
+
+
+<Cards>
+  <Card title="Where it is" description="Devices › a device › the CPE tab" />
+  <Card title="Size" description="7 sections, 45 pages" />
+</Cards>
+
+The CPE tab is the router’s own web interface rebuilt inside the controller, and it carries a
+menu of its own. Everything else in this handbook describes CONTROLLER state; these pages talk to
+the device.
+
+Each entry mirrors a page the classic device form already ships, and names the `(tab, subtab)` pair
+that page switches on. That pairing is what lets an entry which has not been rebuilt in React yet
+open the real, working classic page instead of being a dead menu row.
+
+<Callout type="info">All 45 pages are rebuilt in React — none currently hand off to the router’s classic UI.</Callout>
+
+## Performance SLA
+
+- Health Dashboard
+- Path Monitors
+- SLA Thresholds
+- SLA Settings
+- Tenants
+- Quality Matrix
+
+## Policy Engine
+
+- Adaptive QoS
+- RIP
+- BGP
+- OSPF
+- PIM
+- VRF
+- Application Aware Routing
+
+## Firewall
+
+- Port forward
+- NAT
+- Rules
+- Connections
+- Zones and policies
+
+## Network
+
+- Interfaces and devices
+- DNS and DHCP
+- Static Routes
+- Policy Routing
+- FlowEdge MultiWAN
+- Hotspot
+- Reverse proxy
+- Dynamic DNS
+
+## Security
+
+- Instashield IP
+- Instashield DNS
+- DDoS Protection
+- DPI Engine
+- IPS Engine
+- Antivirus
+- AntiSpam
+- SSL Inspection
+
+## VPN
+
+- OpenVPN Road Warrior
+- IPsec Road Warrior
+- OpenVPN tunnel
+- WireGuard Road Warrior
+- WireGuard tunnel
+- L2TP
+- GRE
+- OOBM
+- VXLAN Tunnels
+- IPsec
+
+## Log & Reports
+
+- Event Log Settings
+
+---
+
+<small>Read from: the `CPE_MENU` literal in `components/cpe/cpeMenu.js`.</small>

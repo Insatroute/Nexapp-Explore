@@ -26,6 +26,7 @@ import * as path from 'node:path';
 import { readNav, navComments, type NavSection, type NavLeaf } from './extract-nav.ts';
 import { readRouteTable, type RouteRec, type RouteTable } from './extract-routes.ts';
 import { factsForFile, type PageFacts } from './extract-page-facts.ts';
+import { readCpeMenu } from './extract-cpe.ts';
 import { CURATED, COMMON_NOTES } from './console-descriptions.ts';
 import { OUT, KB, URL_BASE, requireController } from './config.ts';
 
@@ -401,8 +402,9 @@ async function main() {
 
   await emitIndex(topLinks, toc, gaps.length, total);
   const detail = await emitDeviceDetail(table);
-  total += detail;
-  grounded += detail;
+  const cpe = await emitCpe();
+  total += detail + cpe;
+  grounded += detail + cpe;
 
   await copyAuthoredPages();
   await removeOrphanSections(sectionDirs);
@@ -510,6 +512,69 @@ async function emitDeviceDetail(table: RouteTable): Promise<number> {
     if (!meta.pages.includes('device-detail')) {
       const at = meta.pages.indexOf('devices');
       meta.pages.splice(at < 0 ? meta.pages.length : at + 1, 0, 'device-detail');
+      await writeFile(metaPath, JSON.stringify(meta, null, 2));
+    }
+  }
+  return 1;
+}
+
+/**
+ * The CPE tab's own navigation — the largest surface in the console and the only
+ * one the sidebar never reaches, because it sits two levels down: Devices → a
+ * device → the CPE tab.
+ */
+async function emitCpe(): Promise<number> {
+  const menu = await readCpeMenu();
+  const all = menu.flatMap((s) => s.pages);
+  const classic = all.filter((p) => !p.built);
+
+  const L = [
+    frontmatter('CPE pages', 'Network › Devices › a device › the CPE tab — the router\u2019s own UI, page for page.'),
+    '<Cards>',
+    `  <Card title="Where it is" description="Devices \u203a a device \u203a the CPE tab" />`,
+    `  <Card title="Size" description="${menu.length} sections, ${all.length} pages" />`,
+    '</Cards>',
+    '',
+    'The CPE tab is the router\u2019s own web interface rebuilt inside the controller, and it carries a',
+    'menu of its own. Everything else in this handbook describes CONTROLLER state; these pages talk to',
+    'the device.',
+    '',
+    'Each entry mirrors a page the classic device form already ships, and names the `(tab, subtab)` pair',
+    'that page switches on. That pairing is what lets an entry which has not been rebuilt in React yet',
+    'open the real, working classic page instead of being a dead menu row.',
+    '',
+  ];
+  L.push(
+    classic.length
+      ? `<Callout type="info">${all.length - classic.length} of ${all.length} pages are rebuilt in React; ${classic.length} still hand off to the router\u2019s classic UI.</Callout>`
+      : `<Callout type="info">All ${all.length} pages are rebuilt in React — none currently hand off to the router\u2019s classic UI.</Callout>`,
+    '',
+  );
+
+  for (const sec of menu) {
+    L.push(`## ${esc(sec.label)}`, '');
+    let group: string | undefined;
+    for (const pg of sec.pages) {
+      if (pg.group && pg.group !== group) { L.push(`**${esc(pg.group)}**`, ''); group = pg.group; }
+      const tag = pg.built ? '' : ' — *still the classic page*';
+      L.push(`- ${esc(pg.label)}${tag}`);
+    }
+    L.push('');
+  }
+  L.push('---', '', '<small>Read from: the `CPE_MENU` literal in `components/cpe/cpeMenu.js`.</small>', '');
+
+  const dir = path.join(OUT, 'network');
+  await mkdir(dir, { recursive: true });
+  await writeFile(path.join(dir, 'cpe-pages.mdx'), L.join('\n'));
+
+  // Sits after Device detail, which is where the tab actually lives.
+  const metaPath = path.join(dir, 'meta.json');
+  if (await exists(metaPath)) {
+    const { readFile: rf } = await import('node:fs/promises');
+    const meta = JSON.parse(await rf(metaPath, 'utf8'));
+    if (!meta.pages.includes('cpe-pages')) {
+      const at = meta.pages.indexOf('device-detail');
+      meta.pages.splice(at < 0 ? meta.pages.length : at + 1, 0, 'cpe-pages');
       await writeFile(metaPath, JSON.stringify(meta, null, 2));
     }
   }

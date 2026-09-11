@@ -3,6 +3,7 @@
   "pages": [
     "devices",
     "device-detail",
+    "cpe-pages",
     "sd-lan",
     "configuration",
     "high-availability",
