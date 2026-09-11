@@ -1,0 +1,7 @@
+{
+  "title": "IPAM",
+  "pages": [
+    "ip-addresses",
+    "subnets"
+  ]
+}

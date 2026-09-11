@@ -1,0 +1,149 @@
+---
+title: Sdwan_tunnel
+full: true
+_openapi:
+  preload:
+    - ./controller-openapi.docs.json
+  toc:
+    - depth: 2
+      title: |-
+        Aggregate Control Plane (VPN server) count + reachability for the
+        **Control Plane** card on the dashboard Overview tab.
+      url: '#aggregate-control-plane-vpn-server-count--reachability-for-thecontrol-plane-card-on-the-dashboard-overview-tab'
+    - depth: 2
+      title: Aggregate Inbound/Outbound Mbps distribution across all org WAN
+        interfaces.
+      url: '#aggregate-inboundoutbound-mbps-distribution-across-all-org-wan-interfaces'
+    - depth: 2
+      title: Json_list
+      url: '#json_list'
+    - depth: 2
+      title: Sdwan_tunnel_diagnostics_presets_list
+      url: '#sdwan_tunnel_diagnostics_presets_list'
+    - depth: 2
+      title: Sdwan_tunnel_diagnostics_presets_create
+      url: '#sdwan_tunnel_diagnostics_presets_create'
+    - depth: 2
+      title: Sdwan_tunnel_diagnostics_presets_delete
+      url: '#sdwan_tunnel_diagnostics_presets_delete'
+  structuredData:
+    headings:
+      - content: |-
+          Aggregate Control Plane (VPN server) count + reachability for the
+          **Control Plane** card on the dashboard Overview tab.
+        id: aggregate-control-plane-vpn-server-count--reachability-for-thecontrol-plane-card-on-the-dashboard-overview-tab
+      - content: Aggregate Inbound/Outbound Mbps distribution across all org WAN
+          interfaces.
+        id: aggregate-inboundoutbound-mbps-distribution-across-all-org-wan-interfaces
+      - content: Json_list
+        id: json_list
+      - content: Sdwan_tunnel_diagnostics_presets_list
+        id: sdwan_tunnel_diagnostics_presets_list
+      - content: Sdwan_tunnel_diagnostics_presets_create
+        id: sdwan_tunnel_diagnostics_presets_create
+      - content: Sdwan_tunnel_diagnostics_presets_delete
+        id: sdwan_tunnel_diagnostics_presets_delete
+    contents:
+      - content: >-
+          "Control Plane" is the operator-facing name for ``config.Vpn`` servers
+
+          (admin at ``/admin/config/vpn/``). The VPN model has no online/offline
+
+          field, so reachability is derived the same way the VPN-uptime report
+          does:
+
+          match each VPN ``host`` to a managed Device (by ``management_ip`` /
+
+          ``last_ip``) and treat the server as *online* when that device's
+          monitoring
+
+          status is ``ok``. A VPN whose host matches no monitored device — or
+          matches
+
+          a device that is not ``ok`` — counts as *offline* (reachability
+          unconfirmed).
+
+
+          Response shape::
+
+              {"total": 3, "online": 2, "offline": 1, "as_of": "2026-06-04T..Z"}
+
+          Aggregate counts only — never VPN names, hosts, or device IDs.
+          Org-scoped:
+
+          non-superusers only ever count VPNs in their own organizations.
+        heading: aggregate-control-plane-vpn-server-count--reachability-for-thecontrol-plane-card-on-the-dashboard-overview-tab
+      - content: >-
+          Powers the **Interface Throughput** card (Inbound + Outbound
+          doughnuts) on
+
+          the WAN Uplinks dashboard tab.
+
+
+          Query params (forwarded to
+          :func:`get_data_usage_payload_for_request`):
+            * ``period`` — ``1d`` (default) | ``3d`` | ``7d`` | ``30d`` | ``365d``
+            * ``location_id``, ``floorplan_id``, ``ifname`` — optional filters
+            * ``nocache=1`` to bypass the 60s cache (debugging only)
+
+          Response shape::
+
+              {
+                "inbound":  [{"bucket": "<100", "count": 12}, ...],   # rx-direction
+                "outbound": [{"bucket": "<100", "count": 8},  ...],   # tx-direction
+                "total_interfaces": 16,
+                "as_of": "2026-05-08T10:30:00Z"
+              }
+
+          The four buckets are always present in the same order:
+
+          ``<100 / 100-500 / 500-1000 / >1000`` (Mbps).
+        heading: aggregate-inboundoutbound-mbps-distribution-across-all-org-wan-interfaces
+      - content: >-
+          Aggregate SD-WAN overlay (NsBondTopology) count + status for the
+
+          **SD-WAN Overlays** card on the dashboard Overview tab.
+
+
+          Each :class:`NsBondTopology` is one overlay fabric. Counts are grouped
+          by
+
+          the topology ``status`` state machine into three pills:
+
+
+          * ``deployed`` — status ``deployed``
+
+          * ``error``    — status ``error`` / ``failed``
+
+          * ``pending``  — everything else (draft / computed / validated /
+          deploying /
+            undeploying)
+
+          Response shape::
+
+              {"total": 5, "deployed": 3, "pending": 1, "error": 1, "as_of": "..Z"}
+
+          Aggregate counts only. Org-scoped exactly like the nsbond map-tunnels
+          view.
+        heading: json_list
+      - content: GET (list, org-staff) and POST (create, org-admin).
+        heading: sdwan_tunnel_diagnostics_presets_list
+      - content: GET (list, org-staff) and POST (create, org-admin).
+        heading: sdwan_tunnel_diagnostics_presets_create
+      - content: DELETE (org-admin + same-org). Cross-org id returns 404.
+        heading: sdwan_tunnel_diagnostics_presets_delete
+---
+
+{/* This file was generated by Fumadocs. Do not edit this file directly. Any changes should be made by running the generation command again. */}
+
+export default function Layout(props) {
+  const { APIPage, OpenAPIPage } = props.components ?? {};
+  // "APIPage" is the old name from v10, this allows both for backward compatibility
+  const Comp = OpenAPIPage ?? APIPage;
+  return (
+    <>
+      {props.children}
+      <Comp document="./controller-openapi.docs.json" webhooks={[]} operations={[{"path":"/sdwan_tunnel/dashboard/control-plane.json","method":"get"},{"path":"/sdwan_tunnel/dashboard/interface-throughput.json","method":"get"},{"path":"/sdwan_tunnel/dashboard/sdwan-overlays.json","method":"get"},{"path":"/sdwan_tunnel/diagnostics/presets/","method":"get"},{"path":"/sdwan_tunnel/diagnostics/presets/","method":"post"},{"path":"/sdwan_tunnel/diagnostics/presets/{id}/","method":"delete"}]} showTitle showDescription />
+    </>
+  );
+}

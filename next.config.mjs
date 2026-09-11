@@ -1,4 +1,8 @@
 import { createMDX } from 'fumadocs-mdx/next';
+import * as path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const HERE = path.dirname(fileURLToPath(import.meta.url));
 
 const withMDX = createMDX();
 
@@ -32,6 +36,14 @@ const config = {
   basePath: '/kb',
   trailingSlash: true,
   images: { unoptimized: true },
+
+  // Pin the workspace root.
+  //
+  // Turbopack infers it by walking up for a lockfile and finds one in the home
+  // directory, which would make the whole of ~ the project root. It warns and
+  // backs off, but the inference is a coin-flip on any machine with a stray
+  // package.json above the repo — so state it.
+  turbopack: { root: HERE },
 };
 
 export default withMDX(config);

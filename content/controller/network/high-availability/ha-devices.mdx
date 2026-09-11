@@ -1,0 +1,37 @@
+---
+title: "HA Devices"
+description: "Network › High Availability › HA Devices"
+---
+
+<Cards>
+  <Card title="Path" description="/ha/devices" />
+  <Card title="Who can open it" description="Superusers only." />
+</Cards>
+
+High availability for the ROUTERS: which devices are paired, which of a pair currently holds the virtual IP, and what VRRP thinks the state is. Rows carry the peer, the role, the virtual IP and when the device was last polled and last synced, so a pair that has stopped talking shows up as a stale timestamp rather than silence.
+
+This is one of three unrelated HA subjects the console groups together — the routers' pairs here, the controller's own two servers under HA Controller, and the DC/DR sites under DR Control Panel.
+
+## What you can do here
+
+### Actions
+
+- Create HA device
+- Delete HA device
+- **Poll HA device** — Asks a device for its current HA state now rather than waiting for the next scheduled poll — the way to confirm a pair after changing it.
+- **Set up HA device** — Runs the pairing itself, in the setup drawer: pick the peer and the interfaces, and the controller configures both sides.
+
+### Reading and lookups
+
+- Browse and search devices
+- Browse and search HA devices
+- Browse and search organizations
+
+**Also calls:** `useLazyHaDeviceInterfacesQuery` — listed verbatim because the name does not match a known verb.
+
+**Opens:** `HaSetupDrawer` — some actions above are performed in it.
+
+---
+
+<small>Read from: component `HaDevices`; description from `pages/HaDevices.jsx — headers Device, Organization, Peer, Role, Status, Virtual IP, VRRP state, Last polled, Last sync; status filter All/Enabled/Configuring/Disabled/Unconfigured/Error; calls useListHaDevicesQuery, usePollHaDeviceMutation, useDeleteHaDeviceMutation, and HaSetupDrawer's create/setup mutations`.</small>
+

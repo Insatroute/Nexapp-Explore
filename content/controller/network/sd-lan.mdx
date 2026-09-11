@@ -1,0 +1,49 @@
+---
+title: "SD-LAN"
+description: "Network › SD-LAN"
+---
+
+<Cards>
+  <Card title="Path" description="/sdlan" />
+  <Card title="Who can open it" description="Requires any permission on nexapp_remote_access.savedremoteaccess." />
+</Cards>
+
+Where a host behind a router actually is, and whether you can reach it right now — without knowing which router it sits behind. Each row is a saved remote-access target: the site and router it is reached through, the LAN endpoint and protocol, and the path the controller would take to it.
+
+The per-device panel at `/devices/:id/sdlan` answers the narrower question, "what can I reach behind THIS router". Same rows and the same endpoint: the viewset filters by device only when `device_id` is passed, so dropping the parameter returns everything the user's organizations can see.
+
+**A row is a link, not a tunnel.** It opens through the controller's own reverse proxy at `/sdlan-proxy/<scheme>/<ip>:<port>/`, so there is no port to allocate, no session to expire and nothing to clean up when a tab closes — which means a row can be middle-clicked, bookmarked and re-opened. The proxy reaches the LAN address from the CONTROLLER side, so you need no VPN of your own; the precondition is instead that the controller has a route into that LAN, which is what the **Path** column reports.
+
+Two protocol details are worth knowing. **SSH is not raw SSH** — on NexappOS it is ttyd, a root shell served over HTTPS as a WebSocket, which is why it opens in a tab like everything else. **TELNET is the one target no proxy can rescue**: raw TCP with no HTTP framing, so there is nothing for nginx to reverse-proxy and nothing for a browser to render. It stays addable and hands you the command instead of a tab.
+
+## Why it sits here
+
+The hosts BEHIND the routers — a PLC, camera or NVR on a site LAN. Beside Devices rather than under it: an operator arrives here knowing the endpoint they want, not which router it happens to sit behind.
+
+<Callout type="info">Authored note, from the `NAV` array in `Sidebar.jsx`.</Callout>
+
+## What you can do here
+
+### Actions
+
+- **Close proxy session** — Ends that session (`POST /admin/remote-access/api/proxy/close/<id>/`). Sessions are not left open implicitly.
+- **Create remote access** — Adds a target: the router, the LAN address and port, and what you intend to reach — a web UI or a root shell. The stored model holds three protocols plus a `use_tls` flag, because the scheme cannot be guessed from the port, so that one choice is unfolded into the wire fields on save.
+- **Delete remote access** — Removes a target. Nothing else is torn down, because a row holds no allocated resource.
+- **Edit remote access** — Changes a saved target — `PATCH /admin/remote-access/api/entries/<id>/`.
+- **Open proxy session** — Opens a proxy session to the LAN endpoint (`POST /admin/remote-access/api/proxy/open/`), which is what makes the host reachable from here.
+
+### Reading and lookups
+
+- **Browse and search devices** — The routers a target can sit behind — the picker on the create form.
+- **Browse and search groups** — The group list the scope picker filters the table by.
+- **Browse and search remote access** — The saved targets, from `GET /admin/remote-access/api/entries/`. This page omits the `device_id` parameter the per-device panel sends, which is what turns the same endpoint into a fleet-wide list.
+- **View device location** — Resolves the router's site so a row can say where the endpoint physically is.
+
+## What the page shows
+
+**Columns** — `Site` · `Group` · `Router` · `Target` · `Protocol` · `LAN endpoint` · `Path` · `Status` · `Session`
+
+---
+
+<small>Read from: component `Sdlan`; description from `pages/Sdlan.jsx header comment (the reverse-proxy design, the ttyd meaning of SSH, the TELNET limitation and the device_id filter note) plus its table headers Site, Group, Router, Target, Protocol, LAN endpoint, Path, Status, Session; endpoints from api/client.js`.</small>
+

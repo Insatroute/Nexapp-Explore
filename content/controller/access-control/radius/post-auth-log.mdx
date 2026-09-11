@@ -1,0 +1,21 @@
+---
+title: "Post-auth log"
+description: "Access Control › RADIUS › Post-auth log"
+---
+
+<Cards>
+  <Card title="Path" description="/radius/post-auth" />
+  <Card title="Who can open it" description="Requires any permission on nexapp_radius.radiuspostauth." />
+</Cards>
+
+The authentication log: every attempt and whether it succeeded, with the username, the client and NAS MAC addresses and when it happened. This is where a failing login is diagnosed.
+
+## What you can do here
+
+- Browse and search organizations
+- Browse and search RADIUS post authentication
+
+---
+
+<small>Read from: component `RadiusPostAuth`; description from `pages/RadiusPostAuth.jsx — headers Username, Result, When, Client MAC, NAS MAC, Organization`.</small>
+

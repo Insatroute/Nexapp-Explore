@@ -1,0 +1,29 @@
+---
+title: "Users"
+description: "Administration › Users & Organizations › Users"
+---
+
+<Cards>
+  <Card title="Path" description="/users" />
+  <Card title="Who can open it" description="Requires any permission on nexapp_users.user." />
+</Cards>
+
+Who can sign in, and what they are. Each row carries the user's role tier, the organizations they belong to, whether the account is active, whether two-factor is enabled and whether it is required of them.
+
+Users sit beside Organizations because they are one subject split in half: who exists, and who they belong to.
+
+## What you can do here
+
+### Actions
+
+- Delete user
+
+### Reading and lookups
+
+- Browse and search organizations
+- Browse and search users
+
+---
+
+<small>Read from: component `UserList`; description from `pages/UserList.jsx — headers User, Role, Organizations, Active, 2FA, 2FA req., Joined; role tier from UserList.roleOf (Superuser / Staff / User)`.</small>
+

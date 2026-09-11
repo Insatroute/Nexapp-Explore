@@ -1,0 +1,235 @@
+---
+title: Traffic Application
+full: true
+_openapi:
+  preload:
+    - ./controller-openapi.docs.json
+  toc:
+    - depth: 2
+      title: Api_v1_app db version_list
+      url: '#api_v1_app-db-version_list'
+    - depth: 2
+      title: Api_v1_app db version_read
+      url: '#api_v1_app-db-version_read'
+    - depth: 2
+      title: Api_v1_app group_list
+      url: '#api_v1_app-group_list'
+    - depth: 2
+      title: Api_v1_app group_create
+      url: '#api_v1_app-group_create'
+    - depth: 2
+      title: Api_v1_app group_read
+      url: '#api_v1_app-group_read'
+    - depth: 2
+      title: Api_v1_app group_partial_update
+      url: '#api_v1_app-group_partial_update'
+    - depth: 2
+      title: Api_v1_app group_delete
+      url: '#api_v1_app-group_delete'
+    - depth: 2
+      title: Api_v1_app group_update
+      url: '#api_v1_app-group_update'
+    - depth: 2
+      title: Api_v1_application_list
+      url: '#api_v1_application_list'
+    - depth: 2
+      title: Api_v1_application_create
+      url: '#api_v1_application_create'
+    - depth: 2
+      title: Api_v1_application_distribute_all
+      url: '#api_v1_application_distribute_all'
+    - depth: 2
+      title: Api_v1_application_pull_from_devices
+      url: '#api_v1_application_pull_from_devices'
+    - depth: 2
+      title: Api_v1_application_read
+      url: '#api_v1_application_read'
+    - depth: 2
+      title: Api_v1_application_partial_update
+      url: '#api_v1_application_partial_update'
+    - depth: 2
+      title: Api_v1_application_delete
+      url: '#api_v1_application_delete'
+    - depth: 2
+      title: Api_v1_application_update
+      url: '#api_v1_application_update'
+    - depth: 2
+      title: Api_v1_category_list
+      url: '#api_v1_category_list'
+    - depth: 2
+      title: Api_v1_category_create
+      url: '#api_v1_category_create'
+    - depth: 2
+      title: Api_v1_category_read
+      url: '#api_v1_category_read'
+    - depth: 2
+      title: Api_v1_category_partial_update
+      url: '#api_v1_category_partial_update'
+    - depth: 2
+      title: Api_v1_category_delete
+      url: '#api_v1_category_delete'
+    - depth: 2
+      title: Api_v1_category_update
+      url: '#api_v1_category_update'
+    - depth: 2
+      title: Api_v1_distribution log_list
+      url: '#api_v1_distribution-log_list'
+    - depth: 2
+      title: Api_v1_distribution log_read
+      url: '#api_v1_distribution-log_read'
+    - depth: 2
+      title: Api_v1_firewall_list
+      url: '#api_v1_firewall_list'
+    - depth: 2
+      title: Api_v1_firewall_create
+      url: '#api_v1_firewall_create'
+    - depth: 2
+      title: Api_v1_firewall_read
+      url: '#api_v1_firewall_read'
+    - depth: 2
+      title: Api_v1_firewall_partial_update
+      url: '#api_v1_firewall_partial_update'
+    - depth: 2
+      title: Api_v1_firewall_delete
+      url: '#api_v1_firewall_delete'
+    - depth: 2
+      title: Api_v1_firewall_update
+      url: '#api_v1_firewall_update'
+  structuredData:
+    headings:
+      - content: Api_v1_app db version_list
+        id: api_v1_app-db-version_list
+      - content: Api_v1_app db version_read
+        id: api_v1_app-db-version_read
+      - content: Api_v1_app group_list
+        id: api_v1_app-group_list
+      - content: Api_v1_app group_create
+        id: api_v1_app-group_create
+      - content: Api_v1_app group_read
+        id: api_v1_app-group_read
+      - content: Api_v1_app group_partial_update
+        id: api_v1_app-group_partial_update
+      - content: Api_v1_app group_delete
+        id: api_v1_app-group_delete
+      - content: Api_v1_app group_update
+        id: api_v1_app-group_update
+      - content: Api_v1_application_list
+        id: api_v1_application_list
+      - content: Api_v1_application_create
+        id: api_v1_application_create
+      - content: Api_v1_application_distribute_all
+        id: api_v1_application_distribute_all
+      - content: Api_v1_application_pull_from_devices
+        id: api_v1_application_pull_from_devices
+      - content: Api_v1_application_read
+        id: api_v1_application_read
+      - content: Api_v1_application_partial_update
+        id: api_v1_application_partial_update
+      - content: Api_v1_application_delete
+        id: api_v1_application_delete
+      - content: Api_v1_application_update
+        id: api_v1_application_update
+      - content: Api_v1_category_list
+        id: api_v1_category_list
+      - content: Api_v1_category_create
+        id: api_v1_category_create
+      - content: Api_v1_category_read
+        id: api_v1_category_read
+      - content: Api_v1_category_partial_update
+        id: api_v1_category_partial_update
+      - content: Api_v1_category_delete
+        id: api_v1_category_delete
+      - content: Api_v1_category_update
+        id: api_v1_category_update
+      - content: Api_v1_distribution log_list
+        id: api_v1_distribution-log_list
+      - content: Api_v1_distribution log_read
+        id: api_v1_distribution-log_read
+      - content: Api_v1_firewall_list
+        id: api_v1_firewall_list
+      - content: Api_v1_firewall_create
+        id: api_v1_firewall_create
+      - content: Api_v1_firewall_read
+        id: api_v1_firewall_read
+      - content: Api_v1_firewall_partial_update
+        id: api_v1_firewall_partial_update
+      - content: Api_v1_firewall_delete
+        id: api_v1_firewall_delete
+      - content: Api_v1_firewall_update
+        id: api_v1_firewall_update
+    contents:
+      - content: List all application database version records.
+        heading: api_v1_app-db-version_list
+      - content: Retrieve an application database version record by ID.
+        heading: api_v1_app-db-version_read
+      - content: List all application groups.
+        heading: api_v1_app-group_list
+      - content: Create a new application group.
+        heading: api_v1_app-group_create
+      - content: Retrieve an application group by ID.
+        heading: api_v1_app-group_read
+      - content: Partially update an application group.
+        heading: api_v1_app-group_partial_update
+      - content: Delete an application group.
+        heading: api_v1_app-group_delete
+      - content: Fully update an application group.
+        heading: api_v1_app-group_update
+      - content: List all traffic applications with optional filtering.
+        heading: api_v1_application_list
+      - content: Create a new traffic application.
+        heading: api_v1_application_create
+      - content: Queue a full distribution run for custom traffic applications.
+        heading: api_v1_application_distribute_all
+      - content: Queue a full import of DPI applications from all devices.
+        heading: api_v1_application_pull_from_devices
+      - content: Retrieve a traffic application by ID.
+        heading: api_v1_application_read
+      - content: Partially update a traffic application.
+        heading: api_v1_application_partial_update
+      - content: Delete a traffic application.
+        heading: api_v1_application_delete
+      - content: Fully update a traffic application.
+        heading: api_v1_application_update
+      - content: List all application categories.
+        heading: api_v1_category_list
+      - content: Create a new application category.
+        heading: api_v1_category_create
+      - content: Retrieve an application category by ID.
+        heading: api_v1_category_read
+      - content: Partially update an application category.
+        heading: api_v1_category_partial_update
+      - content: Delete an application category.
+        heading: api_v1_category_delete
+      - content: Fully update an application category.
+        heading: api_v1_category_update
+      - content: List application distribution log entries.
+        heading: api_v1_distribution-log_list
+      - content: Retrieve a distribution log entry by ID.
+        heading: api_v1_distribution-log_read
+      - content: List all firewall rules.
+        heading: api_v1_firewall_list
+      - content: Create a new firewall rule.
+        heading: api_v1_firewall_create
+      - content: Retrieve a firewall rule by ID.
+        heading: api_v1_firewall_read
+      - content: Partially update a firewall rule.
+        heading: api_v1_firewall_partial_update
+      - content: Delete a firewall rule.
+        heading: api_v1_firewall_delete
+      - content: Fully update a firewall rule.
+        heading: api_v1_firewall_update
+---
+
+{/* This file was generated by Fumadocs. Do not edit this file directly. Any changes should be made by running the generation command again. */}
+
+export default function Layout(props) {
+  const { APIPage, OpenAPIPage } = props.components ?? {};
+  // "APIPage" is the old name from v10, this allows both for backward compatibility
+  const Comp = OpenAPIPage ?? APIPage;
+  return (
+    <>
+      {props.children}
+      <Comp document="./controller-openapi.docs.json" webhooks={[]} operations={[{"path":"/api/v1/app-db-version/","method":"get"},{"path":"/api/v1/app-db-version/{id}/","method":"get"},{"path":"/api/v1/app-group/","method":"get"},{"path":"/api/v1/app-group/","method":"post"},{"path":"/api/v1/app-group/{id}/","method":"get"},{"path":"/api/v1/app-group/{id}/","method":"patch"},{"path":"/api/v1/app-group/{id}/","method":"delete"},{"path":"/api/v1/app-group/{id}/","method":"put"},{"path":"/api/v1/application/","method":"get"},{"path":"/api/v1/application/","method":"post"},{"path":"/api/v1/application/distribute_all/","method":"post"},{"path":"/api/v1/application/pull_from_devices/","method":"post"},{"path":"/api/v1/application/{id}/","method":"get"},{"path":"/api/v1/application/{id}/","method":"patch"},{"path":"/api/v1/application/{id}/","method":"delete"},{"path":"/api/v1/application/{id}/","method":"put"},{"path":"/api/v1/category/","method":"get"},{"path":"/api/v1/category/","method":"post"},{"path":"/api/v1/category/{id}/","method":"get"},{"path":"/api/v1/category/{id}/","method":"patch"},{"path":"/api/v1/category/{id}/","method":"delete"},{"path":"/api/v1/category/{id}/","method":"put"},{"path":"/api/v1/distribution-log/","method":"get"},{"path":"/api/v1/distribution-log/{id}/","method":"get"},{"path":"/api/v1/firewall/","method":"get"},{"path":"/api/v1/firewall/","method":"post"},{"path":"/api/v1/firewall/{id}/","method":"get"},{"path":"/api/v1/firewall/{id}/","method":"patch"},{"path":"/api/v1/firewall/{id}/","method":"delete"},{"path":"/api/v1/firewall/{id}/","method":"put"}]} showTitle showDescription />
+    </>
+  );
+}

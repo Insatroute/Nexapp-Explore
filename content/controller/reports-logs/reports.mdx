@@ -1,0 +1,39 @@
+---
+title: "Reports"
+description: "Reports & Logs › Reports"
+---
+
+<Cards>
+  <Card title="Path" description="/reports" />
+  <Card title="Who can open it" description="Requires any permission on controller_reports.reporttemplate." />
+</Cards>
+
+The report catalogue: what each report covers, the category it belongs to, and when it was last updated. Reports are opened from here, and a custom report can be built with the customize wizard — choosing the columns and the devices it covers.
+
+## Why it sits here
+
+What the system produced and what it recorded. Reports are generated on demand; logs are the running record — different jobs, but both are "look at what happened", so they share a section rather than being scattered across Intelligence and Administration.
+
+<Callout type="info">Authored note, from the `NAV` array in `Sidebar.jsx`.</Callout>
+
+## What you can do here
+
+### Actions
+
+- Create custom report
+- Delete custom report
+- Edit custom report
+
+### Reading and lookups
+
+- Browse and search custom reports
+- Browse and search report devices
+- Browse and search report templates
+- View report columns
+
+**Opens:** `CustomizeWizard` — some actions above are performed in it.
+
+---
+
+<small>Read from: component `ReportsHub`; description from `pages/ReportsHub.jsx — headers Report, Category, Description, Updated; calls CustomizeWizard's api.getReportColumns, api.listReportDevices, api.createCustomReport, api.updateCustomReport`.</small>
+

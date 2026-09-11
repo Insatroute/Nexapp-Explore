@@ -1,0 +1,32 @@
+---
+title: "Permission Groups"
+description: "Administration › Permission Groups"
+---
+
+<Cards>
+  <Card title="Path" description="/groups" />
+  <Card title="Who can open it" description="Requires any permission on nexapp_users.group." />
+</Cards>
+
+Permission groups — named sets of permissions assigned to users. This is the `nexapp_users.Group` proxy the API enforces against, not stock `auth.group`, and it is a different model from Device Groups.
+
+## Why it sits here
+
+Two different models that used to share the word 'Groups'. This one is a named set of PERMISSIONS assigned to users; 'Device Groups' below is what devices belong to and what templates attach to. Both are labelled in full so neither reads as the general case of the other. Not 'Roles': that word is already spent on the user's Superuser/Staff/User tier (UserList.roleOf), and reusing it would trade one collision for a worse one.
+
+<Callout type="info">Authored note, from the `NAV` array in `Sidebar.jsx`.</Callout>
+
+## What you can do here
+
+### Actions
+
+- Delete group
+
+### Reading and lookups
+
+- Browse and search user groups
+
+---
+
+<small>Read from: component `GroupList`; description from `calls useListUserGroupsQuery and useDeleteGroupMutation; permission target from navPermissions.js (`nexapp_users.group`, with the reason recorded there)`.</small>
+

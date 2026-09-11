@@ -940,6 +940,24 @@ const CHILDREN: Record<string, string[]> = {
 };
 
 async function main() {
+  // This handbook's inputs come from the platform repo and a captured manifest,
+  // neither of which exists on every machine. Missing inputs SKIP it rather than
+  // failing the build: the controller handbook in this same app needs only its
+  // own source tree, so a developer without the SDWAN Lite platform checked out
+  // should still get a complete build of everything else.
+  //
+  // Only ABSENT inputs are tolerated. A manifest that is present but malformed,
+  // or a source tree that is present but unreadable, still fails loudly — those
+  // are real breakage, not an unconfigured machine.
+  const haveManifest = await exists(MANIFEST);
+  const haveSource = await exists(path.join(SRC, 'router/index.ts'));
+  if (!haveManifest || !haveSource) {
+    console.log('skipping the SDWAN Lite console reference:');
+    if (!haveManifest) console.log(`  no ${MANIFEST} — capture it with: npm run capture`);
+    if (!haveSource) console.log(`  no platform source at ${SRC}`);
+    return;
+  }
+
   const [nav, routes, tour] = await Promise.all([readNav(), readRoutes(), readTour()]);
 
   // The manifest identifies an entry by the href the console actually renders, so

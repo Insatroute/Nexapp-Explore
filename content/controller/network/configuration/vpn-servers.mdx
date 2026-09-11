@@ -1,0 +1,28 @@
+---
+title: "VPN Servers"
+description: "Network › Configuration › VPN Servers"
+---
+
+<Cards>
+  <Card title="Path" description="/vpn" />
+  <Card title="Who can open it" description="Requires any permission on config.vpn." />
+</Cards>
+
+The VPN servers devices connect back to. A row is one server: the host it runs on, the backend that implements it, the organization that owns it, and the certificate it presents.
+
+A device is not attached to a server directly — a **template** of type VPN-client is what does that, which is why the two sit together under Configuration. The certificate column matters for the same reason the CA list shows an expiry: a server whose certificate has lapsed stops accepting the devices that were configured against it.
+
+## What you can do here
+
+### Actions
+
+- **Delete VPN** — Removes a server. Templates pointing at it are what actually attach devices, so check those first — a template left behind renders against a server that no longer exists.
+
+### Reading and lookups
+
+- **Browse and search vpns** — The server list itself. Backend is the implementation (OpenVPN, WireGuard and so on) — it decides what a VPN-client template rendered against this server will contain.
+
+---
+
+<small>Read from: component `VpnList`; description from `pages/VpnList.jsx — headers Name, Host, Backend, Organization, Certificate, Modified; calls useListVpnsQuery and useDeleteVpnMutation`.</small>
+

@@ -1,0 +1,30 @@
+---
+title: "Email & Alerts"
+description: "Settings › Email & Alerts"
+---
+
+<Cards>
+  <Card title="Path" description="/settings/email-alerts" />
+  <Card title="Who can open it" description="Superusers only." />
+</Cards>
+
+Which alerts are sent by email, and the templates they are sent with. Alerts can be switched on and off individually or in bulk, and the templates that carry their wording are edited here — kept separate from the rules, so message text can change without touching what counts as a problem.
+
+## What you can do here
+
+### Actions
+
+- Delete email template
+- **Set alert enabled** — Turns one alert on or off.
+- **Set alert enabled bulk** — Turns a whole set on or off at once, rather than one row at a time.
+
+### Reading and lookups
+
+- View alert hub
+
+**Opens:** `AlertConfigTable` · `EmailTemplatesTable` — some actions above are performed in these.
+
+---
+
+<small>Read from: component `EmailAlerts`; description from `pages/EmailAlerts.jsx with AlertConfigTable and EmailTemplatesTable — calls api.setAlertEnabled, api.setAlertEnabledBulk, api.deleteEmailTemplate`.</small>
+

@@ -1,0 +1,30 @@
+---
+title: "Organizations"
+description: "Administration › Users & Organizations › Organizations"
+---
+
+<Cards>
+  <Card title="Path" description="/organizations" />
+  <Card title="Who can open it" description="Requires any permission on nexapp_users.organization." />
+</Cards>
+
+The tenants. A row is one organization with its contact email, how many devices it owns and how many of those are online or offline right now — so tenant size and tenant health read together.
+
+An organization is also the scope almost everything else in the console is filtered by.
+
+## What you can do here
+
+### Actions
+
+- Delete organization
+
+### Reading and lookups
+
+- Browse and search organizations
+
+**Also calls:** `useOrgDeviceCountQuery` — listed verbatim because the name does not match a known verb.
+
+---
+
+<small>Read from: component `OrgList`; description from `pages/OrgList.jsx — headers Name, Email, Devices, Online, Offline, Active, Created, Modified`.</small>
+

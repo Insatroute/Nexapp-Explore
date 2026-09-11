@@ -1,0 +1,32 @@
+---
+title: "Nodes"
+description: "Network Topology › Nodes"
+---
+
+<Cards>
+  <Card title="Path" description="/network-topology/nodes" />
+  <Card title="Who can open it" description="Requires any permission on topology.node." />
+</Cards>
+
+The nodes a parsed topology found — each with the addresses it is known by and the topology it belongs to.
+
+## What you can do here
+
+### Actions
+
+- Create net node
+- Delete net node
+- Edit net node
+
+### Reading and lookups
+
+- Browse and search net nodes
+- Browse and search net topologies
+- Browse and search organizations
+
+**Opens:** `NodeDrawer` · `useNetTopologies` — some actions above are performed in these.
+
+---
+
+<small>Read from: component `NetNodeList`; description from `pages/NetNodeList.jsx — headers Name, Organization, Topology, Addresses, Modified; calls NodeDrawer's api.createNetNode and api.updateNetNode, plus useNetTopologies`.</small>
+

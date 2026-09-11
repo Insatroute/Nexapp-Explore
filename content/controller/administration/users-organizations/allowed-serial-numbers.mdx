@@ -1,0 +1,34 @@
+---
+title: "Allowed Serial Numbers"
+description: "Administration › Users & Organizations › Allowed Serial Numbers"
+---
+
+<Cards>
+  <Card title="Path" description="/allowed-serials" />
+  <Card title="Who can open it" description="Requires any permission on serial_admission.allowedserialnumber." />
+</Cards>
+
+Which hardware is permitted to join which organization. A row is a serial number, the organization it may join, whether it is admitted automatically, and who added it.
+
+It is only consulted for organizations with "Require serial admission" switched on — a setting on the organization itself. Filed under Users & Organizations rather than Devices because the row is about entitlement, not about a device that already exists.
+
+## What you can do here
+
+### Actions
+
+- Create allowed serial
+- Delete allowed serial
+- Edit allowed serial
+- **Import or upload allowed serials csv** — Loads a batch of serial numbers from a CSV instead of adding them one at a time.
+
+### Reading and lookups
+
+- Browse and search allowed serials
+- Browse and search organizations
+
+**Opens:** `AllowedSerialDrawer` · `SerialCsvDrawer` — some actions above are performed in these.
+
+---
+
+<small>Read from: component `AllowedSerialList`; description from `pages/AllowedSerialList.jsx — headers Serial number, Organization, Auto admit, Notes, Added by, Modified; calls the allowed-serial queries plus AllowedSerialDrawer and SerialCsvDrawer`.</small>
+

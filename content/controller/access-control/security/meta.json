@@ -1,0 +1,14 @@
+{
+  "title": "Security",
+  "pages": [
+    "index",
+    "instashield-ip",
+    "ips",
+    "antivirus",
+    "antispam",
+    "web-filter",
+    "address-groups",
+    "profiles",
+    "policies"
+  ]
+}

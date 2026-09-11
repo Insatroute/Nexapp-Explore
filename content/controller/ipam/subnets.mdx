@@ -1,0 +1,32 @@
+---
+title: "Subnets"
+description: "IPAM › Subnets"
+---
+
+<Cards>
+  <Card title="Path" description="/ipam/subnets" />
+  <Card title="Who can open it" description="Requires any permission on nexapp_ipam.subnet." />
+</Cards>
+
+The ranges addresses are allocated from. A subnet belongs to an organization, may sit under a master subnet, and may be tied to a device — the list shows all three, so the shape of the addressing plan is readable without opening anything.
+
+Subnets can also be imported rather than entered one at a time.
+
+## What you can do here
+
+### Actions
+
+- Delete subnet
+- **Import or upload subnet** — Bulk-loads subnets rather than adding them one by one, in the import modal.
+
+### Reading and lookups
+
+- Browse and search organizations
+- Browse and search subnets with device
+
+**Opens:** `SubnetImportModal` — some actions above are performed in it.
+
+---
+
+<small>Read from: component `SubnetList`; description from `pages/SubnetList.jsx — headers Name, Organization, Subnet, Master subnet, Related device, Created, Modified; calls useListSubnetsWithDeviceQuery, useDeleteSubnetMutation, useListOrganizationsQuery, and SubnetImportModal's useImportSubnetMutation`.</small>
+

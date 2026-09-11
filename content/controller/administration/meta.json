@@ -1,0 +1,10 @@
+{
+  "title": "Administration",
+  "pages": [
+    "users-organizations",
+    "permission-groups",
+    "device-groups",
+    "hierarchy",
+    "license-subscription"
+  ]
+}

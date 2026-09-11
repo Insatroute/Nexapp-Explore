@@ -1,0 +1,35 @@
+---
+title: "Device Groups"
+description: "Administration › Device Groups"
+---
+
+<Cards>
+  <Card title="Path" description="/device-groups" />
+  <Card title="Who can open it" description="Requires any permission on config.devicegroup." />
+</Cards>
+
+The groups devices belong to, and what those groups carry. A group has a parent, so the tree can go region → site → devices, and it can hold templates and variables that every device in it inherits.
+
+Distinct from Permission Groups above, which are sets of permissions for users. These are what devices belong to and what templates attach to.
+
+## What you can do here
+
+### Actions
+
+- Create device group
+- Delete device group
+- Edit device group
+
+### Reading and lookups
+
+- Browse and search device groups
+- Browse and search groups
+- Browse and search organizations
+- Browse and search templates
+
+**Opens:** `DeviceGroupDrawer` — some actions above are performed in it.
+
+---
+
+<small>Read from: component `DeviceGroupList`; description from `pages/DeviceGroupList.jsx — headers Name, Organization, Parent, Templates, Variables, Created, Modified; calls the device-group queries plus DeviceGroupDrawer's create/update and useListTemplatesQuery`.</small>
+

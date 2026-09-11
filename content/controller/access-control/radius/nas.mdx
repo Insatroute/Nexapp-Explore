@@ -1,0 +1,29 @@
+---
+title: "NAS"
+description: "Access Control › RADIUS › NAS"
+---
+
+<Cards>
+  <Card title="Path" description="/radius/nas" />
+  <Card title="Who can open it" description="Requires any permission on nexapp_radius.nas." />
+</Cards>
+
+The RADIUS clients — the network access servers permitted to ask this controller to authenticate a user. An entry is a shared secret plus the address the request will arrive from, scoped to an organization.
+
+## What you can do here
+
+### Actions
+
+- Create NAS
+- Delete NAS
+- Edit NAS
+
+### Reading and lookups
+
+- Browse and search NAS
+- Browse and search organizations
+
+---
+
+<small>Read from: component `RadiusNas`; description from `calls useListNasQuery, useCreateNasMutation, useUpdateNasMutation, useDeleteNasMutation, useListOrganizationsQuery`.</small>
+

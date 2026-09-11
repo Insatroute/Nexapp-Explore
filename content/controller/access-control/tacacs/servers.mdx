@@ -1,0 +1,30 @@
+---
+title: "Servers"
+description: "Access Control › TACACS+ › Servers"
+---
+
+<Cards>
+  <Card title="Path" description="/tacacs/servers" />
+  <Card title="Who can open it" description="Requires any permission on nexapp_tacacs.tacacsserverconfig." />
+</Cards>
+
+The TACACS+ servers this controller runs: what they listen on, whether authentication and accounting are enabled, the deploy mode, and whether the running configuration matches what has been asked for — a pending count means changes are staged but not yet reloaded.
+
+## What you can do here
+
+### Actions
+
+- Apply or push TACACS+ server
+- Edit TACACS+ server
+- Refresh TACACS+ server
+
+### Reading and lookups
+
+- Browse and search TACACS+ servers
+
+**Opens:** `TacacsServerDrawer` — some actions above are performed in it.
+
+---
+
+<small>Read from: component `TacacsServers`; description from `pages/TacacsServers.jsx — headers Organization, Listen, Auth, Accounting, Deploy mode, Status, Pending, Last reload; calls TacacsServerDrawer's useUpdateTacacsServerMutation`.</small>
+

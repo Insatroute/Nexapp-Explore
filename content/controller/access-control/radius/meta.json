@@ -1,0 +1,13 @@
+{
+  "title": "RADIUS",
+  "pages": [
+    "index",
+    "nas",
+    "groups",
+    "checks",
+    "replies",
+    "accounting",
+    "post-auth-log",
+    "batch-operations"
+  ]
+}

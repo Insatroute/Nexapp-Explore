@@ -1,0 +1,30 @@
+---
+title: "Batch operations"
+description: "Access Control › RADIUS › Batch operations"
+---
+
+<Cards>
+  <Card title="Path" description="/radius/batch" />
+  <Card title="Who can open it" description="Requires any permission on nexapp_radius.radiusbatch." />
+</Cards>
+
+Bulk user creation. A batch generates or imports a set of RADIUS users in one operation — the strategy says which — and records how many users it produced, when the credentials expire, and lets the generated credentials be retrieved.
+
+## What you can do here
+
+### Actions
+
+- Create RADIUS batch
+- Delete RADIUS batch
+
+### Reading and lookups
+
+- Browse and search organizations
+- Browse and search RADIUS batches
+
+**Opens:** `RadiusBatchDrawer` — some actions above are performed in it.
+
+---
+
+<small>Read from: component `RadiusBatches`; description from `pages/RadiusBatches.jsx — headers Name, Organization, Strategy, Users, Credentials, Expires, Created; calls RadiusBatchDrawer's useCreateRadiusBatchMutation`.</small>
+

@@ -1,0 +1,36 @@
+---
+title: "IP addresses"
+description: "IPAM › IP addresses"
+---
+
+<Cards>
+  <Card title="Path" description="/ipam/ip-addresses" />
+  <Card title="Who can open it" description="Requires any permission on nexapp_ipam.ipaddress." />
+</Cards>
+
+Individual addresses, and the day-to-day half of IPAM: allocating one, or hunting a free one. Each row shows the address, the subnet it belongs to and the organization that owns it.
+
+Addresses come first in this section because subnets are the setup step you visit far less often.
+
+## Why it sits here
+
+Its own section rather than a disclosure inside Network. Addressing is a subject an operator works IN — allocating a subnet, hunting a free address — not one entry among the devices and links it describes, and filed under Network it cost two clicks to reach from anywhere else. Addresses first: it is the day-to-day view, and subnets are the setup step you visit far less often.
+
+<Callout type="info">Authored note, from the `NAV` array in `Sidebar.jsx`.</Callout>
+
+## What you can do here
+
+### Actions
+
+- Delete IP
+
+### Reading and lookups
+
+- Browse and search all IPS
+- Browse and search organizations
+- Browse and search subnets
+
+---
+
+<small>Read from: component `IpAddressList`; description from `pages/IpAddressList.jsx — headers IP address, Subnet, Organization, Created, Modified; filters by organization and by subnet; calls useListAllIpsQuery, useDeleteIpMutation, useListSubnetsQuery, useListOrganizationsQuery`.</small>
+

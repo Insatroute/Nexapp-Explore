@@ -1,0 +1,58 @@
+---
+title: "Devices"
+description: "Network › Devices"
+---
+
+<Cards>
+  <Card title="Path" description="/devices" />
+  <Card title="Who can open it" description="Requires any permission on config.device." />
+</Cards>
+
+The device inventory, and the page most operational work starts from. Each row is one router: whether it is reachable, whether its pushed configuration applied cleanly, which organization owns it, and what firmware it runs. The status tiles across the top (All / Online / Problem / Offline / Unknown) filter the table, and search covers name, MAC, model and IP.
+
+Twelve columns exist; eleven are shown by default. `Group` is the one that is off, which is why the picker reads “Columns 11” against a twelve-row list. `Status` and `Device` cannot be switched off at all.
+
+The toolbar is in two halves, and the difference matters. **Apply template**, **Back up config**, **Change group** and **Delete** are BULK: they stay disabled until rows are ticked, then act on the whole selection, so the page serves one device and forty the same way. **Import devices**, **Export CSV** and **Recover deleted** sit in a separate “more actions” menu and need no selection — they are always available. **SDLAN Access** is the exception in the other direction: it works on exactly one device and is disabled at zero and at more than one.
+
+## What you can do here
+
+### Actions
+
+- **Create device** — Bulk-creates devices from a CSV, in the import drawer. The file carries per-device identity (name, MAC, optional model and notes) and one organization is chosen for the whole batch, because a device needs exactly name + organization + MAC. Parsing is a plain comma split with no quoted-field support — richer files belong in the Django admin’s import page.
+- **Delete device** — `DELETE /controller/device/<id>/?force=true`, per row or across a selection, always behind a confirm. Only offered to a user holding `config.delete_device`; everyone else keeps the row menu without it. Deletes are recoverable — see below.
+- **Edit device** — `PATCH /controller/device/<id>/`. On this page it is reached through “change group”, which writes the single `group` field (and accepts null to clear it) rather than opening a full edit form. Assigning devices to a group is a different job from creating one, which lives under Administration › Device Groups.
+- **Recover device** — Deleted devices are retained by django-reversion rather than destroyed. The recover modal lists what is still held and restores one on demand, and because the backend reverts the whole revision the device’s configuration comes back with it.
+
+### Bulk actions
+
+- **Apply or push backup (in bulk)** — A different operation from applying a template, despite sitting in the same drawer. This takes a stored backup and pushes its raw UCI over SSH (`POST /controller/device/bulk-apply-backup/`), overwriting the running configuration of every device listed. A template is attached and rendered; a backup is pushed as-is.
+- **Apply or push template (in bulk)** — Attaches one or more templates to every selected device (`POST /controller/device/bulk-apply-template/`), which the controller then renders per device. Two rules are enforced up front rather than as a 400 afterwards: the selection must sit in a single organization, because templates are org-scoped and a mixed selection has no valid template list; and `add` unions with what each device already has while `replace` overwrites it. Replace is the destructive one, so it is not the default.
+- **Back up config (in bulk)** — Queues a configuration snapshot per selected device via `POST /controller/device/bulk-backup/`. The task skips writing one when nothing has changed since the last backup, so a snapshot appears under Templates › Backup Templates only if the config actually differs. Queued, not created — the toast is careful about that distinction and so is this page.
+
+### Reading and lookups
+
+- **Browse and search backup templates** — Loads the saved backups so one can be chosen as the source for the push above.
+- **Browse and search deleted devices** — `GET /controller/device/deleted/` — the list behind the recover modal. It is only read when that modal is opened.
+- **Browse and search device groups** — Loads the group tree for the change-group drawer.
+- **Browse and search devices** — The table itself, from `GET /monitoring/device/` — the monitoring endpoint rather than the plain controller one, so each row carries live status alongside its identity. Paged, and scoped by the organization/group picker. `?subnet=<cidr>` narrows it to one IPAM range, which is how IPAM’s “See all devices” links in; the filter lives in the URL so the view is linkable and survives a refresh. “Auto” re-polls on a timer and pauses while the browser tab is hidden.
+- **Browse and search groups** — The scope picker’s group list — what narrows the whole table to one part of the fleet.
+- **Browse and search organizations** — The scope picker’s organization list, and the org chosen for a CSV import batch.
+- **Browse and search templates** — Loads the org’s templates to populate the apply-template picker.
+
+## Also on the page
+
+- **SDLAN access** — Opens the SD-LAN access view for a device, at `/devices/<id>/sdlan`. It is a link, not a call, which is why it does not appear among the operations above. Available two ways: from a row’s own menu, and from the toolbar button — but the toolbar one acts on exactly one device, so it stays disabled at zero selected and at more than one, and says which in its tooltip. The access cards on the destination page are single-device, which is the reason for the restriction.
+- **Open device** — The row menu’s first entry, to `/devices/<id>` — the device detail page and its fourteen tabs. Clicking the device name in the table goes to the same place.
+
+<Callout type="info">These make no API call of their own, so they do not appear above: the list of operations is derived from the page’s call surface.</Callout>
+
+**Opens:** `ApplyTemplateDrawer` · `ChangeGroupDrawer` · `DeviceImportDrawer` · `DeviceRecoverModal` — some actions above are performed in these.
+
+## What the page shows
+
+**Columns** — `Status` · `Device` · `Config` · `Organization` · `Model` · `Firmware` · `Management IP` · `Last IP` · `MAC address` · `Group` · `Created` · `Modified`
+
+---
+
+<small>Read from: component `DeviceList`; description from `reads pages/DeviceList.jsx (status tiles, COLUMNS/ESSENTIALS model, auto-refresh, selection gating, both overflow menus, sdlanHref) and the four components it opens; endpoints from api/client.js`.</small>
+

@@ -1,0 +1,33 @@
+---
+title: "VRF"
+description: "Policy Engine › VRF"
+---
+
+<Cards>
+  <Card title="Path" description="/policy-engine/vrf" />
+  <Card title="Who can open it" description="Requires any permission on sdwan_tunnel.vrfconfig." />
+</Cards>
+
+Virtual routing and forwarding instances. VRF is the one exception to the no-device-picker rule on this page: its serializer requires a device outright, so a VRF is always bound to one.
+
+Scope is the same across the Policy Engine: a policy with **Apply fleet-wide** set reaches every device, otherwise it is narrowed to an organization. There is deliberately no device picker — configuring a single router is what that router's own CPE page is for.
+
+<Callout type="info">Served by the shared `PolicyEngine` component via the `/policy-engine/:tab` route. Facts below describe that component, which renders several tabs.</Callout>
+
+## What you can do here
+
+### Actions
+
+- **Delete resource** — Removes a policy via `DELETE /api/v1/nsbond/vrf-config/<id>/`.
+- **Edit resource** — Creates and edits a policy through the shared resource form. Fields: VRF ID, Table ID, Device, Route distinguisher, RT import, RT export, Interfaces, Internet access.
+
+### Reading and lookups
+
+- **Browse and search resource** — Lists policies from `GET /api/v1/nsbond/vrf-config/`, with columns Name, VRF ID, RD, State.
+
+**Opens:** `ResourceTable` — some actions above are performed in it.
+
+---
+
+<small>Read from: component `PolicyEngine`; description from `pages/policy/tabs.js descriptor for key 'vrf': resource 'nsbond/vrf-config', noun 'policy', and its columns/fields arrays (field names read from each endpoint's OPTIONS response, per the file's own note)`.</small>
+

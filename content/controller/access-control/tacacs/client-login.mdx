@@ -1,0 +1,36 @@
+---
+title: "Client (login)"
+description: "Access Control › TACACS+ › Client (login)"
+---
+
+<Cards>
+  <Card title="Path" description="/tacacs/client" />
+  <Card title="Who can open it" description="Requires any permission on nexapp_tacacs.tacacsclientconfig." />
+</Cards>
+
+The other side: this controller acting as a TACACS+ CLIENT, so administrators sign in to it against a TACACS+ server. It records which servers are used, the timeout, whether local logins remain possible as a fallback, and which surfaces the login applies to.
+
+Shared configuration, and superuser-only — a mistake here can lock everyone out, which is why local logins exist as a switch.
+
+## What you can do here
+
+### Actions
+
+- Create TACACS+ client
+- Create TACACS+ client server
+- Delete TACACS+ client
+- Delete TACACS+ client server
+- Edit TACACS+ client
+- Edit TACACS+ client server
+
+### Reading and lookups
+
+- Browse and search organizations
+- Browse and search TACACS+ clients
+
+**Opens:** `TacacsClientDrawer` — some actions above are performed in it.
+
+---
+
+<small>Read from: component `TacacsClient`; description from `pages/TacacsClient.jsx — headers Organization, Servers, Auth, Timeout, Local logins, Surfaces, Status; calls the TACACS client queries plus TacacsClientDrawer's client and client-server mutations`.</small>
+

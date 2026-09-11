@@ -1,0 +1,208 @@
+---
+title: Reports
+full: true
+_openapi:
+  preload:
+    - ./controller-openapi.docs.json
+  toc:
+    - depth: 2
+      title: Api_v1_reports_custom_list
+      url: '#api_v1_reports_custom_list'
+    - depth: 2
+      title: Api_v1_reports_custom_create
+      url: '#api_v1_reports_custom_create'
+    - depth: 2
+      title: Api_v1_reports_custom_read
+      url: '#api_v1_reports_custom_read'
+    - depth: 2
+      title: Api_v1_reports_custom_partial_update
+      url: '#api_v1_reports_custom_partial_update'
+    - depth: 2
+      title: Api_v1_reports_custom_delete
+      url: '#api_v1_reports_custom_delete'
+    - depth: 2
+      title: Api_v1_reports_custom_update
+      url: '#api_v1_reports_custom_update'
+    - depth: 2
+      title: Api_v1_reports_custom_data
+      url: '#api_v1_reports_custom_data'
+    - depth: 2
+      title: Api_v1_reports_data_read
+      url: '#api_v1_reports_data_read'
+    - depth: 2
+      title: Api_v1_reports_history_list
+      url: '#api_v1_reports_history_list'
+    - depth: 2
+      title: Api_v1_reports_history_create
+      url: '#api_v1_reports_history_create'
+    - depth: 2
+      title: Api_v1_reports_history_read
+      url: '#api_v1_reports_history_read'
+    - depth: 2
+      title: Api_v1_reports_history_partial_update
+      url: '#api_v1_reports_history_partial_update'
+    - depth: 2
+      title: Api_v1_reports_history_delete
+      url: '#api_v1_reports_history_delete'
+    - depth: 2
+      title: Api_v1_reports_history_update
+      url: '#api_v1_reports_history_update'
+    - depth: 2
+      title: Api_v1_reports_schedule_list
+      url: '#api_v1_reports_schedule_list'
+    - depth: 2
+      title: Api_v1_reports_schedule_create
+      url: '#api_v1_reports_schedule_create'
+    - depth: 2
+      title: Api_v1_reports_schedule_read
+      url: '#api_v1_reports_schedule_read'
+    - depth: 2
+      title: Api_v1_reports_schedule_partial_update
+      url: '#api_v1_reports_schedule_partial_update'
+    - depth: 2
+      title: Api_v1_reports_schedule_delete
+      url: '#api_v1_reports_schedule_delete'
+    - depth: 2
+      title: Api_v1_reports_schedule_update
+      url: '#api_v1_reports_schedule_update'
+    - depth: 2
+      title: Api_v1_reports_template_list
+      url: '#api_v1_reports_template_list'
+    - depth: 2
+      title: Api_v1_reports_template_create
+      url: '#api_v1_reports_template_create'
+    - depth: 2
+      title: Api_v1_reports_template_read
+      url: '#api_v1_reports_template_read'
+    - depth: 2
+      title: Api_v1_reports_template_partial_update
+      url: '#api_v1_reports_template_partial_update'
+    - depth: 2
+      title: Api_v1_reports_template_delete
+      url: '#api_v1_reports_template_delete'
+    - depth: 2
+      title: Api_v1_reports_template_update
+      url: '#api_v1_reports_template_update'
+  structuredData:
+    headings:
+      - content: Api_v1_reports_custom_list
+        id: api_v1_reports_custom_list
+      - content: Api_v1_reports_custom_create
+        id: api_v1_reports_custom_create
+      - content: Api_v1_reports_custom_read
+        id: api_v1_reports_custom_read
+      - content: Api_v1_reports_custom_partial_update
+        id: api_v1_reports_custom_partial_update
+      - content: Api_v1_reports_custom_delete
+        id: api_v1_reports_custom_delete
+      - content: Api_v1_reports_custom_update
+        id: api_v1_reports_custom_update
+      - content: Api_v1_reports_custom_data
+        id: api_v1_reports_custom_data
+      - content: Api_v1_reports_data_read
+        id: api_v1_reports_data_read
+      - content: Api_v1_reports_history_list
+        id: api_v1_reports_history_list
+      - content: Api_v1_reports_history_create
+        id: api_v1_reports_history_create
+      - content: Api_v1_reports_history_read
+        id: api_v1_reports_history_read
+      - content: Api_v1_reports_history_partial_update
+        id: api_v1_reports_history_partial_update
+      - content: Api_v1_reports_history_delete
+        id: api_v1_reports_history_delete
+      - content: Api_v1_reports_history_update
+        id: api_v1_reports_history_update
+      - content: Api_v1_reports_schedule_list
+        id: api_v1_reports_schedule_list
+      - content: Api_v1_reports_schedule_create
+        id: api_v1_reports_schedule_create
+      - content: Api_v1_reports_schedule_read
+        id: api_v1_reports_schedule_read
+      - content: Api_v1_reports_schedule_partial_update
+        id: api_v1_reports_schedule_partial_update
+      - content: Api_v1_reports_schedule_delete
+        id: api_v1_reports_schedule_delete
+      - content: Api_v1_reports_schedule_update
+        id: api_v1_reports_schedule_update
+      - content: Api_v1_reports_template_list
+        id: api_v1_reports_template_list
+      - content: Api_v1_reports_template_create
+        id: api_v1_reports_template_create
+      - content: Api_v1_reports_template_read
+        id: api_v1_reports_template_read
+      - content: Api_v1_reports_template_partial_update
+        id: api_v1_reports_template_partial_update
+      - content: Api_v1_reports_template_delete
+        id: api_v1_reports_template_delete
+      - content: Api_v1_reports_template_update
+        id: api_v1_reports_template_update
+    contents:
+      - content: List custom reports visible to the current user.
+        heading: api_v1_reports_custom_list
+      - content: Create a new custom report.
+        heading: api_v1_reports_custom_create
+      - content: Retrieve a single custom report by ID.
+        heading: api_v1_reports_custom_read
+      - content: Partially update an existing custom report.
+        heading: api_v1_reports_custom_partial_update
+      - content: Delete an existing custom report.
+        heading: api_v1_reports_custom_delete
+      - content: Replace an existing custom report.
+        heading: api_v1_reports_custom_update
+      - content: 'Rendered rows for a saved custom report: every selected report slug
+          built, merged and de-duplicated into one device-centric table.'
+        heading: api_v1_reports_custom_data
+      - content: Rows, columns and period for one report slug.
+        heading: api_v1_reports_data_read
+      - content: List report email historys visible to the current user.
+        heading: api_v1_reports_history_list
+      - content: Create a new report email history.
+        heading: api_v1_reports_history_create
+      - content: Retrieve a single report email history by ID.
+        heading: api_v1_reports_history_read
+      - content: Partially update an existing report email history.
+        heading: api_v1_reports_history_partial_update
+      - content: Delete an existing report email history.
+        heading: api_v1_reports_history_delete
+      - content: Replace an existing report email history.
+        heading: api_v1_reports_history_update
+      - content: List report email schedules visible to the current user.
+        heading: api_v1_reports_schedule_list
+      - content: Create a new report email schedule.
+        heading: api_v1_reports_schedule_create
+      - content: Retrieve a single report email schedule by ID.
+        heading: api_v1_reports_schedule_read
+      - content: Partially update an existing report email schedule.
+        heading: api_v1_reports_schedule_partial_update
+      - content: Delete an existing report email schedule.
+        heading: api_v1_reports_schedule_delete
+      - content: Replace an existing report email schedule.
+        heading: api_v1_reports_schedule_update
+      - content: List report templates visible to the current user.
+        heading: api_v1_reports_template_list
+      - content: Create a new report template.
+        heading: api_v1_reports_template_create
+      - content: Retrieve a single report template by ID.
+        heading: api_v1_reports_template_read
+      - content: Partially update an existing report template.
+        heading: api_v1_reports_template_partial_update
+      - content: Delete an existing report template.
+        heading: api_v1_reports_template_delete
+      - content: Replace an existing report template.
+        heading: api_v1_reports_template_update
+---
+
+{/* This file was generated by Fumadocs. Do not edit this file directly. Any changes should be made by running the generation command again. */}
+
+export default function Layout(props) {
+  const { APIPage, OpenAPIPage } = props.components ?? {};
+  // "APIPage" is the old name from v10, this allows both for backward compatibility
+  const Comp = OpenAPIPage ?? APIPage;
+  return (
+    <>
+      {props.children}
+      <Comp document="./controller-openapi.docs.json" webhooks={[]} operations={[{"path":"/api/v1/reports/custom/","method":"get"},{"path":"/api/v1/reports/custom/","method":"post"},{"path":"/api/v1/reports/custom/{id}/","method":"get"},{"path":"/api/v1/reports/custom/{id}/","method":"patch"},{"path":"/api/v1/reports/custom/{id}/","method":"delete"},{"path":"/api/v1/reports/custom/{id}/","method":"put"},{"path":"/api/v1/reports/custom/{id}/data/","method":"get"},{"path":"/api/v1/reports/data/{slug}/","method":"get"},{"path":"/api/v1/reports/history/","method":"get"},{"path":"/api/v1/reports/history/","method":"post"},{"path":"/api/v1/reports/history/{id}/","method":"get"},{"path":"/api/v1/reports/history/{id}/","method":"patch"},{"path":"/api/v1/reports/history/{id}/","method":"delete"},{"path":"/api/v1/reports/history/{id}/","method":"put"},{"path":"/api/v1/reports/schedule/","method":"get"},{"path":"/api/v1/reports/schedule/","method":"post"},{"path":"/api/v1/reports/schedule/{id}/","method":"get"},{"path":"/api/v1/reports/schedule/{id}/","method":"patch"},{"path":"/api/v1/reports/schedule/{id}/","method":"delete"},{"path":"/api/v1/reports/schedule/{id}/","method":"put"},{"path":"/api/v1/reports/template/","method":"get"},{"path":"/api/v1/reports/template/","method":"post"},{"path":"/api/v1/reports/template/{id}/","method":"get"},{"path":"/api/v1/reports/template/{id}/","method":"patch"},{"path":"/api/v1/reports/template/{id}/","method":"delete"},{"path":"/api/v1/reports/template/{id}/","method":"put"}]} showTitle showDescription />
+    </>
+  );
+}

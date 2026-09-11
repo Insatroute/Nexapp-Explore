@@ -1,0 +1,9 @@
+{
+  "title": "Users & Organizations",
+  "pages": [
+    "index",
+    "users",
+    "organizations",
+    "allowed-serial-numbers"
+  ]
+}

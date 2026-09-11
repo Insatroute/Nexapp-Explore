@@ -1,0 +1,20 @@
+---
+title: "DR Control Panel"
+description: "Network › High Availability › DR Control Panel"
+---
+
+<Cards>
+  <Card title="Path" description="/ha/dr" />
+  <Card title="Who can open it" description="Superusers only." />
+</Cards>
+
+This data centre and the disaster-recovery site it streams to — the page you open to answer one question: is the data safe.
+
+It reports the replication state between the two sites along with task workers, database connections, database size, management-plane health, uptime and last-seen for each. The admin page it replaces laid the same API response out field by field and put the verdict last; here the verdict leads.
+
+**Also calls:** `useDcdrStatusQuery` — listed verbatim because the name does not match a known verb.
+
+---
+
+<small>Read from: component `HaDrPanel`; description from `pages/HaDrPanel.jsx — its header comment describes the layout it replaces (dcdr_fabric.html); renders Task workers, DB connections, Database size, Management plane, Uptime, Last seen; calls useDcdrStatusQuery`.</small>
+

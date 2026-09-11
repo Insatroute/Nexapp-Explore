@@ -1,0 +1,31 @@
+---
+title: "Command rules"
+description: "Access Control › TACACS+ › Command rules"
+---
+
+<Cards>
+  <Card title="Path" description="/tacacs/rules" />
+  <Card title="Who can open it" description="Requires any permission on nexapp_tacacs.tacacscommandrule." />
+</Cards>
+
+Command authorization: which commands a group may or may not run. Each rule is a pattern, an action and an order — order matters, because the first matching rule decides.
+
+## What you can do here
+
+### Actions
+
+- Create TACACS+ rule
+- Delete TACACS+ rule
+- Edit TACACS+ rule
+
+### Reading and lookups
+
+- Browse and search CPE user groups
+- Browse and search TACACS+ rules
+
+**Opens:** `TacacsRuleDrawer` — some actions above are performed in it.
+
+---
+
+<small>Read from: component `TacacsRules`; description from `pages/TacacsRules.jsx — headers Order, Group, Command, Pattern, Action; calls TacacsRuleDrawer's create/update mutations`.</small>
+

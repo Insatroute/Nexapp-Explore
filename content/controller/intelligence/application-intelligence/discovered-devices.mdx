@@ -1,0 +1,35 @@
+---
+title: "Discovered Devices"
+description: "Intelligence › Application Intelligence › Discovered Devices"
+---
+
+<Cards>
+  <Card title="Path" description="/app-intelligence/discovered" />
+  <Card title="Who can open it" description="Requires any permission on dpi_analytics.dpideviceprofile." />
+</Cards>
+
+Hosts the DPI engine has seen behind a router but that were never registered — hostname, MAC, address, how much they moved, and when they were first and last seen.
+
+Read-only: these rows are produced by the DPI engine.
+
+<Callout type="info">Served by the shared `AppIntelHub` component via the `/app-intelligence/:tab` route. Facts below describe that component, which renders several tabs.</Callout>
+
+## What you can do here
+
+### Actions
+
+- **Delete resource** — Removes a discovered device via `DELETE /api/v1/dpi/devices/<id>/`.
+- **Edit resource** — Creates and edits a discovered device through the shared resource form. Read-only in practice — these records are written by the engine, not by hand.
+
+### Reading and lookups
+
+- **Browse and search resource** — Lists discovered devices from `GET /api/v1/dpi/devices/`, with columns Device, Hostname, MAC address, IP address, Status, Total download, Total upload, Type, First seen, Last seen.
+
+**Also calls:** `appDetail` — listed verbatim because the name does not match a known verb.
+
+**Opens:** `AppDatabase` · `ResourceTable` — some actions above are performed in these.
+
+---
+
+<small>Read from: component `AppIntelHub`; description from `pages/appintel/tabs.js descriptor for key 'discovered': resource 'dpi/devices', noun 'discovered device', and its columns/fields arrays (field names read from each endpoint's OPTIONS response, per the file's own note)`.</small>
+

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "spec": "cd '../../../IOT RMS_2026/nexapp-rms2/backend' && go run ./cmd/openapi-dump -o '../../../fumadocs/apps/sdwan-lite/openapi.json'",
-    "generate": "node --experimental-strip-types ./scripts/generate-docs.ts && npm run generate:console",
+    "generate": "node --experimental-strip-types ./scripts/generate-docs.ts && npm run generate:console && npm run controller",
     "refresh": "npm run capture && npm run spec && npm run generate",
     "build": "npm run generate && npm run check:links && next build",
     "dev": "next dev -p 3001",
@@ -14,13 +14,21 @@
     "check:links": "node --experimental-strip-types ./scripts/check-links.ts",
     "capture": "python3 ./scripts/crawl-nav.py",
     "sync": "npm run refresh && npm run build",
-    "publish": "bash ./scripts/publish.sh"
+    "publish": "bash ./scripts/publish.sh",
+    "controller:spec": "python3 ./nexapp-controller/dump-schema.py",
+    "controller:convert": "node --experimental-strip-types ./nexapp-controller/convert-spec.ts",
+    "controller:api": "node --experimental-strip-types ./nexapp-controller/generate-docs.ts",
+    "controller:console": "node --experimental-strip-types ./nexapp-controller/generate-console-reference.ts",
+    "controller": "npm run controller:api && npm run controller:console",
+    "controller:nav": "node --experimental-strip-types ./nexapp-controller/extract-nav.ts",
+    "controller:routes": "node --experimental-strip-types ./nexapp-controller/extract-routes.ts",
+    "serve": "bash ./scripts/serve.sh"
   },
   "dependencies": {
-    "fumadocs-core": "workspace:*",
-    "fumadocs-mdx": "workspace:*",
-    "fumadocs-openapi": "workspace:*",
-    "fumadocs-ui": "workspace:@fumadocs/base-ui@*",
+    "fumadocs-core": "^16.15.7",
+    "fumadocs-mdx": "^15.4.0",
+    "fumadocs-openapi": "^11.4.1",
+    "fumadocs-ui": "npm:@fumadocs/base-ui@^16.15.7",
     "next": "16.3.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
@@ -29,6 +37,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",
     "@types/mdx": "^2.0.14",
+    "@types/node": "^26.4.1",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
     "postcss": "^8.5.26",

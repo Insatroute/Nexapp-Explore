@@ -1,0 +1,26 @@
+---
+title: "Site Settings"
+description: "Settings › Site Settings"
+---
+
+<Cards>
+  <Card title="Path" description="/settings/site" />
+  <Card title="Who can open it" description="Superusers only." />
+</Cards>
+
+The site's name and domain — two fields from django.contrib.sites, and neither is cosmetic. The domain is interpolated into the links in every alert email, so a wrong value here produces mail whose links go nowhere.
+
+## Why it sits here
+
+Mirrors the admin's Settings group (registered in sla_metrics/apps.py at position 470) so the two navs stay recognisable as the same product. Notifications and Email & Alerts are ported; the rest hand back to the admin rather than disappearing from the menu.
+
+<Callout type="info">Authored note, from the `NAV` array in `Sidebar.jsx`.</Callout>
+
+## What you can do here
+
+- Edit site
+
+---
+
+<small>Read from: component `SiteSettings`; description from `pages/SiteSettings.jsx — its own header comment: "django.contrib.sites holds two fields, but they are not cosmetic: `domain` is what every alert email interpolates into its links, so a wrong value…"`.</small>
+

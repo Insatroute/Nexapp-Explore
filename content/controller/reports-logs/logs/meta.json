@@ -1,0 +1,10 @@
+{
+  "title": "Logs",
+  "pages": [
+    "index",
+    "access-log",
+    "activity-log",
+    "device-log",
+    "firmware-log"
+  ]
+}

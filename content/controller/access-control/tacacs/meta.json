@@ -1,0 +1,12 @@
+{
+  "title": "TACACS+",
+  "pages": [
+    "index",
+    "servers",
+    "client-login",
+    "command-rules",
+    "device-group-secrets",
+    "active-sessions",
+    "accounting-logs"
+  ]
+}

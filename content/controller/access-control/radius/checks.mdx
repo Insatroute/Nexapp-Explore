@@ -1,0 +1,29 @@
+---
+title: "Checks"
+description: "Access Control › RADIUS › Checks"
+---
+
+<Cards>
+  <Card title="Path" description="/radius/check" />
+  <Card title="Who can open it" description="Requires any permission on nexapp_radius.radiuscheck." />
+</Cards>
+
+Check attributes: the conditions a RADIUS request must satisfy to authenticate. Each row is a username, an attribute, an operator and a value — the operator matters, since it is what distinguishes a match from an assignment.
+
+## What you can do here
+
+### Actions
+
+- Create RADIUS checks
+- Delete RADIUS checks
+- Edit RADIUS checks
+
+### Reading and lookups
+
+- Browse and search organizations
+- Browse and search RADIUS checks
+
+---
+
+<small>Read from: component `RadiusChecks`; description from `pages/RadiusChecks.jsx — headers Username, Attribute, Op, Value, Organization`.</small>
+

@@ -19,3 +19,6 @@ content/docs/
 # from the environment.
 .env
 .env.*
+
+# Local static preview of out/ (npm run serve)
+.serve/

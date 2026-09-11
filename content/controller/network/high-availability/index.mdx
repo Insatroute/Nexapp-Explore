@@ -1,0 +1,15 @@
+---
+title: "High Availability"
+description: "Network › High Availability"
+---
+
+
+A disclosure, not a link: "high availability" covers three different pairs — the routers', this controller's two servers, and the DC/DR sites — and they have no combined view. The admin listed them as three unrelated entries; here they read as one subject.
+
+`High Availability` is a disclosure in the sidebar — it opens, it does not navigate. It covers:
+
+- [HA Devices](/controller/network/high-availability/ha-devices) — High availability for the ROUTERS: which devices are paired, which of a pair currently holds the virtual IP, and what VRRP thinks the state is.
+- [HA Controller](/controller/network/high-availability/ha-controller) — High availability for the CONTROLLER'S OWN pair — not the routers'.
+- [DR Control Panel](/controller/network/high-availability/dr-control-panel) — This data centre and the disaster-recovery site it streams to — the page you open to answer one question: is the data safe.
+
+<Callout type="info">The note above is authored, from the `NAV` array in `Sidebar.jsx`.</Callout>

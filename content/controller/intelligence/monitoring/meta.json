@@ -1,0 +1,9 @@
+{
+  "title": "Monitoring",
+  "pages": [
+    "index",
+    "wifi-sessions",
+    "metrics",
+    "checks"
+  ]
+}

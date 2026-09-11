@@ -1,0 +1,348 @@
+---
+title: S D W A N Fabric
+full: true
+_openapi:
+  preload:
+    - ./controller-openapi.docs.json
+  toc:
+    - depth: 2
+      title: Api_v1_nsbond_device_check_reachability
+      url: '#api_v1_nsbond_device_check_reachability'
+    - depth: 2
+      title: Api_v1_nsbond_device_bgp_status
+      url: '#api_v1_nsbond_device_bgp_status'
+    - depth: 2
+      title: Api_v1_nsbond_device_deploy
+      url: '#api_v1_nsbond_device_deploy'
+    - depth: 2
+      title: Api_v1_nsbond_device_detect_wan
+      url: '#api_v1_nsbond_device_detect_wan'
+    - depth: 2
+      title: Api_v1_nsbond_device_dpi_stats
+      url: '#api_v1_nsbond_device_dpi_stats'
+    - depth: 2
+      title: Api_v1_nsbond_device_live_status
+      url: '#api_v1_nsbond_device_live_status'
+    - depth: 2
+      title: Api_v1_nsbond_device_mesh_status
+      url: '#api_v1_nsbond_device_mesh_status'
+    - depth: 2
+      title: Api_v1_nsbond_device_ospf_status
+      url: '#api_v1_nsbond_device_ospf_status'
+    - depth: 2
+      title: Api_v1_nsbond_device_overlay_status
+      url: '#api_v1_nsbond_device_overlay_status'
+    - depth: 2
+      title: Api_v1_nsbond_device_proxy
+      url: '#api_v1_nsbond_device_proxy'
+    - depth: 2
+      title: Api_v1_nsbond_device_qos_stats
+      url: '#api_v1_nsbond_device_qos_stats'
+    - depth: 2
+      title: Api_v1_nsbond_device_test_connection
+      url: '#api_v1_nsbond_device_test_connection'
+    - depth: 2
+      title: Api_v1_nsbond_device_tier_matrix
+      url: '#api_v1_nsbond_device_tier_matrix'
+    - depth: 2
+      title: Api_v1_nsbond_device_validate_config
+      url: '#api_v1_nsbond_device_validate_config'
+    - depth: 2
+      title: Api_v1_nsbond_steering policy_reorder
+      url: '#api_v1_nsbond_steering-policy_reorder'
+    - depth: 2
+      title: Api_v1_nsbond_topology_list
+      url: '#api_v1_nsbond_topology_list'
+    - depth: 2
+      title: Api_v1_nsbond_topology_create
+      url: '#api_v1_nsbond_topology_create'
+    - depth: 2
+      title: Api_v1_nsbond_topology_wizard_check_devices
+      url: '#api_v1_nsbond_topology_wizard_check_devices'
+    - depth: 2
+      title: Api_v1_nsbond_topology_wizard_detect_wan
+      url: '#api_v1_nsbond_topology_wizard_detect_wan'
+    - depth: 2
+      title: Api_v1_nsbond_topology_wizard_devices
+      url: '#api_v1_nsbond_topology_wizard_devices'
+    - depth: 2
+      title: Api_v1_nsbond_topology_wizard_policies
+      url: '#api_v1_nsbond_topology_wizard_policies'
+    - depth: 2
+      title: Api_v1_nsbond_topology_wizard_create
+      url: '#api_v1_nsbond_topology_wizard_create'
+    - depth: 2
+      title: Api_v1_nsbond_topology_read
+      url: '#api_v1_nsbond_topology_read'
+    - depth: 2
+      title: Api_v1_nsbond_topology_partial_update
+      url: '#api_v1_nsbond_topology_partial_update'
+    - depth: 2
+      title: Api_v1_nsbond_topology_delete
+      url: '#api_v1_nsbond_topology_delete'
+    - depth: 2
+      title: Api_v1_nsbond_topology_update
+      url: '#api_v1_nsbond_topology_update'
+    - depth: 2
+      title: Api_v1_nsbond_topology_analytics
+      url: '#api_v1_nsbond_topology_analytics'
+    - depth: 2
+      title: Api_v1_nsbond_topology_compute
+      url: '#api_v1_nsbond_topology_compute'
+    - depth: 2
+      title: Api_v1_nsbond_topology_deploy
+      url: '#api_v1_nsbond_topology_deploy'
+    - depth: 2
+      title: Api_v1_nsbond_topology_fleet_health
+      url: '#api_v1_nsbond_topology_fleet_health'
+    - depth: 2
+      title: Api_v1_nsbond_topology_progress
+      url: '#api_v1_nsbond_topology_progress'
+    - depth: 2
+      title: Api_v1_nsbond_topology_redeploy_device
+      url: '#api_v1_nsbond_topology_redeploy_device'
+    - depth: 2
+      title: Api_v1_nsbond_topology_remove_device
+      url: '#api_v1_nsbond_topology_remove_device'
+    - depth: 2
+      title: Api_v1_nsbond_topology_rollback
+      url: '#api_v1_nsbond_topology_rollback'
+    - depth: 2
+      title: Api_v1_nsbond_topology_status_summary
+      url: '#api_v1_nsbond_topology_status_summary'
+    - depth: 2
+      title: Api_v1_nsbond_topology_sync_dpi
+      url: '#api_v1_nsbond_topology_sync_dpi'
+    - depth: 2
+      title: Api_v1_nsbond_topology_sync_sla
+      url: '#api_v1_nsbond_topology_sync_sla'
+    - depth: 2
+      title: Api_v1_nsbond_topology_update_wan_label
+      url: '#api_v1_nsbond_topology_update_wan_label'
+    - depth: 2
+      title: Api_v1_nsbond_topology_validate
+      url: '#api_v1_nsbond_topology_validate'
+    - depth: 2
+      title: Api_v1_nsbond_vrf config_bulk_create
+      url: '#api_v1_nsbond_vrf-config_bulk_create'
+    - depth: 2
+      title: Api_v1_nsbond_vrf config_deploy_topology
+      url: '#api_v1_nsbond_vrf-config_deploy_topology'
+    - depth: 2
+      title: Api_v1_nsbond_vrf config_teardown_topology
+      url: '#api_v1_nsbond_vrf-config_teardown_topology'
+    - depth: 2
+      title: Api_v1_nsbond_vrf config_deploy
+      url: '#api_v1_nsbond_vrf-config_deploy'
+  structuredData:
+    headings:
+      - content: Api_v1_nsbond_device_check_reachability
+        id: api_v1_nsbond_device_check_reachability
+      - content: Api_v1_nsbond_device_bgp_status
+        id: api_v1_nsbond_device_bgp_status
+      - content: Api_v1_nsbond_device_deploy
+        id: api_v1_nsbond_device_deploy
+      - content: Api_v1_nsbond_device_detect_wan
+        id: api_v1_nsbond_device_detect_wan
+      - content: Api_v1_nsbond_device_dpi_stats
+        id: api_v1_nsbond_device_dpi_stats
+      - content: Api_v1_nsbond_device_live_status
+        id: api_v1_nsbond_device_live_status
+      - content: Api_v1_nsbond_device_mesh_status
+        id: api_v1_nsbond_device_mesh_status
+      - content: Api_v1_nsbond_device_ospf_status
+        id: api_v1_nsbond_device_ospf_status
+      - content: Api_v1_nsbond_device_overlay_status
+        id: api_v1_nsbond_device_overlay_status
+      - content: Api_v1_nsbond_device_proxy
+        id: api_v1_nsbond_device_proxy
+      - content: Api_v1_nsbond_device_qos_stats
+        id: api_v1_nsbond_device_qos_stats
+      - content: Api_v1_nsbond_device_test_connection
+        id: api_v1_nsbond_device_test_connection
+      - content: Api_v1_nsbond_device_tier_matrix
+        id: api_v1_nsbond_device_tier_matrix
+      - content: Api_v1_nsbond_device_validate_config
+        id: api_v1_nsbond_device_validate_config
+      - content: Api_v1_nsbond_steering policy_reorder
+        id: api_v1_nsbond_steering-policy_reorder
+      - content: Api_v1_nsbond_topology_list
+        id: api_v1_nsbond_topology_list
+      - content: Api_v1_nsbond_topology_create
+        id: api_v1_nsbond_topology_create
+      - content: Api_v1_nsbond_topology_wizard_check_devices
+        id: api_v1_nsbond_topology_wizard_check_devices
+      - content: Api_v1_nsbond_topology_wizard_detect_wan
+        id: api_v1_nsbond_topology_wizard_detect_wan
+      - content: Api_v1_nsbond_topology_wizard_devices
+        id: api_v1_nsbond_topology_wizard_devices
+      - content: Api_v1_nsbond_topology_wizard_policies
+        id: api_v1_nsbond_topology_wizard_policies
+      - content: Api_v1_nsbond_topology_wizard_create
+        id: api_v1_nsbond_topology_wizard_create
+      - content: Api_v1_nsbond_topology_read
+        id: api_v1_nsbond_topology_read
+      - content: Api_v1_nsbond_topology_partial_update
+        id: api_v1_nsbond_topology_partial_update
+      - content: Api_v1_nsbond_topology_delete
+        id: api_v1_nsbond_topology_delete
+      - content: Api_v1_nsbond_topology_update
+        id: api_v1_nsbond_topology_update
+      - content: Api_v1_nsbond_topology_analytics
+        id: api_v1_nsbond_topology_analytics
+      - content: Api_v1_nsbond_topology_compute
+        id: api_v1_nsbond_topology_compute
+      - content: Api_v1_nsbond_topology_deploy
+        id: api_v1_nsbond_topology_deploy
+      - content: Api_v1_nsbond_topology_fleet_health
+        id: api_v1_nsbond_topology_fleet_health
+      - content: Api_v1_nsbond_topology_progress
+        id: api_v1_nsbond_topology_progress
+      - content: Api_v1_nsbond_topology_redeploy_device
+        id: api_v1_nsbond_topology_redeploy_device
+      - content: Api_v1_nsbond_topology_remove_device
+        id: api_v1_nsbond_topology_remove_device
+      - content: Api_v1_nsbond_topology_rollback
+        id: api_v1_nsbond_topology_rollback
+      - content: Api_v1_nsbond_topology_status_summary
+        id: api_v1_nsbond_topology_status_summary
+      - content: Api_v1_nsbond_topology_sync_dpi
+        id: api_v1_nsbond_topology_sync_dpi
+      - content: Api_v1_nsbond_topology_sync_sla
+        id: api_v1_nsbond_topology_sync_sla
+      - content: Api_v1_nsbond_topology_update_wan_label
+        id: api_v1_nsbond_topology_update_wan_label
+      - content: Api_v1_nsbond_topology_validate
+        id: api_v1_nsbond_topology_validate
+      - content: Api_v1_nsbond_vrf config_bulk_create
+        id: api_v1_nsbond_vrf-config_bulk_create
+      - content: Api_v1_nsbond_vrf config_deploy_topology
+        id: api_v1_nsbond_vrf-config_deploy_topology
+      - content: Api_v1_nsbond_vrf config_teardown_topology
+        id: api_v1_nsbond_vrf-config_teardown_topology
+      - content: Api_v1_nsbond_vrf config_deploy
+        id: api_v1_nsbond_vrf-config_deploy
+    contents:
+      - content: Check reachability for multiple SD-WAN devices in parallel.
+        heading: api_v1_nsbond_device_check_reachability
+      - content: Fetch BGP runtime status for the selected SD-WAN device.
+        heading: api_v1_nsbond_device_bgp_status
+      - content: Start asynchronous deployment for a single SD-WAN device.
+        heading: api_v1_nsbond_device_deploy
+      - content: Detect WAN interfaces on the selected device using the router member
+          list.
+        heading: api_v1_nsbond_device_detect_wan
+      - content: Fetch DPI statistics for the selected SD-WAN device.
+        heading: api_v1_nsbond_device_dpi_stats
+      - content: Fetch the latest live SD-WAN status directly from the router.
+        heading: api_v1_nsbond_device_live_status
+      - content: Fetch mesh or ADVPN status for the selected SD-WAN device.
+        heading: api_v1_nsbond_device_mesh_status
+      - content: Fetch OSPF runtime status for the selected SD-WAN device.
+        heading: api_v1_nsbond_device_ospf_status
+      - content: Fetch overlay and IPsec status for the selected SD-WAN device.
+        heading: api_v1_nsbond_device_overlay_status
+      - content: Proxy an allow-listed RPCD call to the selected device. The request
+          body must include `service`, `method`, and an optional JSON-object
+          `payload`.
+        heading: api_v1_nsbond_device_proxy
+      - content: Fetch QoS statistics for the selected SD-WAN device.
+        heading: api_v1_nsbond_device_qos_stats
+      - content: Run the router-side overlay connectivity test for the selected device.
+        heading: api_v1_nsbond_device_test_connection
+      - content: Fetch the router-reported SLA tier matrix for the selected device.
+        heading: api_v1_nsbond_device_tier_matrix
+      - content: Validate the current router-side configuration for the selected SD-WAN
+          device.
+        heading: api_v1_nsbond_device_validate_config
+      - content: Bulk update steering policy priorities using an ordered list of policy
+          IDs and priority values.
+        heading: api_v1_nsbond_steering-policy_reorder
+      - content: List all NS-Bond topologies scoped to the requesting user's
+          organization.
+        heading: api_v1_nsbond_topology_list
+      - content: Create a new NS-Bond topology.
+        heading: api_v1_nsbond_topology_create
+      - content: Check which candidate devices are reachable before adding them to a
+          topology wizard flow.
+        heading: api_v1_nsbond_topology_wizard_check_devices
+      - content: Detect WAN members and candidate interfaces on a raw device before the
+          device is attached to a topology.
+        heading: api_v1_nsbond_topology_wizard_detect_wan
+      - content: List devices in an organization that are still available to enrol in a
+          topology.
+        heading: api_v1_nsbond_topology_wizard_devices
+      - content: List global or organization-scoped policy templates for the topology
+          creation wizard.
+        heading: api_v1_nsbond_topology_wizard_policies
+      - content: Create a new topology, attach devices, seed WAN members, and clone
+          selected policies from the SD-WAN wizard payload.
+        heading: api_v1_nsbond_topology_wizard_create
+      - content: Retrieve a specific NS-Bond topology by ID.
+        heading: api_v1_nsbond_topology_read
+      - content: Partially update an existing NS-Bond topology.
+        heading: api_v1_nsbond_topology_partial_update
+      - content: 'Delete an NS-Bond topology: disables overlay on all devices (async)
+          then deletes from DB.'
+        heading: api_v1_nsbond_topology_delete
+      - content: Fully update an existing NS-Bond topology.
+        heading: api_v1_nsbond_topology_update
+      - content: Return topology-wide bandwidth, WAN health, DPI, and deployment
+          analytics from cached SD-WAN telemetry.
+        heading: api_v1_nsbond_topology_analytics
+      - content: Compute overlay addressing and derived SD-WAN defaults for every device
+          in the topology.
+        heading: api_v1_nsbond_topology_compute
+      - content: Start asynchronous deployment of the computed topology to all devices.
+        heading: api_v1_nsbond_topology_deploy
+      - content: Return aggregate health counters and WAN quality metrics for the
+          topology using cached device status data.
+        heading: api_v1_nsbond_topology_fleet_health
+      - content: Get real-time deploy/rollback progress for a topology.
+        heading: api_v1_nsbond_topology_progress
+      - content: Re-deploy config to a single device in the topology.
+        heading: api_v1_nsbond_topology_redeploy_device
+      - content: Remove a specific device from the topology and move the topology back
+          to draft if needed.
+        heading: api_v1_nsbond_topology_remove_device
+      - content: 'Snapshot rollback: restore previous config on all devices, or disable
+          overlay if no snapshot.'
+        heading: api_v1_nsbond_topology_rollback
+      - content: Return a cached or live status summary for every device in the
+          topology.
+        heading: api_v1_nsbond_topology_status_summary
+      - content: Analyze DPI data and create or update steering policies for the
+          topology.
+        heading: api_v1_nsbond_topology_sync_dpi
+      - content: Synchronize Performance SLA policies into SD-WAN quality tiers for the
+          topology.
+        heading: api_v1_nsbond_topology_sync_sla
+      - content: Assign or clear a WAN path label for a topology member.
+        heading: api_v1_nsbond_topology_update_wan_label
+      - content: Instant pre-deploy validation (DB-only + device monitoring status).
+          Scales to 30K+ devices.
+        heading: api_v1_nsbond_topology_validate
+      - content: Create multiple VRF configurations in a single request.
+        heading: api_v1_nsbond_vrf-config_bulk_create
+      - content: Trigger wave-based VRF deployment for every device in a topology.
+        heading: api_v1_nsbond_vrf-config_deploy_topology
+      - content: Trigger teardown of every VRF configuration in a topology.
+        heading: api_v1_nsbond_vrf-config_teardown_topology
+      - content: Trigger deployment of a single VRF configuration to its assigned SD-WAN
+          device.
+        heading: api_v1_nsbond_vrf-config_deploy
+---
+
+{/* This file was generated by Fumadocs. Do not edit this file directly. Any changes should be made by running the generation command again. */}
+
+export default function Layout(props) {
+  const { APIPage, OpenAPIPage } = props.components ?? {};
+  // "APIPage" is the old name from v10, this allows both for backward compatibility
+  const Comp = OpenAPIPage ?? APIPage;
+  return (
+    <>
+      {props.children}
+      <Comp document="./controller-openapi.docs.json" webhooks={[]} operations={[{"path":"/api/v1/nsbond/device/check_reachability/","method":"post"},{"path":"/api/v1/nsbond/device/{id}/bgp_status/","method":"get"},{"path":"/api/v1/nsbond/device/{id}/deploy/","method":"post"},{"path":"/api/v1/nsbond/device/{id}/detect_wan/","method":"post"},{"path":"/api/v1/nsbond/device/{id}/dpi_stats/","method":"get"},{"path":"/api/v1/nsbond/device/{id}/live_status/","method":"get"},{"path":"/api/v1/nsbond/device/{id}/mesh_status/","method":"get"},{"path":"/api/v1/nsbond/device/{id}/ospf_status/","method":"get"},{"path":"/api/v1/nsbond/device/{id}/overlay_status/","method":"get"},{"path":"/api/v1/nsbond/device/{id}/proxy/","method":"post"},{"path":"/api/v1/nsbond/device/{id}/qos_stats/","method":"get"},{"path":"/api/v1/nsbond/device/{id}/test_connection/","method":"post"},{"path":"/api/v1/nsbond/device/{id}/tier_matrix/","method":"get"},{"path":"/api/v1/nsbond/device/{id}/validate_config/","method":"get"},{"path":"/api/v1/nsbond/steering-policy/reorder/","method":"post"},{"path":"/api/v1/nsbond/topology/","method":"get"},{"path":"/api/v1/nsbond/topology/","method":"post"},{"path":"/api/v1/nsbond/topology/wizard-check-devices/","method":"post"},{"path":"/api/v1/nsbond/topology/wizard-detect-wan/","method":"post"},{"path":"/api/v1/nsbond/topology/wizard-devices/","method":"get"},{"path":"/api/v1/nsbond/topology/wizard-policies/","method":"get"},{"path":"/api/v1/nsbond/topology/wizard_create/","method":"post"},{"path":"/api/v1/nsbond/topology/{id}/","method":"get"},{"path":"/api/v1/nsbond/topology/{id}/","method":"patch"},{"path":"/api/v1/nsbond/topology/{id}/","method":"delete"},{"path":"/api/v1/nsbond/topology/{id}/","method":"put"},{"path":"/api/v1/nsbond/topology/{id}/analytics/","method":"get"},{"path":"/api/v1/nsbond/topology/{id}/compute/","method":"post"},{"path":"/api/v1/nsbond/topology/{id}/deploy/","method":"post"},{"path":"/api/v1/nsbond/topology/{id}/fleet_health/","method":"get"},{"path":"/api/v1/nsbond/topology/{id}/progress/","method":"get"},{"path":"/api/v1/nsbond/topology/{id}/redeploy_device/","method":"post"},{"path":"/api/v1/nsbond/topology/{id}/remove_device/","method":"post"},{"path":"/api/v1/nsbond/topology/{id}/rollback/","method":"post"},{"path":"/api/v1/nsbond/topology/{id}/status_summary/","method":"get"},{"path":"/api/v1/nsbond/topology/{id}/sync_dpi/","method":"post"},{"path":"/api/v1/nsbond/topology/{id}/sync_sla/","method":"post"},{"path":"/api/v1/nsbond/topology/{id}/update_wan_label/","method":"post"},{"path":"/api/v1/nsbond/topology/{id}/validate/","method":"post"},{"path":"/api/v1/nsbond/vrf-config/bulk_create/","method":"post"},{"path":"/api/v1/nsbond/vrf-config/deploy-topology/","method":"post"},{"path":"/api/v1/nsbond/vrf-config/teardown-topology/","method":"post"},{"path":"/api/v1/nsbond/vrf-config/{id}/deploy/","method":"post"}]} showTitle showDescription />
+    </>
+  );
+}

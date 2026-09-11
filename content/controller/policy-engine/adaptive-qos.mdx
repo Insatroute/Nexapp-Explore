@@ -1,0 +1,39 @@
+---
+title: "Adaptive QoS"
+description: "Policy Engine › Adaptive QoS"
+---
+
+<Cards>
+  <Card title="Path" description="/policy-engine/qos" />
+  <Card title="Who can open it" description="Requires any permission on sdwan_tunnel.qosconfig." />
+</Cards>
+
+Shapes traffic per device: a mode, a bandwidth ceiling and DSCP marking, with optional alerting when the drop rate crosses a threshold.
+
+Scope is the same across the Policy Engine: a policy with **Apply fleet-wide** set reaches every device, otherwise it is narrowed to an organization. There is deliberately no device picker — configuring a single router is what that router's own CPE page is for.
+
+## Why it sits here
+
+Promoted out of Intelligence to a section of its own. Intelligence is what the network REPORTS — DPI counters, monitoring series, things you read. Policy Engine is what you DECIDE: the routing and traffic protocols you configure and push. Rows, labels and order mirror the router's own Policy Engine menu one for one, so an operator moving between the two sees the same list in the same sequence. Two consequences of that mirroring, both deliberate: RIP is second, matching the router. It is the one page here that is NOT backed by an ns.* rpcd module — the device serves it from the GoAhead REST API at /api-new/rip instead, which is why its push path uses call_goahead() rather than call(). Verified live on an IRX600-GE: get-config returns real state and ripd ships installed. IS-IS, Static Routes and Route Reflector are NOT listed, because the router has no such pages. Their routes, models and APIs are untouched and still reachable by URL — this hides them from the menu, it does not remove the features.
+
+<Callout type="info">Authored note, from the `NAV` array in `Sidebar.jsx`.</Callout>
+
+<Callout type="info">Served by the shared `PolicyEngine` component via the `/policy-engine/:tab` route. Facts below describe that component, which renders several tabs.</Callout>
+
+## What you can do here
+
+### Actions
+
+- **Delete resource** — Removes a policy via `DELETE /api/v1/nsbond/qos-config/<id>/`.
+- **Edit resource** — Creates and edits a policy through the shared resource form. Fields: Mode, Bandwidth (Mbps), DSCP marking, Alerts, Drop threshold (%), Check interval (s), Alert cooldown (s).
+
+### Reading and lookups
+
+- **Browse and search resource** — Lists policies from `GET /api/v1/nsbond/qos-config/`, with columns Name, Mode, Bandwidth, Scope, State.
+
+**Opens:** `ResourceTable` — some actions above are performed in it.
+
+---
+
+<small>Read from: component `PolicyEngine`; description from `pages/policy/tabs.js descriptor for key 'qos': resource 'nsbond/qos-config', noun 'policy', and its columns/fields arrays (field names read from each endpoint's OPTIONS response, per the file's own note)`.</small>
+

@@ -1,0 +1,10 @@
+{
+  "title": "Application Intelligence",
+  "pages": [
+    "index",
+    "applications",
+    "app-traffic",
+    "discovered-devices",
+    "snapshots"
+  ]
+}
