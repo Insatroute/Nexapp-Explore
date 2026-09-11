@@ -14,14 +14,14 @@ Check attributes: the conditions a RADIUS request must satisfy to authenticate. 
 
 ### Actions
 
-- Create RADIUS checks
-- Delete RADIUS checks
-- Edit RADIUS checks
+- **Create RADIUS checks** — Adds a condition. The **operator** is the part that matters: it decides whether the row is a test the request must pass or a value being set, and the two read almost identically in the table.
+- **Delete RADIUS checks** — Removes a condition. Anything it was blocking now authenticates, so this loosens access rather than tightening it.
+- **Edit RADIUS checks** — Changes an attribute, operator or value.
 
 ### Reading and lookups
 
-- Browse and search organizations
-- Browse and search RADIUS checks
+- **Browse and search organizations** — The organization list — what the scope picker narrows the page by, and what fills the Organization field on its forms. Almost every record in the controller is organization-scoped, which is why this call appears on so many pages.
+- **Browse and search RADIUS checks** — Check attributes, from `radius-admin/check/` — the conditions a request must satisfy to authenticate at all.
 
 ---
 

@@ -26,7 +26,7 @@ import * as path from 'node:path';
 import { readNav, navComments, type NavSection, type NavLeaf } from './extract-nav.ts';
 import { readRouteTable, type RouteRec, type RouteTable } from './extract-routes.ts';
 import { factsForFile, type PageFacts } from './extract-page-facts.ts';
-import { CURATED } from './console-descriptions.ts';
+import { CURATED, COMMON_NOTES } from './console-descriptions.ts';
 import { OUT, KB, URL_BASE, requireController } from './config.ts';
 
 const slug = (s: string) =>
@@ -151,7 +151,9 @@ function entryBody(
       // One group means the heading says nothing the section above did not.
       if (used.length > 1) L.push(`### ${g}`, '');
       for (const op of byGroup.get(g)!) {
-        const note = curated?.notes?.[op.verb];
+        // A page's own note wins; COMMON_NOTES is the fallback for operations
+        // that mean the same thing wherever they appear.
+        const note = curated?.notes?.[op.verb] ?? COMMON_NOTES[op.verb];
         L.push(note ? `- **${esc(op.verb)}** — ${esc(note)}` : `- ${esc(op.verb)}`);
       }
       L.push('');

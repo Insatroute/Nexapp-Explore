@@ -16,16 +16,16 @@ Distinct from Permission Groups above, which are sets of permissions for users. 
 
 ### Actions
 
-- Create device group
-- Delete device group
-- Edit device group
+- **Create device group** — Adds a group. A parent makes it part of a tree (region → site → devices), and templates attached here are inherited by every device in it.
+- **Delete device group** — Removes a group. Its devices lose whatever it passed down, so look at the Templates and Variables columns before deleting.
+- **Edit device group** — Changes a group's parent, templates or variables. Changing the templates changes the configuration of every device in the group.
 
 ### Reading and lookups
 
-- Browse and search device groups
-- Browse and search groups
-- Browse and search organizations
-- Browse and search templates
+- **Browse and search device groups** — The groups devices belong to, from `controller/group/` — each with its parent, and the templates and variables it passes down.
+- **Browse and search groups** — The device-group list — the second half of the scope picker, and the group field on this page's forms.
+- **Browse and search organizations** — The organization list — what the scope picker narrows the page by, and what fills the Organization field on its forms. Almost every record in the controller is organization-scoped, which is why this call appears on so many pages.
+- **Browse and search templates** — The templates that can be attached to a group, for the group form.
 
 **Opens:** `DeviceGroupDrawer` — some actions above are performed in it.
 

@@ -14,14 +14,14 @@ Reply attributes: what RADIUS sends BACK once a user has authenticated — the s
 
 ### Actions
 
-- Create RADIUS replies
-- Delete RADIUS replies
-- Edit RADIUS replies
+- **Create RADIUS replies** — Adds a session parameter. Same username/attribute/operator/value shape as a check attribute, on the other side of the exchange: a check decides whether to let someone in, a reply decides what they get.
+- **Delete RADIUS replies** — Stops that parameter being returned. The user still authenticates; the NAS just applies its own default instead.
+- **Edit RADIUS replies** — Changes a returned attribute.
 
 ### Reading and lookups
 
-- Browse and search organizations
-- Browse and search RADIUS replies
+- **Browse and search organizations** — The organization list — what the scope picker narrows the page by, and what fills the Organization field on its forms. Almost every record in the controller is organization-scoped, which is why this call appears on so many pages.
+- **Browse and search RADIUS replies** — Reply attributes, from `radius-admin/reply/` — what RADIUS sends BACK once a user has authenticated, and which the NAS then applies to the session.
 
 ---
 

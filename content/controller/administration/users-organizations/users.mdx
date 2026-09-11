@@ -16,12 +16,12 @@ Users sit beside Organizations because they are one subject split in half: who e
 
 ### Actions
 
-- Delete user
+- **Delete user** — Removes an account (`DELETE users/user/<id>/`). Deactivating instead keeps the audit trail intact — the access and activity logs reference the user, and a deleted one leaves rows attributed to nobody.
 
 ### Reading and lookups
 
-- Browse and search organizations
-- Browse and search users
+- **Browse and search organizations** — The organization list — what the scope picker narrows the page by, and what fills the Organization field on its forms. Almost every record in the controller is organization-scoped, which is why this call appears on so many pages.
+- **Browse and search users** — The accounts, from `users/user/` — with the role tier, the organizations each belongs to, whether the account is active, and the two-factor state.
 
 ---
 

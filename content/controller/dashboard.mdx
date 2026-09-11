@@ -14,12 +14,12 @@ Below those sit the fleet's data usage and its top applications, categories and 
 
 ## What you can do here
 
-- Browse and search devices
-- Browse and search locations
-- Browse and search online users
-- View dashboard charts
-- View data usage
-- View wan uplinks
+- **Browse and search devices** — The fleet itself — what the online/total count, the device-health donut, the model and firmware splits are all computed from. Not a picker here; it is the page's main content.
+- **Browse and search locations** — The saved locations a device can be placed at.
+- **Browse and search online users** — Administrators signed in right now, from `/accesslog/online-users/` — the "active in the last 15 minutes" list at the bottom.
+- **View dashboard charts** — The donut charts, from `/monitoring/dashboard/?time=…` — device health, models and firmware versions for the selected window.
+- **View data usage** — Fleet traffic over the window, from `/monitoring/data-usage/`.
+- **View wan uplinks** — The uplinks-up count, from `/monitoring/wan-uplinks/`. Distinct from device health: a device can be online while one of its WAN links is down.
 
 **Also calls:** `topApps` · `topCategories` · `topClients` — listed verbatim because the name does not match a known verb.
 

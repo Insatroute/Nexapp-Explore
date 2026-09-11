@@ -16,17 +16,17 @@ Shared configuration, and superuser-only — a mistake here can lock everyone ou
 
 ### Actions
 
-- Create TACACS+ client
-- Create TACACS+ client server
-- Delete TACACS+ client
-- Delete TACACS+ client server
-- Edit TACACS+ client
-- Edit TACACS+ client server
+- **Create TACACS+ client** — Sets up that authentication. **Local logins** is the switch to think about first: with it off, a TACACS+ outage locks everyone out of the console, including you.
+- **Create TACACS+ client server** — Adds one server to the client's list (`tacacs/client-server/`). More than one is how you survive a single server going away.
+- **Delete TACACS+ client** — Stops the console authenticating against TACACS+ and returns it to local accounts.
+- **Delete TACACS+ client server** — Removes a server from the list. Removing the last one leaves the client with nothing to authenticate against.
+- **Edit TACACS+ client** — Changes the timeout, the fallback behaviour, or which surfaces the login applies to.
+- **Edit TACACS+ client server** — Changes a server's address, secret or order in that list.
 
 ### Reading and lookups
 
-- Browse and search organizations
-- Browse and search TACACS+ clients
+- **Browse and search organizations** — The organization list — what the scope picker narrows the page by, and what fills the Organization field on its forms. Almost every record in the controller is organization-scoped, which is why this call appears on so many pages.
+- **Browse and search TACACS+ clients** — This controller acting as a TACACS+ CLIENT, from `tacacs/client/` — so administrators sign in to the console against a TACACS+ server rather than a local account.
 
 **Opens:** `TacacsClientDrawer` — some actions above are performed in it.
 

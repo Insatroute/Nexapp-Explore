@@ -16,16 +16,16 @@ Coordinates are what put a device on the fleet map.
 
 ### Actions
 
-- Create location
-- Delete location
-- Edit location
+- **Create location** — Adds a place: a name, an organization, a type and coordinates. **Coordinates are what put a device on the fleet map** — a location without them exists but cannot be shown.
+- **Delete location** — Removes it (`DELETE controller/location/<id>/`). The Devices column says how many lose their placement.
+- **Edit location** — Changes a location. Moving the coordinates moves every device placed there.
 
 ### Reading and lookups
 
-- Browse and search groups
-- Browse and search location records
-- Browse and search locations
-- Browse and search organizations
+- **Browse and search groups** — The device-group list — the second half of the scope picker, and the group field on this page's forms.
+- **Browse and search location records** — The location list in table form, from `controller/location/` — as opposed to the GeoJSON feed the map draws from, which is the same records shaped for plotting.
+- **Browse and search locations** — The saved locations a device can be placed at.
+- **Browse and search organizations** — The organization list — what the scope picker narrows the page by, and what fills the Organization field on its forms. Almost every record in the controller is organization-scoped, which is why this call appears on so many pages.
 
 **Opens:** `LocationFormDrawer` · `useScopeOrg` — some actions above are performed in these.
 

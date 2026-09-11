@@ -14,15 +14,15 @@ The nodes a parsed topology found — each with the addresses it is known by and
 
 ### Actions
 
-- Create net node
-- Delete net node
-- Edit net node
+- **Create net node** — Adds a node by hand (`POST /network-topology/node/`). Normally the parser discovers these — adding one manually is for something the collection strategy cannot see.
+- **Delete net node** — Removes a node. Links that joined it are left pointing at something that no longer exists, so check the Links page after.
+- **Edit net node** — Changes a node's label or the addresses it is known by. Addresses are what links are matched on, so editing them can change which links resolve.
 
 ### Reading and lookups
 
-- Browse and search net nodes
-- Browse and search net topologies
-- Browse and search organizations
+- **Browse and search net nodes** — The nodes a link can join, for the same reason.
+- **Browse and search net topologies** — The parsed topologies a record here can belong to, so the form can offer a choice rather than an id.
+- **Browse and search organizations** — The organization list — what the scope picker narrows the page by, and what fills the Organization field on its forms. Almost every record in the controller is organization-scoped, which is why this call appears on so many pages.
 
 **Opens:** `NodeDrawer` · `useNetTopologies` — some actions above are performed in these.
 

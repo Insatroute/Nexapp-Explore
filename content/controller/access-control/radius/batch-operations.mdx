@@ -14,13 +14,13 @@ Bulk user creation. A batch generates or imports a set of RADIUS users in one op
 
 ### Actions
 
-- Create RADIUS batch
-- Delete RADIUS batch
+- **Create RADIUS batch** — Generates or imports a set of users in one operation. The strategy decides which; the credentials it produces are retrievable from the row afterwards, until they expire.
+- **Delete RADIUS batch** — Removes the batch record. Check what it created before deleting — the record is the only place the generated credentials are listed.
 
 ### Reading and lookups
 
-- Browse and search organizations
-- Browse and search RADIUS batches
+- **Browse and search organizations** — The organization list — what the scope picker narrows the page by, and what fills the Organization field on its forms. Almost every record in the controller is organization-scoped, which is why this call appears on so many pages.
+- **Browse and search RADIUS batches** — Past bulk-creation runs, from `radius-admin/batch/` — the strategy used, how many users it produced, and when the generated credentials expire.
 
 **Opens:** `RadiusBatchDrawer` — some actions above are performed in it.
 

@@ -12,8 +12,8 @@ The authentication log: every attempt and whether it succeeded, with the usernam
 
 ## What you can do here
 
-- Browse and search organizations
-- Browse and search RADIUS post authentication
+- **Browse and search organizations** — The organization list — what the scope picker narrows the page by, and what fills the Organization field on its forms. Almost every record in the controller is organization-scoped, which is why this call appears on so many pages.
+- **Browse and search RADIUS post authentication** — Every authentication attempt FreeRADIUS handled and what it answered — accept or reject, per username, with the station identifiers. Read-only and enforced as such: FreeRADIUS writes this table and nothing in the console does.
 
 ---
 

@@ -14,14 +14,14 @@ RADIUS user groups — the named buckets that check and reply attributes are att
 
 ### Actions
 
-- Create RADIUS groups
-- Delete RADIUS groups
-- Edit RADIUS groups
+- **Create RADIUS groups** — Adds a group. One group per organization can be marked default, which is where an otherwise unmatched user lands.
+- **Delete RADIUS groups** — Removes a group. The check and reply attributes written against it are what stop applying, so look at those pages first.
+- **Edit RADIUS groups** — Renames a group or changes which one is the default.
 
 ### Reading and lookups
 
-- Browse and search organizations
-- Browse and search RADIUS groups
+- **Browse and search organizations** — The organization list — what the scope picker narrows the page by, and what fills the Organization field on its forms. Almost every record in the controller is organization-scoped, which is why this call appears on so many pages.
+- **Browse and search RADIUS groups** — The named buckets check and reply attributes attach to, from `radius-admin/group/`. Writing a rule against a group rather than a username is what stops the same rule being repeated per user.
 
 ---
 

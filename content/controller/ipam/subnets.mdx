@@ -16,13 +16,13 @@ Subnets can also be imported rather than entered one at a time.
 
 ### Actions
 
-- Delete subnet
+- **Delete subnet** — Removes a range (`DELETE ipam/subnet/<id>/`). The addresses recorded inside it go with it, so check the IP addresses page filtered to this subnet first.
 - **Import or upload subnet** — Bulk-loads subnets rather than adding them one by one, in the import modal.
 
 ### Reading and lookups
 
-- Browse and search organizations
-- Browse and search subnets with device
+- **Browse and search organizations** — The organization list — what the scope picker narrows the page by, and what fills the Organization field on its forms. Almost every record in the controller is organization-scoped, which is why this call appears on so many pages.
+- **Browse and search subnets with device** — The ranges addresses come from, each showing its master subnet and any device it is tied to — which is what makes the shape of the addressing plan readable from the list.
 
 **Opens:** `SubnetImportModal` — some actions above are performed in it.
 

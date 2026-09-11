@@ -16,11 +16,11 @@ An organization is also the scope almost everything else in the console is filte
 
 ### Actions
 
-- Delete organization
+- **Delete organization** — Removes a tenant (`DELETE users/organization/<id>/`). Almost everything in the controller is organization-scoped, so read the Devices count on the row first: this is the widest-reaching delete in the console.
 
 ### Reading and lookups
 
-- Browse and search organizations
+- **Browse and search organizations** — The organization list — what the scope picker narrows the page by, and what fills the Organization field on its forms. Almost every record in the controller is organization-scoped, which is why this call appears on so many pages.
 
 **Also calls:** `useOrgDeviceCountQuery` — listed verbatim because the name does not match a known verb.
 

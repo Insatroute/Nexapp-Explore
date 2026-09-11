@@ -20,13 +20,13 @@ The tunnels laid over the network, kept apart from the physical estate in Networ
 
 ### Actions
 
-- Delete topology
-- Edit topology
+- **Delete topology** — Removes the fabric. The tunnels it defines stop being deployed, so the overlay it provided goes away.
+- **Edit topology** — Changes a fabric: its type, overlay subnet, and which devices are hubs or spokes. The overlay subnet is the one to be careful with — it is the address space the tunnels are built in.
 
 ### Reading and lookups
 
-- Browse and search topologies
-- View topology
+- **Browse and search topologies** — The SD-WAN fabrics, from `/nsbond/topology/`. Distinct from Network Topology, which is what a parser REPORTS about the network; a fabric here is what you DESIGN and deploy.
+- **View topology** — Opens one fabric — its hubs, spokes and the features enabled on it.
 
 **Opens:** `TopologyEditDrawer` — some actions above are performed in it.
 

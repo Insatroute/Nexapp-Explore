@@ -14,13 +14,13 @@ The TACACS+ servers this controller runs: what they listen on, whether authentic
 
 ### Actions
 
-- Apply or push TACACS+ server
-- Edit TACACS+ server
-- Refresh TACACS+ server
+- **Apply or push TACACS+ server** — Pushes the staged configuration and reloads the server, which is what clears Pending and updates Last reload.
+- **Edit TACACS+ server** — Changes a server's settings. The change is staged rather than live — the **Pending** count is what tells you a reload is owed.
+- **Refresh TACACS+ server** — Re-reads the server's current state rather than waiting for the page to poll — the way to confirm a reload actually took.
 
 ### Reading and lookups
 
-- Browse and search TACACS+ servers
+- **Browse and search TACACS+ servers** — The TACACS+ servers this controller runs, from `tacacs/server/` — what they listen on, whether authentication and accounting are on, and whether the running config matches what has been asked for.
 
 **Opens:** `TacacsServerDrawer` — some actions above are performed in it.
 

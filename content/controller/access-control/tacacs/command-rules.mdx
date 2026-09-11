@@ -14,14 +14,14 @@ Command authorization: which commands a group may or may not run. Each rule is a
 
 ### Actions
 
-- Create TACACS+ rule
-- Delete TACACS+ rule
-- Edit TACACS+ rule
+- **Create TACACS+ rule** — Adds a rule. **Order matters**: the first rule whose pattern matches decides, so a broad allow placed above a narrow deny makes the deny unreachable.
+- **Delete TACACS+ rule** — Removes a rule. Whatever it was denying now falls through to the next matching rule.
+- **Edit TACACS+ rule** — Changes a pattern, action or position.
 
 ### Reading and lookups
 
-- Browse and search CPE user groups
-- Browse and search TACACS+ rules
+- **Browse and search CPE user groups** — The groups a rule can be written against — the router-side user groups, not the console's permission groups.
+- **Browse and search TACACS+ rules** — Command authorization rules, from `tacacs/command-rule/` — which commands a group may or may not run.
 
 **Opens:** `TacacsRuleDrawer` — some actions above are performed in it.
 

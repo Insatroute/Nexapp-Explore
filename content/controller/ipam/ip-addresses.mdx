@@ -22,13 +22,13 @@ Its own section rather than a disclosure inside Network. Addressing is a subject
 
 ### Actions
 
-- Delete IP
+- **Delete IP** — Releases an address back to its subnet (`DELETE ipam/ip-address/<id>/`). Nothing on a device changes — IPAM records the allocation, it does not configure it.
 
 ### Reading and lookups
 
-- Browse and search all IPS
-- Browse and search organizations
-- Browse and search subnets
+- **Browse and search all IPS** — Every allocated address, from `ipam/ip-address/`, with the subnet and organization it belongs to.
+- **Browse and search organizations** — The organization list — what the scope picker narrows the page by, and what fills the Organization field on its forms. Almost every record in the controller is organization-scoped, which is why this call appears on so many pages.
+- **Browse and search subnets** — The subnet list the filter narrows by, and the subnet field when allocating an address.
 
 ---
 

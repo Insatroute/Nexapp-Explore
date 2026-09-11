@@ -20,11 +20,11 @@ Two different models that used to share the word 'Groups'. This one is a named s
 
 ### Actions
 
-- Delete group
+- **Delete group** — Removes a permission group. Users in it lose whatever it granted and fall back to their remaining groups, so check who is in it first.
 
 ### Reading and lookups
 
-- Browse and search user groups
+- **Browse and search user groups** — The permission groups, from `users/group/` — the `nexapp_users.Group` proxy the API enforces against, not stock `auth.group`.
 
 ---
 

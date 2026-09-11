@@ -16,15 +16,15 @@ It is only consulted for organizations with "Require serial admission" switched 
 
 ### Actions
 
-- Create allowed serial
-- Delete allowed serial
-- Edit allowed serial
+- **Create allowed serial** — Permits a piece of hardware to join an organization. Only consulted when that organization has "Require serial admission" switched on — without it, the list is inert.
+- **Delete allowed serial** — Withdraws permission. A device already registered stays registered — this governs joining, not membership.
+- **Edit allowed serial** — Changes the organization, the auto-admit flag or the notes on an entry.
 - **Import or upload allowed serials csv** — Loads a batch of serial numbers from a CSV instead of adding them one at a time.
 
 ### Reading and lookups
 
-- Browse and search allowed serials
-- Browse and search organizations
+- **Browse and search allowed serials** — The serial numbers permitted to join, from `serial-admission/allowed-serial/`, with the organization each may join and who added it.
+- **Browse and search organizations** — The organization list — what the scope picker narrows the page by, and what fills the Organization field on its forms. Almost every record in the controller is organization-scoped, which is why this call appears on so many pages.
 
 **Opens:** `AllowedSerialDrawer` · `SerialCsvDrawer` — some actions above are performed in these.
 

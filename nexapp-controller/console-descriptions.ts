@@ -100,12 +100,28 @@ export const CURATED: Record<string, CuratedDescription> = {
     text:
       'The RADIUS clients — the network access servers permitted to ask this controller to authenticate a user. An entry is a shared secret plus the address the request will arrive from, scoped to an organization.',
     from: 'calls useListNasQuery, useCreateNasMutation, useUpdateNasMutation, useDeleteNasMutation, useListOrganizationsQuery',
-  },
+    notes: {
+      "Browse and search NAS":
+        "The RADIUS clients, from `radius-admin/nas/`. A row is one network access server allowed to ask this controller to authenticate a user \u2014 its address and shared secret, scoped to an organization.",
+      "Create NAS":
+        "Registers a new client. Until a NAS exists here with the right secret, its authentication requests are refused before any user is even looked up.",
+      "Edit NAS":
+        "Changes an entry \u2014 `PATCH radius-admin/nas/<id>/`. Rotating the shared secret here means rotating it on the device too, or it stops authenticating.",
+      "Delete NAS":
+        "Removes a client. Requests from that address stop being accepted.",
+    },
+},
   '/groups': {
     text:
       'Permission groups — named sets of permissions assigned to users. This is the `nexapp_users.Group` proxy the API enforces against, not stock `auth.group`, and it is a different model from Device Groups.',
     from: 'calls useListUserGroupsQuery and useDeleteGroupMutation; permission target from navPermissions.js (`nexapp_users.group`, with the reason recorded there)',
-  },
+    notes: {
+      "Browse and search user groups":
+        "The permission groups, from `users/group/` \u2014 the `nexapp_users.Group` proxy the API enforces against, not stock `auth.group`.",
+      "Delete group":
+        "Removes a permission group. Users in it lose whatever it granted and fall back to their remaining groups, so check who is in it first.",
+    },
+},
   "/policy-engine/qos": {
     text:
       "Shapes traffic per device: a mode, a bandwidth ceiling and DSCP marking, with optional alerting when the drop rate crosses a threshold.\n\nScope is the same across the Policy Engine: a policy with **Apply fleet-wide** set reaches every device, otherwise it is narrowed to an organization. There is deliberately no device picker \u2014 configuring a single router is what that router's own CPE page is for.",
@@ -405,7 +421,15 @@ export const CURATED: Record<string, CuratedDescription> = {
       "The applications the DPI engine recognises. Unlike its three sibling tabs this one is not a generic resource table \u2014 its descriptor is marked `custom`, so it is rendered by a component of its own rather than from a column/field list.",
     from:
       "pages/appintel/models.js APPLICATIONS_MODEL \u2014 { key: 'applications', label: 'Applications', icon: 'chart', custom: true }, with no resource or columns of its own",
-  },
+    notes: {
+      "Browse and search resource":
+        "The applications the DPI engine recognises. This tab is marked `custom` in its descriptor, so unlike its siblings it is drawn by a component of its own rather than from a column list.",
+      "Edit resource":
+        "Changes an application entry.",
+      "Delete resource":
+        "Removes one.",
+    },
+},
   "/sdlan": {
     text:
       "Where a host behind a router actually is, and whether you can reach it right now \u2014 without knowing which router it sits behind. Each row is a saved remote-access target: the site and router it is reached through, the LAN endpoint and protocol, and the path the controller would take to it.\n\nThe per-device panel at `/devices/:id/sdlan` answers the narrower question, \"what can I reach behind THIS router\". Same rows and the same endpoint: the viewset filters by device only when `device_id` is passed, so dropping the parameter returns everything the user's organizations can see.\n\n**A row is a link, not a tunnel.** It opens through the controller's own reverse proxy at `/sdlan-proxy/<scheme>/<ip>:<port>/`, so there is no port to allocate, no session to expire and nothing to clean up when a tab closes \u2014 which means a row can be middle-clicked, bookmarked and re-opened. The proxy reaches the LAN address from the CONTROLLER side, so you need no VPN of your own; the precondition is instead that the controller has a route into that LAN, which is what the **Path** column reports.\n\nTwo protocol details are worth knowing. **SSH is not raw SSH** \u2014 on NexappOS it is ttyd, a root shell served over HTTPS as a WebSocket, which is why it opens in a tab like everything else. **TELNET is the one target no proxy can rescue**: raw TCP with no HTTP framing, so there is nothing for nginx to reverse-proxy and nothing for a browser to render. It stays addable and hands you the command instead of a tab.",
@@ -472,6 +496,14 @@ export const CURATED: Record<string, CuratedDescription> = {
     from:
       "pages/HaDevices.jsx \u2014 headers Device, Organization, Peer, Role, Status, Virtual IP, VRRP state, Last polled, Last sync; status filter All/Enabled/Configuring/Disabled/Unconfigured/Error; calls useListHaDevicesQuery, usePollHaDeviceMutation, useDeleteHaDeviceMutation, and HaSetupDrawer's create/setup mutations",
     notes: {
+      "Browse and search HA devices":
+        "The router pairs, from `ha/device/` \u2014 peer, role, virtual IP, VRRP state, and when each was last polled and synced. A pair that has stopped talking shows as a stale timestamp rather than as silence.",
+      "Browse and search devices":
+        "The devices available to pair, for the setup drawer.",
+      "Create HA device":
+        "Registers a device as part of a pair. Pairing itself is done by *Set up HA device*, which configures both sides.",
+      "Delete HA device":
+        "Removes a device from HA. Its peer is left without a partner, so the pair stops being a pair \u2014 check the peer afterwards.",
       "Poll HA device":
         "Asks a device for its current HA state now rather than waiting for the next scheduled poll \u2014 the way to confirm a pair after changing it.",
       "Set up HA device":
@@ -483,7 +515,11 @@ export const CURATED: Record<string, CuratedDescription> = {
       "High availability for the CONTROLLER'S OWN pair \u2014 not the routers'. It reports which node holds the VIP, which PostgreSQL node is primary, and whether the management plane is up, alongside a log of the events that got it there.\n\nFailover actions are driven from this page, and their progress is polled while they run.",
     from:
       "pages/HaController.jsx \u2014 its own header comment says \"the controller's OWN pair, not the routers'\"; renders VIP holder, PostgreSQL role and Management plane; calls useDcdrStatusQuery, useDcdrActionMutation, useDcdrActionProgressQuery, useListDcdrEventsQuery",
-  },
+    notes: {
+      "Browse and search dcdr events":
+        "The event log behind the status \u2014 what failed over, when, and whether it completed. The page's status cards say where things stand now; this says how they got there.",
+    },
+},
   "/ha/dr": {
     text:
       "This data centre and the disaster-recovery site it streams to \u2014 the page you open to answer one question: is the data safe.\n\nIt reports the replication state between the two sites along with task workers, database connections, database size, management-plane health, uptime and last-seen for each. The admin page it replaces laid the same API response out field by field and put the verdict last; here the verdict leads.",
@@ -495,19 +531,41 @@ export const CURATED: Record<string, CuratedDescription> = {
       "Where devices physically are. A location is a named place owned by an organization, with a type, coordinates and a pincode, and the list shows how many devices sit at each \u2014 so a location with none is visible as a candidate for tidying.\n\nCoordinates are what put a device on the fleet map.",
     from:
       "pages/LocationList.jsx \u2014 headers Name, Organization, Type, Devices, Coordinates, Pincode, Created; calls api.listLocations, api.listLocationRecords, api.deleteLocation, useListOrganizationsQuery, and LocationFormDrawer's create/update",
-  },
+    notes: {
+      "Browse and search location records":
+        "The location list in table form, from `controller/location/` \u2014 as opposed to the GeoJSON feed the map draws from, which is the same records shaped for plotting.",
+      "Create location":
+        "Adds a place: a name, an organization, a type and coordinates. **Coordinates are what put a device on the fleet map** \u2014 a location without them exists but cannot be shown.",
+      "Edit location":
+        "Changes a location. Moving the coordinates moves every device placed there.",
+      "Delete location":
+        "Removes it (`DELETE controller/location/<id>/`). The Devices column says how many lose their placement.",
+    },
+},
   "/ipam/ip-addresses": {
     text:
       "Individual addresses, and the day-to-day half of IPAM: allocating one, or hunting a free one. Each row shows the address, the subnet it belongs to and the organization that owns it.\n\nAddresses come first in this section because subnets are the setup step you visit far less often.",
     from:
       "pages/IpAddressList.jsx \u2014 headers IP address, Subnet, Organization, Created, Modified; filters by organization and by subnet; calls useListAllIpsQuery, useDeleteIpMutation, useListSubnetsQuery, useListOrganizationsQuery",
-  },
+    notes: {
+      "Browse and search all IPS":
+        "Every allocated address, from `ipam/ip-address/`, with the subnet and organization it belongs to.",
+      "Browse and search subnets":
+        "The subnet list the filter narrows by, and the subnet field when allocating an address.",
+      "Delete IP":
+        "Releases an address back to its subnet (`DELETE ipam/ip-address/<id>/`). Nothing on a device changes \u2014 IPAM records the allocation, it does not configure it.",
+    },
+},
   "/ipam/subnets": {
     text:
       "The ranges addresses are allocated from. A subnet belongs to an organization, may sit under a master subnet, and may be tied to a device \u2014 the list shows all three, so the shape of the addressing plan is readable without opening anything.\n\nSubnets can also be imported rather than entered one at a time.",
     from:
       "pages/SubnetList.jsx \u2014 headers Name, Organization, Subnet, Master subnet, Related device, Created, Modified; calls useListSubnetsWithDeviceQuery, useDeleteSubnetMutation, useListOrganizationsQuery, and SubnetImportModal's useImportSubnetMutation",
     notes: {
+      "Browse and search subnets with device":
+        "The ranges addresses come from, each showing its master subnet and any device it is tied to \u2014 which is what makes the shape of the addressing plan readable from the list.",
+      "Delete subnet":
+        "Removes a range (`DELETE ipam/subnet/<id>/`). The addresses recorded inside it go with it, so check the IP addresses page filtered to this subnet first.",
       "Import or upload subnet":
         "Bulk-loads subnets rather than adding them one by one, in the import modal.",
     },
@@ -517,25 +575,55 @@ export const CURATED: Record<string, CuratedDescription> = {
       "The landing page, and the only entry visible to every signed-in user. It answers \"is the fleet healthy right now\" in one screen: how many devices are online against the total, how many WAN uplinks are up, where devices sit on a map, and the split of device health, models and firmware versions across the estate.\n\nBelow those sit the fleet's data usage and its top applications, categories and clients, and a list of which admins are currently signed in.",
     from:
       "pages/Dashboard.jsx \u2014 calls api.listDevices, api.listLocations, api.listOnlineUsers, api.getDashboardCharts, api.getWanUplinks, api.getDataUsage, api.topApps, api.topCategories, api.topClients; visibility from navPermissions.js leafVisible, which returns true for '/' before any permission test",
-  },
+    notes: {
+      "Browse and search devices":
+        "The fleet itself \u2014 what the online/total count, the device-health donut, the model and firmware splits are all computed from. Not a picker here; it is the page's main content.",
+      "Browse and search online users":
+        "Administrators signed in right now, from `/accesslog/online-users/` \u2014 the \"active in the last 15 minutes\" list at the bottom.",
+      "View dashboard charts":
+        "The donut charts, from `/monitoring/dashboard/?time=\u2026` \u2014 device health, models and firmware versions for the selected window.",
+      "View wan uplinks":
+        "The uplinks-up count, from `/monitoring/wan-uplinks/`. Distinct from device health: a device can be online while one of its WAN links is down.",
+      "View data usage":
+        "Fleet traffic over the window, from `/monitoring/data-usage/`.",
+    },
+},
   "/users": {
     text:
       "Who can sign in, and what they are. Each row carries the user's role tier, the organizations they belong to, whether the account is active, whether two-factor is enabled and whether it is required of them.\n\nUsers sit beside Organizations because they are one subject split in half: who exists, and who they belong to.",
     from:
       "pages/UserList.jsx \u2014 headers User, Role, Organizations, Active, 2FA, 2FA req., Joined; role tier from UserList.roleOf (Superuser / Staff / User)",
-  },
+    notes: {
+      "Browse and search users":
+        "The accounts, from `users/user/` \u2014 with the role tier, the organizations each belongs to, whether the account is active, and the two-factor state.",
+      "Delete user":
+        "Removes an account (`DELETE users/user/<id>/`). Deactivating instead keeps the audit trail intact \u2014 the access and activity logs reference the user, and a deleted one leaves rows attributed to nobody.",
+    },
+},
   "/organizations": {
     text:
       "The tenants. A row is one organization with its contact email, how many devices it owns and how many of those are online or offline right now \u2014 so tenant size and tenant health read together.\n\nAn organization is also the scope almost everything else in the console is filtered by.",
     from:
       "pages/OrgList.jsx \u2014 headers Name, Email, Devices, Online, Offline, Active, Created, Modified",
-  },
+    notes: {
+      "Delete organization":
+        "Removes a tenant (`DELETE users/organization/<id>/`). Almost everything in the controller is organization-scoped, so read the Devices count on the row first: this is the widest-reaching delete in the console.",
+    },
+},
   "/allowed-serials": {
     text:
       "Which hardware is permitted to join which organization. A row is a serial number, the organization it may join, whether it is admitted automatically, and who added it.\n\nIt is only consulted for organizations with \"Require serial admission\" switched on \u2014 a setting on the organization itself. Filed under Users & Organizations rather than Devices because the row is about entitlement, not about a device that already exists.",
     from:
       "pages/AllowedSerialList.jsx \u2014 headers Serial number, Organization, Auto admit, Notes, Added by, Modified; calls the allowed-serial queries plus AllowedSerialDrawer and SerialCsvDrawer",
     notes: {
+      "Browse and search allowed serials":
+        "The serial numbers permitted to join, from `serial-admission/allowed-serial/`, with the organization each may join and who added it.",
+      "Create allowed serial":
+        "Permits a piece of hardware to join an organization. Only consulted when that organization has \"Require serial admission\" switched on \u2014 without it, the list is inert.",
+      "Edit allowed serial":
+        "Changes the organization, the auto-admit flag or the notes on an entry.",
+      "Delete allowed serial":
+        "Withdraws permission. A device already registered stays registered \u2014 this governs joining, not membership.",
       "Import or upload allowed serials csv":
         "Loads a batch of serial numbers from a CSV instead of adding them one at a time.",
     },
@@ -545,13 +633,29 @@ export const CURATED: Record<string, CuratedDescription> = {
       "The groups devices belong to, and what those groups carry. A group has a parent, so the tree can go region \u2192 site \u2192 devices, and it can hold templates and variables that every device in it inherits.\n\nDistinct from Permission Groups above, which are sets of permissions for users. These are what devices belong to and what templates attach to.",
     from:
       "pages/DeviceGroupList.jsx \u2014 headers Name, Organization, Parent, Templates, Variables, Created, Modified; calls the device-group queries plus DeviceGroupDrawer's create/update and useListTemplatesQuery",
-  },
+    notes: {
+      "Browse and search device groups":
+        "The groups devices belong to, from `controller/group/` \u2014 each with its parent, and the templates and variables it passes down.",
+      "Create device group":
+        "Adds a group. A parent makes it part of a tree (region \u2192 site \u2192 devices), and templates attached here are inherited by every device in it.",
+      "Edit device group":
+        "Changes a group's parent, templates or variables. Changing the templates changes the configuration of every device in the group.",
+      "Delete device group":
+        "Removes a group. Its devices lose whatever it passed down, so look at the Templates and Variables columns before deleting.",
+      "Browse and search templates":
+        "The templates that can be attached to a group, for the group form.",
+    },
+},
   "/hierarchy": {
     text:
       "The same structure the sidebar's scope picker carries \u2014 deployment \u2192 organizations \u2192 device groups \u2192 subgroups \u2014 drawn as an org chart, top-down, instead of as an indented tree.\n\nIt is a way of reading the shape of a deployment at a glance; the editing happens on the Organizations and Device Groups pages.",
     from:
       "pages/Hierarchy.jsx \u2014 its own header comment: \"Org chart of the same structure the sidebar tree carries \u2014 deployment \u2192 organizations \u2192 device groups \u2192 subgroups \u2014 drawn top-down instead of indented\"",
-  },
+    notes: {
+      "Browse and search devices":
+        "The device counts that hang off each branch of the chart \u2014 what makes the org chart show where the fleet actually sits, rather than just its shape.",
+    },
+},
   "/license": {
     text:
       "What this installation is entitled to and how much of it is being used: the device limit against devices in use, user counts, the version and release channel installed, and the subscription's status and dates.\n\nLaid out as settings cards rather than dashboard tiles, deliberately \u2014 this is a page you check and act on, not a report you watch.",
@@ -563,103 +667,249 @@ export const CURATED: Record<string, CuratedDescription> = {
       "The SD-WAN fabric \u2014 the overlay you design and deploy, as opposed to the physical estate under Network. A row is one topology: its type, the overlay subnet it uses, how many hubs and spokes it has, which features are on, and whether it is up.",
     from:
       "pages/TopologyList.jsx \u2014 headers Name, Type, Status, Overlay subnet, Hubs, Spokes, Devices, Features; calls the topology queries plus TopologyEditDrawer's api.updateTopology",
-  },
+    notes: {
+      "Browse and search topologies":
+        "The SD-WAN fabrics, from `/nsbond/topology/`. Distinct from Network Topology, which is what a parser REPORTS about the network; a fabric here is what you DESIGN and deploy.",
+      "View topology":
+        "Opens one fabric \u2014 its hubs, spokes and the features enabled on it.",
+      "Edit topology":
+        "Changes a fabric: its type, overlay subnet, and which devices are hubs or spokes. The overlay subnet is the one to be careful with \u2014 it is the address space the tunnels are built in.",
+      "Delete topology":
+        "Removes the fabric. The tunnels it defines stop being deployed, so the overlay it provided goes away.",
+    },
+},
   "/network-topology/topologies": {
     text:
       "What the network REPORTS about itself, rather than what you designed \u2014 collected by a parser and published as a graph. A row shows the parsing strategy, the format, how many nodes and links were found, and whether it is published.\n\nKept at top level rather than under Overlay Networks because the two are opposites: SD-WAN Fabric is the thing you deploy, this is the thing that comes back.",
     from:
       "pages/NetTopologyList.jsx \u2014 headers Label, Organization, Strategy, Format, Nodes, Links, Published, Modified; calls the topology queries plus TopologyDrawer's api.createNetTopology",
-  },
+    notes: {
+      "Create net topology":
+        "Defines a topology for the parser to populate: the strategy that collects it, the format it arrives in, and the organization it belongs to. Nodes and links are then discovered into it rather than drawn by hand.",
+      "Edit net topology":
+        "Changes a topology's strategy, format or published state (`PATCH /network-topology/topology/<id>/?include_unpublished=true` \u2014 the flag is what lets an unpublished one be edited at all).",
+      "Delete net topology":
+        "Removes the topology and, with it, the nodes and links collected under it.",
+    },
+},
   "/network-topology/nodes": {
     text:
       "The nodes a parsed topology found \u2014 each with the addresses it is known by and the topology it belongs to.",
     from:
       "pages/NetNodeList.jsx \u2014 headers Name, Organization, Topology, Addresses, Modified; calls NodeDrawer's api.createNetNode and api.updateNetNode, plus useNetTopologies",
-  },
+    notes: {
+      "Create net node":
+        "Adds a node by hand (`POST /network-topology/node/`). Normally the parser discovers these \u2014 adding one manually is for something the collection strategy cannot see.",
+      "Edit net node":
+        "Changes a node's label or the addresses it is known by. Addresses are what links are matched on, so editing them can change which links resolve.",
+      "Delete net node":
+        "Removes a node. Links that joined it are left pointing at something that no longer exists, so check the Links page after.",
+    },
+},
   "/network-topology/links": {
     text:
       "The links between those nodes: which pair a link joins, its cost, and whether it is currently up.",
     from:
       "pages/NetLinkList.jsx \u2014 headers Link, Organization, Topology, Cost, Status, Modified; calls LinkDrawer's api.createNetLink and api.updateNetLink, plus useNetTopologies",
-  },
+    notes: {
+      "Browse and search net links":
+        "The links between nodes, from `/network-topology/link/` \u2014 which pair each joins, its cost, and whether it is currently up.",
+      "Create net link":
+        "Adds a link by hand, between two existing nodes. Like nodes, these are normally discovered by the parser.",
+      "Edit net link":
+        "Changes a link's cost or status. Cost is what a routing protocol weighs, so this is not just a label.",
+      "Delete net link":
+        "Removes the link from the graph. Nothing on the network changes \u2014 this graph is a report of what was found, not a configuration that is pushed.",
+    },
+},
   "/radius/group": {
     text:
       "RADIUS user groups \u2014 the named buckets that check and reply attributes are attached to, so a rule can be written once for a group instead of per user. One group per organization can be the default, which is what an otherwise unmatched user falls into.",
     from:
       "pages/RadiusGroups.jsx \u2014 headers Name, Organization, Default, Created",
-  },
+    notes: {
+      "Browse and search RADIUS groups":
+        "The named buckets check and reply attributes attach to, from `radius-admin/group/`. Writing a rule against a group rather than a username is what stops the same rule being repeated per user.",
+      "Create RADIUS groups":
+        "Adds a group. One group per organization can be marked default, which is where an otherwise unmatched user lands.",
+      "Edit RADIUS groups":
+        "Renames a group or changes which one is the default.",
+      "Delete RADIUS groups":
+        "Removes a group. The check and reply attributes written against it are what stop applying, so look at those pages first.",
+    },
+},
   "/radius/check": {
     text:
       "Check attributes: the conditions a RADIUS request must satisfy to authenticate. Each row is a username, an attribute, an operator and a value \u2014 the operator matters, since it is what distinguishes a match from an assignment.",
     from:
       "pages/RadiusChecks.jsx \u2014 headers Username, Attribute, Op, Value, Organization",
-  },
+    notes: {
+      "Browse and search RADIUS checks":
+        "Check attributes, from `radius-admin/check/` \u2014 the conditions a request must satisfy to authenticate at all.",
+      "Create RADIUS checks":
+        "Adds a condition. The **operator** is the part that matters: it decides whether the row is a test the request must pass or a value being set, and the two read almost identically in the table.",
+      "Edit RADIUS checks":
+        "Changes an attribute, operator or value.",
+      "Delete RADIUS checks":
+        "Removes a condition. Anything it was blocking now authenticates, so this loosens access rather than tightening it.",
+    },
+},
   "/radius/reply": {
     text:
       "Reply attributes: what RADIUS sends BACK once a user has authenticated \u2014 the session parameters the NAS then applies. Same username/attribute/operator/value shape as check attributes, on the other side of the exchange.",
     from:
       "pages/RadiusReplies.jsx \u2014 headers Username, Attribute, Op, Value, Organization",
-  },
+    notes: {
+      "Browse and search RADIUS replies":
+        "Reply attributes, from `radius-admin/reply/` \u2014 what RADIUS sends BACK once a user has authenticated, and which the NAS then applies to the session.",
+      "Create RADIUS replies":
+        "Adds a session parameter. Same username/attribute/operator/value shape as a check attribute, on the other side of the exchange: a check decides whether to let someone in, a reply decides what they get.",
+      "Edit RADIUS replies":
+        "Changes a returned attribute.",
+      "Delete RADIUS replies":
+        "Stops that parameter being returned. The user still authenticates; the NAS just applies its own default instead.",
+    },
+},
   "/radius/accounting": {
     text:
       "Live and historical RADIUS sessions: who is connected, through which NAS and from which IP and client MAC, when the session started, how long it has run, and how much traffic passed in each direction.\n\nA record, not a control \u2014 nothing here is edited.",
     from:
       "pages/RadiusAccounting.jsx \u2014 headers User, NAS, IP, Client MAC, Started, Duration, In, Out, State",
-  },
+    notes: {
+      "Browse and search RADIUS sessions":
+        "The session record \u2014 who connected, through which NAS, for how long, and how much traffic passed. Read-only and not by choice: the view is a `ListAPIView`, so there is no detail route and no write, which is why a row does not open.",
+    },
+},
   "/radius/post-auth": {
     text:
       "The authentication log: every attempt and whether it succeeded, with the username, the client and NAS MAC addresses and when it happened. This is where a failing login is diagnosed.",
     from:
       "pages/RadiusPostAuth.jsx \u2014 headers Username, Result, When, Client MAC, NAS MAC, Organization",
-  },
+    notes: {
+      "Browse and search RADIUS post authentication":
+        "Every authentication attempt FreeRADIUS handled and what it answered \u2014 accept or reject, per username, with the station identifiers. Read-only and enforced as such: FreeRADIUS writes this table and nothing in the console does.",
+    },
+},
   "/radius/batch": {
     text:
       "Bulk user creation. A batch generates or imports a set of RADIUS users in one operation \u2014 the strategy says which \u2014 and records how many users it produced, when the credentials expire, and lets the generated credentials be retrieved.",
     from:
       "pages/RadiusBatches.jsx \u2014 headers Name, Organization, Strategy, Users, Credentials, Expires, Created; calls RadiusBatchDrawer's useCreateRadiusBatchMutation",
-  },
+    notes: {
+      "Browse and search RADIUS batches":
+        "Past bulk-creation runs, from `radius-admin/batch/` \u2014 the strategy used, how many users it produced, and when the generated credentials expire.",
+      "Create RADIUS batch":
+        "Generates or imports a set of users in one operation. The strategy decides which; the credentials it produces are retrievable from the row afterwards, until they expire.",
+      "Delete RADIUS batch":
+        "Removes the batch record. Check what it created before deleting \u2014 the record is the only place the generated credentials are listed.",
+    },
+},
   "/tacacs/servers": {
     text:
       "The TACACS+ servers this controller runs: what they listen on, whether authentication and accounting are enabled, the deploy mode, and whether the running configuration matches what has been asked for \u2014 a pending count means changes are staged but not yet reloaded.",
     from:
       "pages/TacacsServers.jsx \u2014 headers Organization, Listen, Auth, Accounting, Deploy mode, Status, Pending, Last reload; calls TacacsServerDrawer's useUpdateTacacsServerMutation",
-  },
+    notes: {
+      "Browse and search TACACS+ servers":
+        "The TACACS+ servers this controller runs, from `tacacs/server/` \u2014 what they listen on, whether authentication and accounting are on, and whether the running config matches what has been asked for.",
+      "Edit TACACS+ server":
+        "Changes a server's settings. The change is staged rather than live \u2014 the **Pending** count is what tells you a reload is owed.",
+      "Apply or push TACACS+ server":
+        "Pushes the staged configuration and reloads the server, which is what clears Pending and updates Last reload.",
+      "Refresh TACACS+ server":
+        "Re-reads the server's current state rather than waiting for the page to poll \u2014 the way to confirm a reload actually took.",
+    },
+},
   "/tacacs/client": {
     text:
       "The other side: this controller acting as a TACACS+ CLIENT, so administrators sign in to it against a TACACS+ server. It records which servers are used, the timeout, whether local logins remain possible as a fallback, and which surfaces the login applies to.\n\nShared configuration, and superuser-only \u2014 a mistake here can lock everyone out, which is why local logins exist as a switch.",
     from:
       "pages/TacacsClient.jsx \u2014 headers Organization, Servers, Auth, Timeout, Local logins, Surfaces, Status; calls the TACACS client queries plus TacacsClientDrawer's client and client-server mutations",
-  },
+    notes: {
+      "Browse and search TACACS+ clients":
+        "This controller acting as a TACACS+ CLIENT, from `tacacs/client/` \u2014 so administrators sign in to the console against a TACACS+ server rather than a local account.",
+      "Create TACACS+ client":
+        "Sets up that authentication. **Local logins** is the switch to think about first: with it off, a TACACS+ outage locks everyone out of the console, including you.",
+      "Edit TACACS+ client":
+        "Changes the timeout, the fallback behaviour, or which surfaces the login applies to.",
+      "Delete TACACS+ client":
+        "Stops the console authenticating against TACACS+ and returns it to local accounts.",
+      "Create TACACS+ client server":
+        "Adds one server to the client's list (`tacacs/client-server/`). More than one is how you survive a single server going away.",
+      "Edit TACACS+ client server":
+        "Changes a server's address, secret or order in that list.",
+      "Delete TACACS+ client server":
+        "Removes a server from the list. Removing the last one leaves the client with nothing to authenticate against.",
+    },
+},
   "/tacacs/rules": {
     text:
       "Command authorization: which commands a group may or may not run. Each rule is a pattern, an action and an order \u2014 order matters, because the first matching rule decides.",
     from:
       "pages/TacacsRules.jsx \u2014 headers Order, Group, Command, Pattern, Action; calls TacacsRuleDrawer's create/update mutations",
-  },
+    notes: {
+      "Browse and search TACACS+ rules":
+        "Command authorization rules, from `tacacs/command-rule/` \u2014 which commands a group may or may not run.",
+      "Create TACACS+ rule":
+        "Adds a rule. **Order matters**: the first rule whose pattern matches decides, so a broad allow placed above a narrow deny makes the deny unreachable.",
+      "Edit TACACS+ rule":
+        "Changes a pattern, action or position.",
+      "Delete TACACS+ rule":
+        "Removes a rule. Whatever it was denying now falls through to the next matching rule.",
+      "Browse and search CPE user groups":
+        "The groups a rule can be written against \u2014 the router-side user groups, not the console's permission groups.",
+    },
+},
   "/tacacs/group-secrets": {
     text:
       "The shared secret each device group uses to talk to TACACS+, and when that secret was last deployed to them. Keeping it per group is what lets a secret be rotated for part of the fleet without touching the rest.",
     from:
       "pages/TacacsGroupSettings.jsx \u2014 headers Device group, Shared secret, Last deployed, Updated; calls TacacsGroupSettingsDrawer's create/update mutations",
-  },
+    notes: {
+      "Browse and search TACACS+ group settings":
+        "Per-device-group TACACS+ secrets, from `tacacs/device-group-settings/`, with when each was last deployed.",
+      "Create TACACS+ group settings":
+        "Gives a device group its own shared secret. Keeping it per group is what lets a secret be rotated for part of the fleet without touching the rest.",
+      "Edit TACACS+ group settings":
+        "Changes a secret. It is not live on the devices until it is deployed \u2014 **Last deployed** is the column that says whether it is.",
+      "Delete TACACS+ group settings":
+        "Removes the group's secret, leaving its devices with nothing to authenticate with.",
+    },
+},
   "/tacacs/sessions": {
     text:
       "Who is logged in through TACACS+ right now: the user, the device, where they connected from, at what privilege level, and how long they have been there.",
     from:
       "pages/TacacsSessions.jsx \u2014 headers User, Device, Source IP, Type, Privilege, Started, Duration, State",
-  },
+    notes: {
+      "Browse and search TACACS+ sessions":
+        "Live sessions, from `tacacs/session/` \u2014 user, device, source address, privilege level and duration. Read-only by design: the server viewset is a `ReadOnlyModelViewSet`, so there is no disconnect action, and offering one would be a button that cannot work.",
+    },
+},
   "/tacacs/accounting": {
     text:
       "The TACACS+ command log \u2014 every command run, by whom, on which device, at what privilege and from where. The audit trail that command authorization is written against.",
     from:
       "pages/TacacsAccounting.jsx \u2014 headers When, User, Device, Source IP, Event, Command / detail, Priv, Action",
-  },
+    notes: {
+      "Browse and search TACACS+ accounting":
+        "The command log, from `tacacs/accounting/` \u2014 what each user did, on which device, when. Read-only and deliberately so: this is the audit trail command authorization is written against. Rows are aged out by the retention window rather than deleted by hand.",
+    },
+},
   "/credentials": {
     text:
       "How the controller logs in to devices in order to push configuration \u2014 the SSH credentials themselves. A credential has a connection type and an organization, and can be set to attach automatically to new devices in that organization rather than being applied by hand.\n\nSSH keypairs are generated here, so a private key never has to be pasted in from elsewhere.",
     from:
       "pages/CredentialList.jsx \u2014 headers Name, Organization, Connection type, Auto add, Created, Modified; calls the credential queries plus CredentialFormModal's api.generateSshKeypair, api.createCredential, api.updateCredential",
     notes: {
+      "Browse and search credentials":
+        "The SSH credentials the controller uses to reach devices. A credential is bound to devices through a connection, which is what the device's own Credentials tab manages.",
+      "Create credential":
+        "Adds one. **Auto add** is the field that matters: with it set, the credential attaches to every new device in that organization, which is what stops a freshly registered device sitting unreachable.",
+      "Edit credential":
+        "Changes a credential. Devices already bound to it pick the change up on their next connection attempt.",
+      "Delete credential":
+        "Removes it. Any device whose only connection used it can no longer be reached, so check the device Credentials tabs first.",
       "Generate ssh keypair":
         "Creates a keypair in place, so the private half is never carried in from somewhere else.",
     },
@@ -669,37 +919,77 @@ export const CURATED: Record<string, CuratedDescription> = {
       "Wi-Fi association history: which client MAC joined which SSID on which device, the vendor the MAC resolves to, and when the session started and stopped. A record of who was on the wireless, not a control.",
     from:
       "pages/MonitoringWifiSessions.jsx \u2014 headers Device, Organization, SSID, MAC address, Vendor, Start time, Stop time",
-  },
+    notes: {
+      "Browse and search Wi-Fi sessions":
+        "Association history \u2014 which client MAC joined which SSID on which device, the vendor the MAC resolves to, and when the session started and stopped.",
+      "Browse and search devices":
+        "The device list the session filter narrows by.",
+    },
+},
   "/monitoring/metrics": {
     text:
       "The metrics being collected from devices. Each row is one metric definition; the data itself is what the device detail page's Charts tab draws.",
     from:
       "pages/MonitoringMetrics.jsx \u2014 headers Metric, Created, Modified",
-  },
+    notes: {
+      "Browse and search metrics":
+        "The metric definitions being collected. The data itself is what a device's Charts tab draws.",
+      "Delete metric":
+        "Removes a definition. Historic data stays; collection stops.",
+    },
+},
   "/monitoring/checks": {
     text:
       "The checks that decide whether a device counts as healthy \u2014 the thing behind the Online / Problem / Offline split on Devices. A check has a type and is attached to devices; its results show on the device's own Checks tab.",
     from:
       "pages/MonitoringChecks.jsx \u2014 headers Check, Check type, Created, Modified",
-  },
+    notes: {
+      "Browse and search all checks":
+        "Every check defined across the fleet \u2014 the definitions behind the Online / Problem / Offline split on Devices.",
+      "Browse and search check types":
+        "The kinds of check that exist, which is what a new check is created from.",
+      "Delete check":
+        "Removes a check definition. The health metric it produced stops being collected, so anything on a device that depended on it goes quiet rather than turning red.",
+    },
+},
   "/firmware": {
     text:
       "Firmware in three parts: the CATEGORIES that group images, the BUILDS themselves with their version and OS identifier, and the UPGRADE batches that push a build to devices and report how far each one got.\n\nA build belongs to a category and targets an OS identifier, which is what stops an image being offered to hardware it does not fit.",
     from:
       "pages/FirmwareHub.jsx \u2014 headers across its three tables: Category, Name, Description, Organization, Type; Build, Version, OS identifier, Created; Devices, Status, Started",
-  },
+    notes: {
+      "Browse and search firewall categories":
+        "The categories images are grouped into. (The call is named for the app it lives in; the page is firmware, not firewall.)",
+      "Browse and search firewall builds":
+        "The images themselves, each with a version and an OS identifier \u2014 the identifier is what stops a build being offered to hardware it does not fit.",
+      "Browse and search batch ops":
+        "Upgrade batches: which devices a build was pushed to and how far each one got.",
+      "Delete firewall build":
+        "Removes an image. Devices already running it are unaffected \u2014 this withdraws it from future upgrades.",
+      "Delete firewall category":
+        "Removes a category. Check the builds filed under it first; a category is how they are found.",
+    },
+},
   "/settings/site": {
     text:
       "The site's name and domain \u2014 two fields from django.contrib.sites, and neither is cosmetic. The domain is interpolated into the links in every alert email, so a wrong value here produces mail whose links go nowhere.",
     from:
       "pages/SiteSettings.jsx \u2014 its own header comment: \"django.contrib.sites holds two fields, but they are not cosmetic: `domain` is what every alert email interpolates into its links, so a wrong value\u2026\"",
-  },
+    notes: {
+      "Edit site":
+        "Changes the site name and domain. The **domain** is what every alert email interpolates into its links, so a wrong value here produces mail whose links go nowhere.",
+    },
+},
   "/settings/email-alerts": {
     text:
       "Which alerts are sent by email, and the templates they are sent with. Alerts can be switched on and off individually or in bulk, and the templates that carry their wording are edited here \u2014 kept separate from the rules, so message text can change without touching what counts as a problem.",
     from:
       "pages/EmailAlerts.jsx with AlertConfigTable and EmailTemplatesTable \u2014 calls api.setAlertEnabled, api.setAlertEnabledBulk, api.deleteEmailTemplate",
     notes: {
+      "View alert hub":
+        "The alert catalogue \u2014 every alert that can be sent, and whether it currently is.",
+      "Delete email template":
+        "Removes a message template. Templates carry the wording an alert is sent with, kept separate from the rule so text can change without touching what counts as a problem.",
       "Set alert enabled":
         "Turns one alert on or off.",
       "Set alert enabled bulk":
@@ -711,37 +1001,77 @@ export const CURATED: Record<string, CuratedDescription> = {
       "Per-user notification preferences \u2014 which notifications you personally receive, as switches rather than checkboxes so each is a single tap target.",
     from:
       "pages/NotificationPreferences.jsx \u2014 its header comment: \"A switch is clearer than a checkbox for an on/off preference and reads as one tap target\"",
-  },
+    notes: {
+      "Browse and search notif settings":
+        "Your own notification preferences \u2014 which notifications you personally receive. Per-user, not global.",
+      "Edit notif setting":
+        "Toggles one preference. Rendered as a switch rather than a checkbox, so each is a single tap target.",
+    },
+},
   "/reports": {
     text:
       "The report catalogue: what each report covers, the category it belongs to, and when it was last updated. Reports are opened from here, and a custom report can be built with the customize wizard \u2014 choosing the columns and the devices it covers.",
     from:
       "pages/ReportsHub.jsx \u2014 headers Report, Category, Description, Updated; calls CustomizeWizard's api.getReportColumns, api.listReportDevices, api.createCustomReport, api.updateCustomReport",
-  },
+    notes: {
+      "Browse and search report templates":
+        "The built-in reports, from `/reports/template/` \u2014 the catalogue this page lists.",
+      "Browse and search custom reports":
+        "Reports built here rather than shipped, from `/reports/custom/`.",
+      "Create custom report":
+        "Builds one in the customize wizard \u2014 pick the columns and the devices it covers.",
+      "Edit custom report":
+        "Changes a custom report's columns or device scope.",
+      "Delete custom report":
+        "Removes it. Built-in templates cannot be deleted; only custom ones.",
+      "View report columns":
+        "The columns available for a given report, which is what the wizard offers as choices.",
+      "Browse and search report devices":
+        "The devices a report can be scoped to, for the same wizard.",
+    },
+},
   "/logs/access": {
     text:
       "Sign-ins, sign-outs and failed attempts. Scoped per user: a non-superuser sees only their own rows.",
     from:
       "pages/AccessLog.jsx \u2014 its header comment: \"Sign-ins, sign-outs and failed attempts\", with the same per-user scoping rule as the activity log",
-  },
+    notes: {
+      "Browse and search access log":
+        "Sign-ins, sign-outs and failed attempts. Scoped per user: a non-superuser sees only their own rows.",
+    },
+},
   "/logs/activity": {
     text:
       "Who changed what. Same envelope and the same per-user scoping rule as the access log \u2014 a non-superuser sees only their own rows.",
     from:
       "pages/ActivityLog.jsx \u2014 its header comment: \"Who changed what. Same envelope and the same per-user scoping rule as the access log \u2014 a non-superuser sees only their own rows\"",
-  },
+    notes: {
+      "Browse and search activity log":
+        "Who changed what \u2014 the same envelope and the same per-user scoping rule as the access log.",
+    },
+},
   "/logs/device": {
     text:
       "Syslog from the devices themselves. Unlike the other three logs this is not a database table \u2014 the view proxies Graylog and parses each line, so what you can search here is bounded by what Graylog holds rather than by the controller's own database.",
     from:
       "pages/DeviceLog.jsx \u2014 its header comment: \"Syslog from the devices themselves. Unlike the other three this is not a database table \u2014 the view proxies Graylog, parses each line\u2026\"",
-  },
+    notes: {
+      "Browse and search device log":
+        "Syslog from the devices. Unlike the other three logs this is not a database table \u2014 the view proxies Graylog and parses each line, so what you can search is bounded by what Graylog holds.",
+      "Browse and search device log hostnames":
+        "The hostnames Graylog has seen, which is what the device filter on this page offers.",
+    },
+},
   "/logs/firmware": {
     text:
       "Upgrade lifecycle events, synced from each device's own `/etc/ns-update-audit.jsonl`. The record of what a device did during an upgrade, taken from the device rather than inferred from the controller's side of it.",
     from:
       "pages/FirmwareLog.jsx \u2014 its header comment: \"Upgrade lifecycle events synced from each device's /etc/ns-update-audit.jsonl\"",
-  },
+    notes: {
+      "Browse and search firmware log":
+        "Upgrade lifecycle events, synced from each device's own `/etc/ns-update-audit.jsonl` \u2014 taken from the device rather than inferred from the controller's side of the upgrade.",
+    },
+},
   "/devices/:id": {
     text:
       "One device, in depth \u2014 reached by opening a row in [Devices](/controller/network/devices), not from the menu.\n\nThe page is mostly its fourteen tabs, and they run roughly in the order you would ask questions in: is it healthy, what is it carrying, what has it been doing, then what is it configured with. Most of them are the corresponding section of the old Django admin device page, rebuilt.\n\nThe device payload is fetched once with `GET /monitoring/device/<id>/?status=true` \u2014 the `?status=true` matters, because without it the response carries no `data` key and the Status tab has nothing to render. Tabs that need something outside that payload (availability, DPI, commands) fetch it themselves when opened.",
@@ -846,4 +1176,30 @@ export const CURATED: Record<string, CuratedDescription> = {
         "The router's own web UI, rebuilt inside the controller. Last in the list because it is a different kind of thing from the tabs before it: those read controller state, this one talks to the device. Roughly 33 pages across eight groups \u2014 Performance SLA, Policy Engine, Firewall, Network, Security, VPN, OOBM and Log & Reports. Mounted only while the tab is open, so its background polling stops when you leave.",
     },
   },
+};
+
+/**
+ * Notes for operations that mean the SAME thing wherever they appear.
+ *
+ * `Browse and search organizations` is on 21 pages and is the scope picker's
+ * list on every one of them. Writing that out 21 times would be 21 places to
+ * update and 21 chances to drift, so it is written once here and used wherever
+ * a page does not say something more specific.
+ *
+ * A page's own `notes` entry ALWAYS wins. These are a floor, not a ceiling —
+ * and where an operation genuinely differs by page (`Browse and search devices`
+ * is the fleet count on the Dashboard and a router picker on SD-LAN) it is
+ * deliberately absent from this map and written per page instead.
+ */
+export const COMMON_NOTES: Record<string, string> = {
+  "Browse and search organizations":
+    "The organization list \u2014 what the scope picker narrows the page by, and what fills the Organization field on its forms. Almost every record in the controller is organization-scoped, which is why this call appears on so many pages.",
+  "Browse and search groups":
+    "The device-group list \u2014 the second half of the scope picker, and the group field on this page's forms.",
+  "Browse and search net topologies":
+    "The parsed topologies a record here can belong to, so the form can offer a choice rather than an id.",
+  "Browse and search net nodes":
+    "The nodes a link can join, for the same reason.",
+  "Browse and search locations":
+    "The saved locations a device can be placed at.",
 };
