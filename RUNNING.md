@@ -126,6 +126,24 @@ docker compose stop influxdb
 
 ---
 
+## Publishing
+
+```bash
+scripts/publish.sh --local                      # build only, nothing transferred
+KB_HOST=user@host scripts/publish.sh --dry-run  # show what would transfer
+KB_HOST=user@host scripts/publish.sh            # publish
+```
+
+`KB_HOST` has **no default**, on purpose. The bundle holds both handbooks and
+rsync runs with `--delete`, so a default target would let one careless run
+replace a live handbook with whatever is in `out/`.
+
+It also refuses to publish when a handbook generated almost nothing — which is
+what happens when its source repo is missing. Right now that is SDWAN Lite, so
+publishing is blocked until either its inputs exist or you pass `--allow-partial`.
+
+---
+
 ## If something goes wrong
 
 **Page not found / 404**
