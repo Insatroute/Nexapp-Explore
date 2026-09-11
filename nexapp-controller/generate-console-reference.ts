@@ -526,59 +526,94 @@ async function emitDeviceDetail(table: RouteTable): Promise<number> {
 async function emitCpe(): Promise<number> {
   const menu = await readCpeMenu();
   const all = menu.flatMap((s) => s.pages);
-  const classic = all.filter((p) => !p.built);
+  const withCalls = all.filter((p) => p.calls.length);
+  const methods = withCalls.reduce((n, p) => n + p.calls.length, 0);
 
-  const L = [
-    frontmatter('CPE pages', 'Network › Devices › a device › the CPE tab — the router\u2019s own UI, page for page.'),
+  const dir = path.join(OUT, 'network', 'cpe');
+  await mkdir(dir, { recursive: true });
+
+  // An earlier run emitted this as a single flat page; a folder and a flat page
+  // of the same name are two routes for one thing.
+  await rm(path.join(OUT, 'network', 'cpe-pages.mdx'), { force: true });
+
+  // ---- index
+  const idx = [
+    frontmatter('CPE', 'Network \u203a Devices \u203a a device \u203a the CPE tab \u2014 the router\u2019s own UI, page for page.'),
     '<Cards>',
-    `  <Card title="Where it is" description="Devices \u203a a device \u203a the CPE tab" />`,
+    '  <Card title="Where it is" description="Devices \u203a a device \u203a the CPE tab" />',
     `  <Card title="Size" description="${menu.length} sections, ${all.length} pages" />`,
     '</Cards>',
     '',
-    'The CPE tab is the router\u2019s own web interface rebuilt inside the controller, and it carries a',
-    'menu of its own. Everything else in this handbook describes CONTROLLER state; these pages talk to',
-    'the device.',
+    'The CPE tab is the router\u2019s own web interface rebuilt inside the controller. Everything else in',
+    'this handbook describes CONTROLLER state; these pages talk to the device itself, over RPCD.',
     '',
-    'Each entry mirrors a page the classic device form already ships, and names the `(tab, subtab)` pair',
-    'that page switches on. That pairing is what lets an entry which has not been rebuilt in React yet',
-    'open the real, working classic page instead of being a dead menu row.',
+    'Each entry mirrors a page the classic device form already ships and names the `(tab, subtab)` pair',
+    'that page switches on \u2014 which is what lets an entry not yet rebuilt in React open the real,',
+    'working classic page instead of being a dead menu row.',
+    '',
+    `<Callout type="info">${all.length - all.filter((p) => !p.built).length} of ${all.length} pages are rebuilt in React. ${withCalls.length} of them name the RPCD methods they call, ${methods} in total; the remaining ${all.length - withCalls.length} reach the router another way \u2014 \`CpeSlaSettingsPage\` says so itself: \u201cThis page is NOT a straight RPCD proxy\u201d.</Callout>`,
     '',
   ];
-  L.push(
-    classic.length
-      ? `<Callout type="info">${all.length - classic.length} of ${all.length} pages are rebuilt in React; ${classic.length} still hand off to the router\u2019s classic UI.</Callout>`
-      : `<Callout type="info">All ${all.length} pages are rebuilt in React — none currently hand off to the router\u2019s classic UI.</Callout>`,
-    '',
-  );
-
   for (const sec of menu) {
-    L.push(`## ${esc(sec.label)}`, '');
+    const n = sec.pages.reduce((a, p) => a + p.calls.length, 0);
+    idx.push(
+      `- [${sec.label}](${URL_BASE}/network/cpe/${slug(sec.label)}) \u2014 ${sec.pages.length} pages` +
+        (n ? `, ${n} RPCD methods` : ''),
+    );
+  }
+  idx.push('', '---', '', '<small>Read from: the `CPE_MENU` literal in `components/cpe/cpeMenu.js`, and the RPCD method names each page component calls.</small>', '');
+  await writeFile(path.join(dir, 'index.mdx'), idx.join('\n'));
+
+  // ---- one page per section
+  const order: string[] = ['index'];
+  for (const sec of menu) {
+    const n = sec.pages.reduce((a, p) => a + p.calls.length, 0);
+    const L = [
+      frontmatter(sec.label, `CPE \u203a ${sec.label}`),
+      '<Cards>',
+      `  <Card title="Pages" description="${sec.pages.length}" />`,
+      `  <Card title="RPCD methods" description="${n}" />`,
+      '</Cards>',
+      '',
+    ];
     let group: string | undefined;
     for (const pg of sec.pages) {
-      if (pg.group && pg.group !== group) { L.push(`**${esc(pg.group)}**`, ''); group = pg.group; }
-      const tag = pg.built ? '' : ' — *still the classic page*';
-      L.push(`- ${esc(pg.label)}${tag}`);
+      if (pg.group && pg.group !== group) { L.push(`## ${esc(pg.group)}`, ''); group = pg.group; }
+      L.push(`### ${esc(pg.label)}`, '');
+      if (pg.admin?.tab) {
+        const sub = pg.admin.subtab ? `, subtab \`${pg.admin.subtab}\`` : '';
+        L.push(`Mirrors the classic device form\u2019s \`${pg.admin.tab}\` tab${sub}.`, '');
+      }
+      if (pg.calls.length) {
+        L.push(
+          `Calls ${pg.calls.length} RPCD method${pg.calls.length === 1 ? '' : 's'} on the router:`,
+          '',
+          pg.calls.map((c) => `\`${c}\``).join(' \u00b7 '),
+          '',
+        );
+      } else {
+        L.push('Reaches the router without naming RPCD methods in its own source, so none are listed here.', '');
+      }
     }
-    L.push('');
+    L.push('---', '', '<small>Read from: `components/cpe/cpeMenu.js` and each page component.</small>', '');
+    await writeFile(path.join(dir, `${slug(sec.label)}.mdx`), L.join('\n'));
+    order.push(slug(sec.label));
   }
-  L.push('---', '', '<small>Read from: the `CPE_MENU` literal in `components/cpe/cpeMenu.js`.</small>', '');
-
-  const dir = path.join(OUT, 'network');
-  await mkdir(dir, { recursive: true });
-  await writeFile(path.join(dir, 'cpe-pages.mdx'), L.join('\n'));
+  await writeFile(path.join(dir, 'meta.json'), JSON.stringify({ title: 'CPE', pages: order }, null, 2));
 
   // Sits after Device detail, which is where the tab actually lives.
-  const metaPath = path.join(dir, 'meta.json');
+  const metaPath = path.join(OUT, 'network', 'meta.json');
   if (await exists(metaPath)) {
     const { readFile: rf } = await import('node:fs/promises');
     const meta = JSON.parse(await rf(metaPath, 'utf8'));
-    if (!meta.pages.includes('cpe-pages')) {
+    meta.pages = meta.pages.filter((x: string) => x !== 'cpe-pages');
+    if (!meta.pages.includes('cpe')) {
       const at = meta.pages.indexOf('device-detail');
-      meta.pages.splice(at < 0 ? meta.pages.length : at + 1, 0, 'cpe-pages');
-      await writeFile(metaPath, JSON.stringify(meta, null, 2));
+      meta.pages.splice(at < 0 ? meta.pages.length : at + 1, 0, 'cpe');
     }
+    await writeFile(metaPath, JSON.stringify(meta, null, 2));
   }
-  return 1;
+  return 1 + menu.length;
 }
 
 /** Prose authored in the controller repo, if that directory exists yet. */
