@@ -57,6 +57,14 @@ const exists = (p: string) => access(p).then(() => true, () => false);
 const plain = (s: string) => s.replace(/`/g, '').replace(/"/g, '\u201d').trim();
 
 /**
+ * Text safe inside a markdown table cell.
+ *
+ * A pipe would end the column and a newline would end the row, so both are
+ * neutralised before the MDX escaping runs.
+ */
+const cell = (s: string) => esc(s.replace(/\s*\n\s*/g, ' ')).replace(/\|/g, '\\|').trim();
+
+/**
  * Which heading an operation sits under.
  *
  * Fourteen alphabetical bullets is a wall: "Delete device" and "Browse and search
@@ -328,10 +336,15 @@ async function main() {
         }
 
         // The disclosure itself is not a page in the console — it only opens.
-        // So its index does not invent a page; it carries the authored note that
-        // explains why these entries were grouped, and a line on each child taken
-        // from that child's own description, so the reader can choose without
-        // opening all of them.
+        // So its index does not invent one. It carries the authored note that
+        // explains why these entries were grouped, then the two facts the reader
+        // is actually choosing on — where each child goes, and whether they may
+        // open it — and finally each child's own one-line summary.
+        //
+        // Repeating path and permission here duplicates the child pages, which is
+        // the point: without it, choosing between three entries means opening all
+        // three. The duplication is generated from the same source on every run,
+        // so it cannot drift from the page it summarises.
         const groupNote = notes.get(item.label);
         const idx: string[] = [frontmatter(item.label, `${label} › ${item.label}`)];
         if (groupNote) idx.push(esc(groupNote), '');
@@ -339,13 +352,27 @@ async function main() {
           `\`${item.label}\` is a disclosure in the sidebar — it opens, it does not navigate. It covers:`,
           '',
         );
+        idx.push('| Page | Path | Who can open it |', '| --- | --- | --- |');
         for (const k of kids) {
           const href = `${URL_BASE}/${sslug}/${slug(item.label)}/${slug(k.label)}`;
-          // First sentence of the child's own description — one line, not a copy
-          // of the whole page.
+          const where = k.to
+            ? `\`${k.to}\``
+            : k.href
+              ? `\`${k.href}\` (Django admin)`
+              : '—';
+          const perm = k.to
+            ? table.permSentence(k.to, navTargets.has(k.to))
+            : 'Not a routed entry.';
+          idx.push(`| [${cell(k.label)}](${href}) | ${where} | ${cell(perm)} |`);
+        }
+        idx.push('');
+
+        // First sentence of each child's own description — one line, not a copy
+        // of the whole page.
+        for (const k of kids) {
           const kt = k.to ? CURATED[k.to]?.text : undefined;
           const first = kt ? kt.split('\n')[0].split(/(?<=\.)\s/)[0].trim() : '';
-          idx.push(first ? `- [${k.label}](${href}) — ${esc(first)}` : `- [${k.label}](${href})`);
+          if (first) idx.push(`**${esc(k.label)}** — ${esc(first)}`, '');
         }
         if (groupNote) {
           idx.push(
