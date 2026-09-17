@@ -3,6 +3,42 @@
 @import 'fumadocs-ui/css/preset.css';
 @import 'fumadocs-openapi/css/preset.css';
 
+/* ---------------------------------------------------------------------------
+ * Nexapp knowledge base — theme.
+ *
+ * Fumadocs' own palette is left exactly as it ships. What is here is structure
+ * rather than colour: the code panel, tables, headings, inline code and the
+ * active sidebar entry. Everything draws its colours from Fumadocs' tokens, so
+ * changing the preset changes this too.
+ *
+ * The one exception is the code panel, which is near-black in BOTH themes the
+ * way the React docs are — a command should look the same whichever theme the
+ * reader is in.
+ *
+ * Code blocks here carry no syntax colouring — every fence in the generated
+ * content is untagged, and the OpenAPI samples ship as plain text. That is what
+ * makes a dark panel safe in the light theme: there are no light-theme token
+ * colours underneath to go unreadable.
+ * ------------------------------------------------------------------------- */
+
+:root {
+  /* the code panel, identical in both themes so a command always reads the same */
+  --kb-code-bg: hsl(215, 26%, 12%);
+  --kb-code-head: hsl(215, 28%, 9.5%);
+  --kb-code-line: hsl(215, 16%, 24%);
+  --kb-code-fg: hsl(210, 30%, 92%);
+  --kb-code-dim: hsl(213, 14%, 63%);
+  --kb-code-accent: hsl(196, 78%, 62%);
+  --kb-radius: 12px;
+}
+
+.dark {
+  /* The code panel sits a little deeper in the dark theme so it still reads as
+     a panel rather than merging into the page. */
+  --kb-code-bg: hsl(215, 28%, 9%);
+  --kb-code-head: hsl(215, 30%, 7%);
+}
+
 html {
   scrollbar-gutter: stable;
 }
@@ -10,4 +46,193 @@ html {
 html > body[data-scroll-locked] {
   margin-right: 0px !important;
   --removed-body-scroll-bar-size: 0px !important;
+}
+
+/* --- type -------------------------------------------------------------- */
+
+#nd-page h1,
+#nd-page h2,
+#nd-page h3,
+#nd-page h4 {
+  letter-spacing: -0.018em;
+  text-wrap: balance;
+}
+#nd-page h2 {
+  margin-top: 2.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-fd-border);
+}
+#nd-page h2:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+
+/* Inline code is a reference to a name, not a block of it: a tinted chip keeps
+   `nexapp_users.user` legible inside a sentence without the backtick soup that
+   a full code background makes of a paragraph. */
+#nd-page :not(pre) > code {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.86em;
+  background: var(--color-fd-accent);
+  color: var(--color-fd-accent-foreground);
+  border: 1px solid transparent;
+  border-radius: 5px;
+  padding: 0.12em 0.36em;
+  font-weight: 500;
+}
+
+/* --- code panels -------------------------------------------------------- */
+
+figure.shiki {
+  background: var(--kb-code-bg);
+  border: 1px solid var(--kb-code-line);
+  border-radius: var(--kb-radius);
+  box-shadow: 0 1px 2px hsl(215 28% 8% / 0.16), 0 6px 18px -12px hsl(215 28% 8% / 0.3);
+  overflow: hidden;
+  position: relative;
+}
+
+/* A standalone block (a JSON response) gets its own slim header, which carries
+   the copy control and nothing else — there is no honest label to put there,
+   since the panel cannot know what the block holds. */
+figure.shiki::before {
+  content: '';
+  display: block;
+  height: 40px;
+  background: var(--kb-code-head);
+  border-bottom: 1px solid var(--kb-code-line);
+}
+
+figure.shiki pre {
+  padding: 16px 18px 18px;
+  color: var(--kb-code-fg);
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 13px;
+  line-height: 1.75;
+  background: transparent;
+}
+figure.shiki code {
+  background: none;
+  color: inherit;
+}
+
+/* the copy control, moved into the header and given the word it needs */
+figure.shiki > div:first-of-type {
+  top: 7px;
+  right: 9px;
+  backdrop-filter: none;
+  background: none;
+}
+figure.shiki button[aria-label='Copy Text'] {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--kb-code-dim);
+}
+figure.shiki button[aria-label='Copy Text']::after {
+  content: 'Copy';
+}
+figure.shiki button[aria-label='Copy Text'][data-checked] {
+  color: var(--kb-code-accent);
+}
+figure.shiki button[aria-label='Copy Text'][data-checked]::after {
+  content: 'Copied';
+}
+figure.shiki button[aria-label='Copy Text']:hover {
+  background: hsl(210 30% 92% / 0.09);
+  color: var(--kb-code-fg);
+}
+
+/* --- request samples ----------------------------------------------------
+ * These already have a header: the language tabs. So the panel keeps one piece
+ * of chrome, not two — the tab bar becomes the header, and the figure inside it
+ * drops its own.
+ * ---------------------------------------------------------------------- */
+
+div:has(> [role='tablist']):has(figure.shiki) {
+  background: var(--kb-code-bg);
+  border-color: var(--kb-code-line);
+  border-radius: var(--kb-radius);
+  box-shadow: 0 1px 2px hsl(215 28% 8% / 0.16), 0 6px 18px -12px hsl(215 28% 8% / 0.3);
+}
+div:has(figure.shiki) > [role='tablist'] {
+  background: var(--kb-code-head);
+  border-bottom: 1px solid var(--kb-code-line);
+  padding-inline: 10px;
+}
+div:has(figure.shiki) > [role='tablist'] [role='tab'] {
+  color: var(--kb-code-dim);
+  padding-block: 9px;
+  font-size: 12.5px;
+  font-family: var(--font-mono), ui-monospace, monospace;
+}
+div:has(figure.shiki) > [role='tablist'] [role='tab']:hover {
+  color: var(--kb-code-fg);
+}
+div:has(figure.shiki) > [role='tablist'] [role='tab'][data-active] {
+  color: var(--kb-code-fg);
+}
+div:has(figure.shiki) > [role='tablist'] [role='tab'][data-active] > div {
+  background: var(--kb-code-accent);
+}
+[role='tabpanel'] figure.shiki {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+}
+[role='tabpanel'] figure.shiki::before {
+  display: none;
+}
+
+/* --- tables -------------------------------------------------------------
+ * The generated pages lean on tables — permission rows, readings per card — so
+ * they get the same care as the code panels. A wide one scrolls in its own
+ * container rather than pushing the page sideways.
+ * ---------------------------------------------------------------------- */
+
+#nd-page table {
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--color-fd-border);
+  border-radius: 10px;
+  overflow: hidden;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+#nd-page thead {
+  background: var(--color-fd-muted);
+}
+#nd-page th {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-fd-muted-foreground);
+  font-weight: 600;
+  text-align: left;
+}
+#nd-page th,
+#nd-page td {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--color-fd-border);
+  vertical-align: top;
+}
+#nd-page tbody tr:last-child td {
+  border-bottom: 0;
+}
+#nd-page tbody tr:hover {
+  background: var(--color-fd-muted);
+}
+
+/* --- sidebar ------------------------------------------------------------ */
+
+#nd-sidebar a[data-active='true'] {
+  background: var(--color-fd-accent);
+  color: var(--color-fd-accent-foreground);
+  border-radius: 7px;
+  font-weight: 600;
 }

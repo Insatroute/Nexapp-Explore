@@ -27,6 +27,7 @@ import { readNav, navComments, type NavSection, type NavLeaf } from './extract-n
 import { readRouteTable, type RouteRec, type RouteTable } from './extract-routes.ts';
 import { factsForFile, type PageFacts } from './extract-page-facts.ts';
 import { readCpeMenu } from './extract-cpe.ts';
+import { readTabFields } from './extract-tab-fields.ts';
 import { CURATED, COMMON_NOTES } from './console-descriptions.ts';
 import { OUT, KB, URL_BASE, requireController } from './config.ts';
 
@@ -524,11 +525,47 @@ async function emitDeviceDetail(table: RouteTable): Promise<number> {
     table.permSentence('/devices/:id', false),
   );
 
+  // --- what each tab actually puts on screen.
+  //
+  // The tab list above says what each tab is FOR in a sentence. That left the
+  // largest page in the console describing fourteen tabs without naming a single
+  // thing any of them shows, while the page itself shows dozens.
+  //
+  // The readings are listed; the values are not. `8.2 GB` and `4d 17h 51m` come
+  // from the device's own check-in, so writing one down freezes a snapshot that
+  // is wrong by the next one — the failure this generator exists to avoid.
+  const tabFields = await readTabFields();
+  const extra: string[] = [];
+  for (const t of tabFields) {
+    extra.push(
+      '',
+      `## What the ${esc(t.label)} tab shows`,
+      '',
+      'The readings this tab puts on screen. Values are not listed here: the device reports them at check-in, so any figure written down would be stale by the next one.',
+      '',
+      '| Where | Readings |',
+      '| --- | --- |',
+    );
+    for (const g of t.groups) {
+      for (const k of g.cards) {
+        const where = k.title && k.title !== g.label ? `${g.label} › ${k.title}` : g.label || k.title;
+        extra.push(`| ${cell(where)} | ${cell(k.fields.join(', '))} |`);
+      }
+    }
+    const conditional = t.groups.some((g) => g.conditional);
+    extra.push(
+      '',
+      `<small>Read from: \`${t.component}\` — its \`sections\` list, the \`<StatusCard>\` headings inside each, and the \`<Field label>\` readings under those.` +
+        (conditional ? ' A section renders only for a device that reports it.' : '') +
+        '</small>',
+    );
+  }
+
   const dir = path.join(OUT, 'network');
   await mkdir(dir, { recursive: true });
   await writeFile(
     path.join(dir, 'device-detail.mdx'),
-    `${frontmatter('Device detail', 'Network › Devices › a single device — every tab on the page.')}${body.md}\n`,
+    `${frontmatter('Device detail', 'Network › Devices › a single device — every tab on the page.')}${body.md}\n${extra.join('\n')}\n`,
   );
 
   // Keep it beside Devices in the section order rather than letting it sort away.
@@ -555,6 +592,10 @@ async function emitCpe(): Promise<number> {
   const all = menu.flatMap((s) => s.pages);
   const withCalls = all.filter((p) => p.calls.length);
   const methods = withCalls.reduce((n, p) => n + p.calls.length, 0);
+  // Call sites whose method is computed rather than written down. Counted, not
+  // guessed: a page that has them is not fully described, and saying so is the
+  // difference between a gap and a silent omission.
+  const dynamic = all.reduce((n, p) => n + p.dynamicCalls, 0);
 
   const dir = path.join(OUT, 'network', 'cpe');
   await mkdir(dir, { recursive: true });
@@ -578,7 +619,7 @@ async function emitCpe(): Promise<number> {
     'that page switches on \u2014 which is what lets an entry not yet rebuilt in React open the real,',
     'working classic page instead of being a dead menu row.',
     '',
-    `<Callout type="info">${all.length - all.filter((p) => !p.built).length} of ${all.length} pages are rebuilt in React. ${withCalls.length} of them name the RPCD methods they call, ${methods} in total; the remaining ${all.length - withCalls.length} reach the router another way \u2014 \`CpeSlaSettingsPage\` says so itself: \u201cThis page is NOT a straight RPCD proxy\u201d.</Callout>`,
+    `<Callout type="info">${all.length - all.filter((p) => !p.built).length} of ${all.length} pages are rebuilt in React. ${withCalls.length} of them name the RPCD methods they call, ${methods} in total; the remaining ${all.length - withCalls.length} reach the router another way \u2014 \`CpeSlaSettingsPage\` says so itself: \u201cThis page is NOT a straight RPCD proxy\u201d.${dynamic ? (dynamic === 1 ? ' One further call site picks its method at runtime, so it cannot be named here.' : ` A further ${dynamic} call sites pick their method at runtime, so they cannot be named here.`) : ''}</Callout>`,
     '',
   ];
   for (const sec of menu) {
@@ -610,6 +651,14 @@ async function emitCpe(): Promise<number> {
       if (pg.admin?.tab) {
         const sub = pg.admin.subtab ? `, subtab \`${pg.admin.subtab}\`` : '';
         L.push(`Mirrors the classic device form\u2019s \`${pg.admin.tab}\` tab${sub}.`, '');
+      }
+      if (pg.dynamicCalls) {
+        L.push(
+          pg.dynamicCalls === 1
+            ? 'One further call site on this page picks its method at runtime.'
+            : `${pg.dynamicCalls} further call sites on this page pick their method at runtime.`,
+          '',
+        );
       }
       if (pg.calls.length) {
         L.push(

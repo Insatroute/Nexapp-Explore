@@ -16,6 +16,8 @@ openapi.docs.json
 controller-swagger.json
 controller-openapi.json
 controller-openapi.docs.json
+# The per-tag subsets generate-docs.ts writes from the spec above.
+controller-openapi/
 
 # Generated documentation pages. Every one is produced by the generators from the
 # platform; none is written by hand.
