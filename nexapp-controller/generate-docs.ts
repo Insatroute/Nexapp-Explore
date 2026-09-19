@@ -73,6 +73,57 @@ type Spec = {
   tags?: ({ name: string } | string)[];
 };
 
+/**
+ * How a path segment is written in the sidebar.
+ *
+ * Presentation only. A label may case a segment properly or expand an acronym
+ * that has exactly one meaning — `ipam` is IPAM, `ha` is high availability — but
+ * it never invents a description of what the endpoints do. `nsbond` stays
+ * NSBond rather than becoming "Router bridge": the segment is what the URL says
+ * and what a reader greps for, and a fuller name would be this file's opinion
+ * rather than the controller's.
+ *
+ * A segment with no entry falls back to sentence case, so a route group added
+ * later reads acceptably without anyone touching this map.
+ */
+const LABELS: Record<string, string> = {
+  accesslog: 'Access log',
+  account: 'Account',
+  admin: 'Admin',
+  'config-compare': 'Config compare',
+  'config-sync': 'Config sync',
+  'control-plane': 'Control plane',
+  cpeusers: 'CPE users',
+  dcdr: 'DC-DR',
+  dpi: 'DPI',
+  'firmware-audit': 'Firmware audit',
+  'firmware-pre-upgrade-backup': 'Firmware pre-upgrade backup',
+  'firmware-upgrader': 'Firmware upgrader',
+  freeradius: 'FreeRADIUS',
+  fullmesh: 'Full mesh',
+  ha: 'High availability',
+  ipam: 'IPAM',
+  'network-topology': 'Network topology',
+  nsbond: 'NSBond',
+  radius: 'RADIUS',
+  'radius-admin': 'RADIUS admin',
+  sdwan_tunnel: 'SD-WAN dashboard',
+  'serial-admission': 'Serial admission',
+  sla: 'SLA',
+  // No '+': the tag becomes the URL, and a plus in a path is decoded as a space
+  // by enough software to be a bad trade for one character of precision.
+  tacacs: 'TACACS',
+  'users-admin': 'Users admin',
+};
+
+/** Sentence case for a segment the map does not name. */
+const sentenceCase = (seg: string) => {
+  const words = seg.replace(/[-_]+/g, ' ').trim();
+  return words.charAt(0).toUpperCase() + words.slice(1);
+};
+
+const labelFor = (seg: string) => LABELS[seg] ?? sentenceCase(seg);
+
 /** `/api/v1/dpi/rules/` -> `dpi`. The version segment is noise to a reader. */
 function tagFromPath(p: string): string {
   const segs = p.split('/').filter(Boolean);
@@ -124,12 +175,23 @@ for (const [p, item] of Object.entries(spec.paths ?? {})) {
     if (real.length) {
       op.tags = real;
     } else {
-      op.tags = [tagFromPath(p)];
+      op.tags = [labelFor(tagFromPath(p))];
       retagged++;
     }
   }
 }
 if (retagged) console.log(`re-tagged ${retagged} operations out of "${CATCH_ALL}" by path`);
+
+// A label can also rename a tag the spec declared. drf-yasg emits `admin`, `sla`
+// and `sdwan_tunnel` in lowercase, and they sat in the sidebar that way beside
+// "SD-WAN Fabric". Only an exact entry applies here — the sentence-case fallback
+// is for path segments, and would rewrite "SD-WAN Fabric" as "SD WAN Fabric".
+for (const item of Object.values(spec.paths ?? {})) {
+  for (const [verb, op] of Object.entries(item)) {
+    if (!METHODS.has(verb.toLowerCase()) || !op || typeof op !== 'object') continue;
+    op.tags = (op.tags ?? []).map((t) => LABELS[t] ?? t);
+  }
+}
 
 // ---- group paths by tag ----------------------------------------------------
 const byTag = new Map<string, Record<string, Record<string, Op>>>();
@@ -156,6 +218,25 @@ await rm(SPEC_DIR, { recursive: true, force: true });
 await mkdir(SPEC_DIR, { recursive: true });
 
 const allSchemas = spec.components?.schemas ?? {};
+
+// Two tags that slug the same would write one spec over the other and lose a
+// page without a word about it. Cheaper to refuse than to explain later.
+const bySlug = new Map<string, string>();
+for (const tag of byTag.keys()) {
+  const clash = bySlug.get(slug(tag));
+  if (clash) {
+    throw new Error(
+      `tags "${clash}" and "${tag}" both slug to "${slug(tag)}" — ` +
+        `one page would overwrite the other. Rename one in LABELS.`,
+    );
+  }
+  bySlug.set(slug(tag), tag);
+}
+
+const byNorm = new Map(
+  [...bySlug].map(([s, tag]) => [s.toLowerCase().replace(/[^a-z0-9]/g, ''), tag]),
+);
+
 const inputs: string[] = [];
 const sizes: { tag: string; ops: number; kb: number }[] = [];
 
@@ -214,6 +295,31 @@ await generateFiles({
   // per input — which is what keeps a page's inlined schema down to its own.
   per: 'tag',
   includeDescription: true,
+  /**
+   * Write the tag's own name as the page title.
+   *
+   * The generated title is the tag put through a camelCase splitter, which
+   * treats a run of capitals as separate words: `SD-WAN Fabric` came out as
+   * "S D W A N Fabric", and `IPAM` as "I P A M". That has been the sidebar's
+   * reading of every SD-WAN tag all along — the acronyms this file now uses only
+   * made it impossible to miss.
+   *
+   * The tag is already the name a reader should see, so it is written verbatim.
+   */
+  beforeWrite(files) {
+    for (const f of files) {
+      if (!f.path.endsWith('.mdx')) continue;
+      const base = (f.path.split('/').pop() ?? '').replace(/\.mdx$/, '');
+      // Compared on letters and digits alone: the file name is slugged by the
+      // library, not by `slug()` here, and the two need not agree character for
+      // character. A mismatch would silently skip the rename.
+      const tag = byNorm.get(base.toLowerCase().replace(/[^a-z0-9]/g, ''));
+      if (!tag) continue;
+      // Quoted: a tag may hold a character YAML would otherwise read, like the
+      // `+` in TACACS+.
+      f.content = f.content.replace(/^title: .*$/m, `title: ${JSON.stringify(tag)}`);
+    }
+  },
 });
 
 // The folder's sidebar label is otherwise derived from its directory name, which

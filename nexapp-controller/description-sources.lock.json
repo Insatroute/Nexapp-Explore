@@ -1,20 +1,4 @@
 {
-  "/": {
-    "frontend/src/components/DonutCard.jsx": "c60743db2acc3841",
-    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
-    "frontend/src/components/GaugeCard.jsx": "078c5651928dfe44",
-    "frontend/src/components/InteractiveChart.jsx": "a7313539620b9f93",
-    "frontend/src/components/Panel.jsx": "94019000e9a6fd06",
-    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
-    "frontend/src/components/SiteMap.jsx": "277616f1b862906d",
-    "frontend/src/components/TrafficBars.jsx": "3627e81755976e02",
-    "frontend/src/components/dash/OnlineUsers.jsx": "371a7b790b17e7f9",
-    "frontend/src/components/dash/UplinkTable.jsx": "a067b8c2bbad9e30",
-    "frontend/src/components/dash/UsageTiles.jsx": "4a9a325c446256d2",
-    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
-    "frontend/src/hooks/useReveal.js": "d86914f07957b64f",
-    "frontend/src/pages/Dashboard.jsx": "e92b203164a9b873"
-  },
   "/devices": {
     "frontend/src/auth/MeContext.js": "e807c9285a246c33",
     "frontend/src/components/ApplyTemplateDrawer.jsx": "155afc663ad92c59",
@@ -32,6 +16,171 @@
     "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
     "frontend/src/pages/DeviceList.jsx": "a25b395c2cacb5fd",
     "frontend/src/utils/datetime.js": "c6d013767e6e3d91"
+  },
+  "/radius/nas": {
+    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
+    "frontend/src/components/BulkBar.jsx": "c184216a393254f0",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
+    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/radius/RadiusNasDrawer.jsx": "780c7d23bb6c9c76",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/hooks/useSelection.js": "746ecd8b82ef85ae",
+    "frontend/src/pages/RadiusNas.jsx": "881afbfa98427a04"
+  },
+  "/groups": {
+    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
+    "frontend/src/components/BulkBar.jsx": "c184216a393254f0",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/RecoverModal.jsx": "a2f71971aa1286c9",
+    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
+    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
+    "frontend/src/components/crud/ColumnPicker.jsx": "2bd7e1d28f9c6fd3",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/hooks/useCurrentUser.js": "07ae92f70002218d",
+    "frontend/src/hooks/useSelection.js": "746ecd8b82ef85ae",
+    "frontend/src/pages/GroupList.jsx": "9dc2aa6bb149b576"
+  },
+  "/policy-engine/qos": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/PolicyEngine.jsx": "9d586eaf506d5145",
+    "frontend/src/pages/policy/tabs.js": "4bd4a4f0300e71fa"
+  },
+  "/policy-engine/rip": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/PolicyEngine.jsx": "9d586eaf506d5145",
+    "frontend/src/pages/policy/tabs.js": "4bd4a4f0300e71fa"
+  },
+  "/policy-engine/bgp": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/PolicyEngine.jsx": "9d586eaf506d5145",
+    "frontend/src/pages/policy/tabs.js": "4bd4a4f0300e71fa"
+  },
+  "/policy-engine/ospf": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/PolicyEngine.jsx": "9d586eaf506d5145",
+    "frontend/src/pages/policy/tabs.js": "4bd4a4f0300e71fa"
+  },
+  "/policy-engine/pim": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/PolicyEngine.jsx": "9d586eaf506d5145",
+    "frontend/src/pages/policy/tabs.js": "4bd4a4f0300e71fa"
+  },
+  "/policy-engine/vrf": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/PolicyEngine.jsx": "9d586eaf506d5145",
+    "frontend/src/pages/policy/tabs.js": "4bd4a4f0300e71fa"
+  },
+  "/policy-engine/sla": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/PolicyEngine.jsx": "9d586eaf506d5145",
+    "frontend/src/pages/policy/tabs.js": "4bd4a4f0300e71fa"
+  },
+  "/policy-engine/steering": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/PolicyEngine.jsx": "9d586eaf506d5145",
+    "frontend/src/pages/policy/tabs.js": "4bd4a4f0300e71fa"
+  },
+  "/security/threatshield-ip": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/SecurityHub.jsx": "10ce124d46b228e6",
+    "frontend/src/pages/security/tabs.js": "02d2ce5175a1a118"
+  },
+  "/security/ips": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/SecurityHub.jsx": "10ce124d46b228e6",
+    "frontend/src/pages/security/tabs.js": "02d2ce5175a1a118"
+  },
+  "/security/antivirus": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/SecurityHub.jsx": "10ce124d46b228e6",
+    "frontend/src/pages/security/tabs.js": "02d2ce5175a1a118"
+  },
+  "/security/antispam": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/SecurityHub.jsx": "10ce124d46b228e6",
+    "frontend/src/pages/security/tabs.js": "02d2ce5175a1a118"
+  },
+  "/security/webfilter": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/SecurityHub.jsx": "10ce124d46b228e6",
+    "frontend/src/pages/security/tabs.js": "02d2ce5175a1a118"
+  },
+  "/security/address-group": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/SecurityHub.jsx": "10ce124d46b228e6",
+    "frontend/src/pages/security/tabs.js": "02d2ce5175a1a118"
+  },
+  "/security/profile": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/SecurityHub.jsx": "10ce124d46b228e6",
+    "frontend/src/pages/security/tabs.js": "02d2ce5175a1a118"
+  },
+  "/security/policy": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/SecurityHub.jsx": "10ce124d46b228e6",
+    "frontend/src/pages/security/tabs.js": "02d2ce5175a1a118"
+  },
+  "/pki/authorities": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/PkiHub.jsx": "b986303463225c4a",
+    "frontend/src/pages/pki/tabs.js": "e03324ac113add78"
+  },
+  "/pki/certificates": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/PkiHub.jsx": "b986303463225c4a",
+    "frontend/src/pages/pki/tabs.js": "e03324ac113add78"
+  },
+  "/app-intelligence/traffic": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/AppIntelHub.jsx": "8ad452f2daf9f664",
+    "frontend/src/pages/appintel/AppDatabase.jsx": "da86c476a0f2cde8",
+    "frontend/src/pages/appintel/tabs.js": "196258a9f3628b4b"
+  },
+  "/app-intelligence/discovered": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/AppIntelHub.jsx": "8ad452f2daf9f664",
+    "frontend/src/pages/appintel/AppDatabase.jsx": "da86c476a0f2cde8",
+    "frontend/src/pages/appintel/tabs.js": "196258a9f3628b4b"
+  },
+  "/app-intelligence/snapshots": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/AppIntelHub.jsx": "8ad452f2daf9f664",
+    "frontend/src/pages/appintel/AppDatabase.jsx": "da86c476a0f2cde8",
+    "frontend/src/pages/appintel/tabs.js": "196258a9f3628b4b"
+  },
+  "/app-intelligence/applications": {
+    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/pages/AppIntelHub.jsx": "8ad452f2daf9f664",
+    "frontend/src/pages/appintel/AppDatabase.jsx": "da86c476a0f2cde8",
+    "frontend/src/pages/appintel/tabs.js": "196258a9f3628b4b"
   },
   "/sdlan": {
     "frontend/src/components/Drawer.jsx": "6865cc948eb1692e",
@@ -149,6 +298,22 @@
     "frontend/src/pages/SubnetList.jsx": "1e3bde6fe9209fb9",
     "frontend/src/utils/datetime.js": "c6d013767e6e3d91"
   },
+  "/": {
+    "frontend/src/components/DonutCard.jsx": "c60743db2acc3841",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/GaugeCard.jsx": "078c5651928dfe44",
+    "frontend/src/components/InteractiveChart.jsx": "a7313539620b9f93",
+    "frontend/src/components/Panel.jsx": "94019000e9a6fd06",
+    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
+    "frontend/src/components/SiteMap.jsx": "277616f1b862906d",
+    "frontend/src/components/TrafficBars.jsx": "3627e81755976e02",
+    "frontend/src/components/dash/OnlineUsers.jsx": "371a7b790b17e7f9",
+    "frontend/src/components/dash/UplinkTable.jsx": "a067b8c2bbad9e30",
+    "frontend/src/components/dash/UsageTiles.jsx": "4a9a325c446256d2",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/hooks/useReveal.js": "d86914f07957b64f",
+    "frontend/src/pages/Dashboard.jsx": "e92b203164a9b873"
+  },
   "/users": {
     "frontend/src/auth/MeContext.js": "e807c9285a246c33",
     "frontend/src/components/BulkBar.jsx": "c184216a393254f0",
@@ -194,21 +359,6 @@
     "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
     "frontend/src/hooks/useSelection.js": "746ecd8b82ef85ae",
     "frontend/src/pages/AllowedSerialList.jsx": "880fe280795aa0fb"
-  },
-  "/groups": {
-    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
-    "frontend/src/components/BulkBar.jsx": "c184216a393254f0",
-    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
-    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
-    "frontend/src/components/RecoverModal.jsx": "a2f71971aa1286c9",
-    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
-    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
-    "frontend/src/components/crud/ColumnPicker.jsx": "2bd7e1d28f9c6fd3",
-    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
-    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
-    "frontend/src/hooks/useCurrentUser.js": "07ae92f70002218d",
-    "frontend/src/hooks/useSelection.js": "746ecd8b82ef85ae",
-    "frontend/src/pages/GroupList.jsx": "9dc2aa6bb149b576"
   },
   "/device-groups": {
     "frontend/src/auth/MeContext.js": "e807c9285a246c33",
@@ -301,133 +451,6 @@
     "frontend/src/hooks/useSelection.js": "746ecd8b82ef85ae",
     "frontend/src/pages/NetLinkList.jsx": "df3c005754db7cc5",
     "frontend/src/utils/format.js": "5b6467ca8589d460"
-  },
-  "/app-intelligence/applications": {
-    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
-    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
-    "frontend/src/pages/AppIntelHub.jsx": "8ad452f2daf9f664",
-    "frontend/src/pages/appintel/AppDatabase.jsx": "da86c476a0f2cde8",
-    "frontend/src/pages/appintel/tabs.js": "196258a9f3628b4b"
-  },
-  "/app-intelligence/traffic": {
-    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
-    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
-    "frontend/src/pages/AppIntelHub.jsx": "8ad452f2daf9f664",
-    "frontend/src/pages/appintel/AppDatabase.jsx": "da86c476a0f2cde8",
-    "frontend/src/pages/appintel/tabs.js": "196258a9f3628b4b"
-  },
-  "/app-intelligence/discovered": {
-    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
-    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
-    "frontend/src/pages/AppIntelHub.jsx": "8ad452f2daf9f664",
-    "frontend/src/pages/appintel/AppDatabase.jsx": "da86c476a0f2cde8",
-    "frontend/src/pages/appintel/tabs.js": "196258a9f3628b4b"
-  },
-  "/app-intelligence/snapshots": {
-    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
-    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
-    "frontend/src/pages/AppIntelHub.jsx": "8ad452f2daf9f664",
-    "frontend/src/pages/appintel/AppDatabase.jsx": "da86c476a0f2cde8",
-    "frontend/src/pages/appintel/tabs.js": "196258a9f3628b4b"
-  },
-  "/monitoring/wifi-sessions": {
-    "frontend/src/components/BoolPill.jsx": "e0bc4e75cf666a3a",
-    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
-    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
-    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
-    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
-    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
-    "frontend/src/pages/MonitoringWifiSessions.jsx": "b98227eed94decfd",
-    "frontend/src/utils/datetime.js": "c6d013767e6e3d91"
-  },
-  "/monitoring/metrics": {
-    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
-    "frontend/src/components/BulkBar.jsx": "c184216a393254f0",
-    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
-    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
-    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
-    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
-    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
-    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
-    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
-    "frontend/src/pages/MonitoringMetrics.jsx": "417a03e69c1888f9",
-    "frontend/src/utils/datetime.js": "c6d013767e6e3d91"
-  },
-  "/monitoring/checks": {
-    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
-    "frontend/src/components/BulkBar.jsx": "c184216a393254f0",
-    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
-    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
-    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
-    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
-    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
-    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
-    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
-    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
-    "frontend/src/pages/MonitoringChecks.jsx": "0725a848ca3e8697",
-    "frontend/src/utils/datetime.js": "c6d013767e6e3d91"
-  },
-  "/policy-engine/qos": {
-    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
-    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
-    "frontend/src/pages/PolicyEngine.jsx": "9d586eaf506d5145",
-    "frontend/src/pages/policy/tabs.js": "4bd4a4f0300e71fa"
-  },
-  "/policy-engine/rip": {
-    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
-    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
-    "frontend/src/pages/PolicyEngine.jsx": "9d586eaf506d5145",
-    "frontend/src/pages/policy/tabs.js": "4bd4a4f0300e71fa"
-  },
-  "/policy-engine/bgp": {
-    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
-    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
-    "frontend/src/pages/PolicyEngine.jsx": "9d586eaf506d5145",
-    "frontend/src/pages/policy/tabs.js": "4bd4a4f0300e71fa"
-  },
-  "/policy-engine/ospf": {
-    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
-    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
-    "frontend/src/pages/PolicyEngine.jsx": "9d586eaf506d5145",
-    "frontend/src/pages/policy/tabs.js": "4bd4a4f0300e71fa"
-  },
-  "/policy-engine/pim": {
-    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
-    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
-    "frontend/src/pages/PolicyEngine.jsx": "9d586eaf506d5145",
-    "frontend/src/pages/policy/tabs.js": "4bd4a4f0300e71fa"
-  },
-  "/policy-engine/vrf": {
-    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
-    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
-    "frontend/src/pages/PolicyEngine.jsx": "9d586eaf506d5145",
-    "frontend/src/pages/policy/tabs.js": "4bd4a4f0300e71fa"
-  },
-  "/policy-engine/sla": {
-    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
-    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
-    "frontend/src/pages/PolicyEngine.jsx": "9d586eaf506d5145",
-    "frontend/src/pages/policy/tabs.js": "4bd4a4f0300e71fa"
-  },
-  "/policy-engine/steering": {
-    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
-    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
-    "frontend/src/pages/PolicyEngine.jsx": "9d586eaf506d5145",
-    "frontend/src/pages/policy/tabs.js": "4bd4a4f0300e71fa"
-  },
-  "/radius/nas": {
-    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
-    "frontend/src/components/BulkBar.jsx": "c184216a393254f0",
-    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
-    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
-    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
-    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
-    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
-    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
-    "frontend/src/features/radius/RadiusNasDrawer.jsx": "780c7d23bb6c9c76",
-    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
-    "frontend/src/hooks/useSelection.js": "746ecd8b82ef85ae",
-    "frontend/src/pages/RadiusNas.jsx": "881afbfa98427a04"
   },
   "/radius/group": {
     "frontend/src/auth/MeContext.js": "e807c9285a246c33",
@@ -562,54 +585,6 @@
     "frontend/src/features/tacacs/tacacsModel.js": "616c6f9f09c01f42",
     "frontend/src/pages/TacacsAccounting.jsx": "8d1ef6c8845156dc"
   },
-  "/security/threatshield-ip": {
-    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
-    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
-    "frontend/src/pages/SecurityHub.jsx": "10ce124d46b228e6",
-    "frontend/src/pages/security/tabs.js": "02d2ce5175a1a118"
-  },
-  "/security/ips": {
-    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
-    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
-    "frontend/src/pages/SecurityHub.jsx": "10ce124d46b228e6",
-    "frontend/src/pages/security/tabs.js": "02d2ce5175a1a118"
-  },
-  "/security/antivirus": {
-    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
-    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
-    "frontend/src/pages/SecurityHub.jsx": "10ce124d46b228e6",
-    "frontend/src/pages/security/tabs.js": "02d2ce5175a1a118"
-  },
-  "/security/antispam": {
-    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
-    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
-    "frontend/src/pages/SecurityHub.jsx": "10ce124d46b228e6",
-    "frontend/src/pages/security/tabs.js": "02d2ce5175a1a118"
-  },
-  "/security/webfilter": {
-    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
-    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
-    "frontend/src/pages/SecurityHub.jsx": "10ce124d46b228e6",
-    "frontend/src/pages/security/tabs.js": "02d2ce5175a1a118"
-  },
-  "/security/address-group": {
-    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
-    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
-    "frontend/src/pages/SecurityHub.jsx": "10ce124d46b228e6",
-    "frontend/src/pages/security/tabs.js": "02d2ce5175a1a118"
-  },
-  "/security/profile": {
-    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
-    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
-    "frontend/src/pages/SecurityHub.jsx": "10ce124d46b228e6",
-    "frontend/src/pages/security/tabs.js": "02d2ce5175a1a118"
-  },
-  "/security/policy": {
-    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
-    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
-    "frontend/src/pages/SecurityHub.jsx": "10ce124d46b228e6",
-    "frontend/src/pages/security/tabs.js": "02d2ce5175a1a118"
-  },
   "/credentials": {
     "frontend/src/components/BoolPill.jsx": "e0bc4e75cf666a3a",
     "frontend/src/components/BulkBar.jsx": "c184216a393254f0",
@@ -623,17 +598,42 @@
     "frontend/src/pages/CredentialList.jsx": "98c9ac4af34f0973",
     "frontend/src/utils/datetime.js": "c6d013767e6e3d91"
   },
-  "/pki/authorities": {
-    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+  "/monitoring/wifi-sessions": {
+    "frontend/src/components/BoolPill.jsx": "e0bc4e75cf666a3a",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
     "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
-    "frontend/src/pages/PkiHub.jsx": "b986303463225c4a",
-    "frontend/src/pages/pki/tabs.js": "e03324ac113add78"
+    "frontend/src/pages/MonitoringWifiSessions.jsx": "b98227eed94decfd",
+    "frontend/src/utils/datetime.js": "c6d013767e6e3d91"
   },
-  "/pki/certificates": {
-    "frontend/src/components/crud/ResourceTable.jsx": "789c490191501d5b",
+  "/monitoring/metrics": {
+    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
+    "frontend/src/components/BulkBar.jsx": "c184216a393254f0",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
     "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
-    "frontend/src/pages/PkiHub.jsx": "b986303463225c4a",
-    "frontend/src/pages/pki/tabs.js": "e03324ac113add78"
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/pages/MonitoringMetrics.jsx": "417a03e69c1888f9",
+    "frontend/src/utils/datetime.js": "c6d013767e6e3d91"
+  },
+  "/monitoring/checks": {
+    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
+    "frontend/src/components/BulkBar.jsx": "c184216a393254f0",
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/components/RowMenu.jsx": "e5e7a1f355e5678f",
+    "frontend/src/components/Select.jsx": "03f5fa6ca2bb54f1",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/scope/scopeSlice.js": "f641f0a70e41f279",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/pages/MonitoringChecks.jsx": "0725a848ca3e8697",
+    "frontend/src/utils/datetime.js": "c6d013767e6e3d91"
   },
   "/firmware": {
     "frontend/src/auth/MeContext.js": "e807c9285a246c33",
@@ -721,5 +721,50 @@
     "frontend/src/pages/DeviceDetail.jsx": "ede909fa72bf6a0f",
     "frontend/src/utils/backends.js": "410f30b01a8a381a",
     "frontend/src/utils/format.js": "5b6467ca8589d460"
+  },
+  "/devices/map": {
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/features/scope/useScopeOrg.js": "a50387cfc59e7a83",
+    "frontend/src/pages/FleetMap.jsx": "d4edc2d28d85da9b",
+    "frontend/src/utils/tiles.js": "80a77895665a7519"
+  },
+  "/devices/:id/sdlan": {
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/pages/SdlanAccess.jsx": "2309902be17cf9bd"
+  },
+  "/device-groups/tree": {
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/PanZoomCanvas.jsx": "e33a332beb45fc5a",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/devicegroups/DeviceGroupDrawer.jsx": "45c279aa570a0323",
+    "frontend/src/features/scope/useScopeOrg.js": "a50387cfc59e7a83",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/pages/DeviceGroupTree.jsx": "b150065678a26493",
+    "frontend/src/pages/Hierarchy.jsx": "a75996650d0de354"
+  },
+  "/network-topology/topologies/:id/graph": {
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/features/nettopo/PropertyList.jsx": "30228f26c69b4c0b",
+    "frontend/src/features/nettopo/TopologyGraph.jsx": "060c4f5f43f11f1b",
+    "frontend/src/features/nettopo/labels.js": "4b9232e33b2f83c1",
+    "frontend/src/features/nettopo/nettopoModel.js": "798558eb6b96edaf",
+    "frontend/src/pages/NetTopologyGraph.jsx": "cb7bf70217c53921",
+    "frontend/src/utils/format.js": "5b6467ca8589d460"
+  },
+  "/monitoring/metrics/recover": {
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/pages/MetricRecover.jsx": "f45ab606e1a1d11f",
+    "frontend/src/utils/datetime.js": "c6d013767e6e3d91"
+  },
+  "/reports/:slug": {
+    "frontend/src/components/EmptyState.jsx": "c15f8997d898bf55",
+    "frontend/src/components/Icon.jsx": "c0d1e6981faf03c1",
+    "frontend/src/components/Pagination.jsx": "5c93c49bc1e3997f",
+    "frontend/src/pages/ReportView.jsx": "0f1db624718a0e9a",
+    "frontend/src/utils/reports.js": "45c6211315de10a4"
   }
 }

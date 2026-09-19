@@ -1176,6 +1176,67 @@ export const CURATED: Record<string, CuratedDescription> = {
         "The router's own web UI, rebuilt inside the controller. Last in the list because it is a different kind of thing from the tabs before it: those read controller state, this one talks to the device. Roughly 33 pages across eight groups \u2014 Performance SLA, Policy Engine, Firewall, Network, Security, VPN, OOBM and Log & Reports. Mounted only while the tab is open, so its background polling stops when you leave.",
     },
   },
+
+  // ---- reachable, but not from the sidebar --------------------------------
+  //
+  // Six screens the nav never points at. They are opened from a button on
+  // another page, so the generator — which walks `NAV` — could not see them, and
+  // the handbook described the console as if they did not exist.
+
+  '/devices/map': {
+    text:
+      'Every device’s site on one map, with the fleet broken down beside it: state → site → device, each level carrying its online and total counts. Opened from the device list, not from the sidebar.\n\n' +
+      'Sites come from `/monitoring/geojson/`, which already counts each site’s devices by health — so a bubble is sized and coloured without asking about any individual device, and a site’s device list is fetched only when you expand it. A bubble takes the worst status present: one unreachable device at a site is what an operator needs to see, not the nine that are fine.\n\n' +
+      'The map tiles come from an external host. On a firewalled controller every tile request fails and the map would be a blank grey square, so the page detects that and says so rather than looking as though it found no sites.',
+    from:
+      'reads pages/FleetMap.jsx — the leading note, `siteTone` (worst status wins), the log-scaled `bubble` sizing, the lazy per-site device fetch and the tile-failure detection',
+  },
+
+  '/devices/:id/sdlan': {
+    text:
+      'Reaching one router’s own services through the controller. Opened from the **SDLAN Access** button on a device’s page.\n\n' +
+      'The page is built around intent rather than wire protocol: you choose what you want to reach and it fills in where that lives on a NexappOS router — the router GUI on `443`, a user terminal at `/api/ttyd/`, a root shell on `7681`. Those targets are taken from the controller’s own `wg-*.conf`, which is how the admin’s Web Access, Terminal and Root buttons have always reached them. **Advanced** still exposes the raw target, for anything else on the LAN behind the router.\n\n' +
+      'Whether a session opens inside the page or has to open in a tab is a property of the service, not a preference. The router’s GUI sends `X-Frame-Options: DENY`, and a tunnel is a raw TCP forward with nowhere to strip that header, so it is browser-only; `ttyd` is itself a web server, so a shell renders in the frame.',
+    from:
+      'reads pages/SdlanAccess.jsx — the `SERVICES` table (each entry’s intent, hint, default ip/port/path and `frameable` flag), the leading note recording that these come from the controller’s `wg-*.conf`, and the Advanced form',
+  },
+
+  '/device-groups/tree': {
+    text:
+      'The parent/child shape of the device groups, drawn as a tree instead of read off the list’s Parent column one row at a time. Opened from the button in the Device Groups header, the same way the fleet map opens off the device list.\n\n' +
+      'Every node is editable in place — add a sub-group under it, edit it, delete it — because the tree is where the hierarchy is actually understood, and sending someone back to a flat list to change a parent they can see in front of them is the long way round. All three go through the same drawer and the same mutations the list page uses, so there is one create and update path in the app rather than two.\n\n' +
+      'Organizations are the roots, because two groups of the same name in different organizations are two different groups. Structure only: there are no device counts here. Hierarchy answers “how many devices are under this branch” and pays for a request per node to do it, while this page draws itself from the two lists the Device Groups screen has already cached and issues no request of its own.',
+    from:
+      'reads pages/DeviceGroupTree.jsx — the leading note, `GroupNode` and `OrgNode` with their add/edit/delete controls, `subtreeSize`, the zoom and expand/collapse toolbar, and its use of `useListGroupsQuery` and `useListOrganizationsQuery`',
+  },
+
+  '/network-topology/topologies/:id/graph': {
+    text:
+      'One topology, drawn — the React counterpart of the admin’s “View topology graph” button, reached from the row menu on Topologies.\n\n' +
+      'It is a route rather than a popup window, deliberately: a popup cannot be linked to, bookmarked or reached with the back button, and inside a single-page app it would have to re-authenticate itself. The page fills the viewport and does not scroll, because the wheel belongs to the canvas — a graph you must scroll the page to see the bottom of is one you cannot pan around.\n\n' +
+      'Three things the admin’s visualiser does are kept: live updates, pushed over `ws/network-topology/topology/<pk>/` whenever the record changes; history, where choosing a date returns that day’s snapshot; and download of the NetJSON payload as a file. Choosing a date also freezes the live updates — a websocket frame overwriting the history you just asked for would be the graph quietly answering a different question.',
+    from:
+      'reads pages/NetTopologyGraph.jsx — the leading note, the live/`date` snapshot toggle and why it freezes updates, the websocket subscription, and the history and download paths',
+  },
+
+  '/monitoring/metrics/recover': {
+    text:
+      'Metrics that were deleted, and can be brought back. Opened from the button on Monitoring › Metrics.\n\n' +
+      'django-reversion keeps a version row for every tracked save, so a metric whose id is gone from the table but still has versions is a deletion that can be undone. Recovery restores the metric under its original id, so anything that referenced it lines up again.\n\n' +
+      'What does not come back are its charts and alert settings. Those are separate objects, the Django admin behaves the same way, and the confirmation says so rather than letting you assume otherwise.',
+    from:
+      'reads pages/MetricRecover.jsx — the leading note on django-reversion, the confirm dialog’s wording about charts and alert settings, and its calls to `useListDeletedMetricsQuery` and `useRecoverMetricMutation`',
+  },
+
+  '/reports/:slug': {
+    text:
+      'One page renders every report in the catalog. Reached by opening a report from Reports.\n\n' +
+      'It can, because every report service already answers with the same shape — title, period, generated_at, all_columns, devices — and the backend’s `_pick_report_fns` maps every slug onto it. So this is not a per-report template; it is the table those services were always describing. Range presets, search, sorting, column hiding, paging and CSV export are therefore identical on every report.\n\n' +
+      '`/reports/custom/<id>` is this same page in custom mode, pointed at a saved custom report whose rows are several reports merged server-side.',
+    from:
+      'reads pages/ReportView.jsx — the leading note on the shared response shape, the `custom` prop the `/reports/custom/:id` route sets in App.jsx, and `RANGE_PRESETS`, `dedupeColumns` and `exportUrl` from utils/reports.js',
+  },
+
 };
 
 /**

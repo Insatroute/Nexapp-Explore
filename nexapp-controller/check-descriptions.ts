@@ -25,7 +25,6 @@ import { createHash } from 'node:crypto';
 import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { CONTROLLER, requireController } from './config.ts';
-import { readNav, flatten } from './extract-nav.ts';
 import { readRouteTable } from './extract-routes.ts';
 import { sourceFilesFor } from './extract-page-facts.ts';
 import { CURATED } from './console-descriptions.ts';
@@ -50,10 +49,14 @@ async function hash(file: string): Promise<string | null> {
 /** route -> { source file (repo-relative) : hash } */
 async function currentState(): Promise<Lock> {
   const table = await readRouteTable();
-  const entries = flatten(await readNav()).filter((e) => e.leaf.to);
-  // The device detail page is not a menu entry but carries one of the largest
-  // descriptions in the handbook, so it is pinned too.
-  const routes = [...new Set([...entries.map((e) => e.leaf.to!), '/devices/:id'])];
+  // Every description, not every menu entry.
+  //
+  // This walked the nav and then named `/devices/:id` by hand, because device
+  // detail is not a menu entry. That worked until there were six more of those —
+  // the screens reached only from a button on another page — and each would have
+  // had to be remembered here as well. A description exists to be checked, so
+  // the list of things to pin is the descriptions themselves.
+  const routes = Object.keys(CURATED);
 
   const state: Lock = {};
   for (const route of routes) {

@@ -28,6 +28,7 @@ import { readRouteTable, type RouteRec, type RouteTable } from './extract-routes
 import { factsForFile, type PageFacts } from './extract-page-facts.ts';
 import { readCpeMenu } from './extract-cpe.ts';
 import { readTabFields } from './extract-tab-fields.ts';
+import { readReportCatalog } from './extract-report-catalog.ts';
 import { CURATED, COMMON_NOTES } from './console-descriptions.ts';
 import { OUT, KB, URL_BASE, requireController } from './config.ts';
 
@@ -400,7 +401,7 @@ async function main() {
       );
       await writeFile(
         path.join(dir, `${slug(item.label)}.mdx`),
-        `${frontmatter(item.label, `${label} › ${item.label}`)}${body.md}\n`,
+        `${frontmatter(item.label, `${label} › ${item.label}`)}${body.md}\n${await extrasFor(item.to)}`,
       );
       pageOrder.push(slug(item.label));
       links.push({ label: item.label, href: `${URL_BASE}/${sslug}/${slug(item.label)}` });
@@ -434,6 +435,11 @@ async function main() {
   total += detail + cpe;
   grounded += detail + cpe;
 
+  const orphans = await emitOrphans(table);
+  total += orphans.total;
+  grounded += orphans.grounded;
+  gaps.push(...orphans.gaps);
+
   await copyAuthoredPages();
   await removeOrphanSections(sectionDirs);
   await removeStaleTopLevel(topLevel);
@@ -455,6 +461,70 @@ async function main() {
     for (const g of gaps) console.log(`    ${g}`);
     console.log('');
   }
+}
+
+/**
+ * Page-specific sections that come from somewhere the facts extractor cannot see.
+ *
+ * The extractor reads a page's own component and the API calls it makes. Some
+ * pages are governed by rules that live in the BACKEND instead, and are invisible
+ * to it — the report catalogue is decided in `controller_reports/catalog.py`, not
+ * in `ReportsHub.jsx`.
+ *
+ * Generated rather than written into a description, deliberately. A description
+ * is pinned to the frontend files it was read from, so backend rules copied into
+ * one would drift with nothing to notice. Read on every run, they cannot.
+ */
+async function extrasFor(route: string | undefined): Promise<string> {
+  if (route !== '/reports') return '';
+  const c = await readReportCatalog();
+  if (!c) return '';
+
+  const L: string[] = ['', '## How the catalogue is put together', ''];
+  L.push(
+    'The reports themselves are database rows — migrations seed them and an operator can add, rename or remove one — so they are not listed here. What decides how they are presented does not vary, and is read from `controller_reports/catalog.py`.',
+    '',
+    '### Which category a report lands in',
+    '',
+    'Taken from the report\u2019s slug: the first keyword below that appears in it wins. The order is the rule, not a presentation choice \u2014 `wan_uplink` has to be tried before `wan`. A slug matching nothing falls to Other.',
+    '',
+    '| Category | Shown as | Keywords, in match order |',
+    '| --- | --- | --- |',
+  );
+  for (const k of c.categories) {
+    L.push(`| \`${cell(k.key)}\` | ${cell(k.label)} | ${k.keywords.map((w) => `\`${w}\``).join(', ')} |`);
+  }
+  if (c.unreachable.length) {
+    L.push(
+      '',
+      `<Callout type="warn">\`${c.unreachable.join('`, `')}\` ${c.unreachable.length === 1 ? 'is a chip the catalogue offers' : 'are chips the catalogue offers'} that no keyword selects, so ${c.unreachable.length === 1 ? 'it can never match a report' : 'they can never match a report'}. The file notes the opposite direction \u2014 that a category cannot be left unfilterable \u2014 but not this one.</Callout>`,
+    );
+  }
+
+  if (c.hideSlugs.length) {
+    L.push('', '### Reports no listing shows', '', esc(c.hideNote), '');
+    L.push(c.hideSlugs.map((x) => `\`${x}\``).join(' \u00b7 '), '');
+    if (c.hideTitles.length) {
+      L.push(`Matched by title as well as slug: ${c.hideTitles.map((x) => `\u201c${x}\u201d`).join(', ')}.`, '');
+    }
+  }
+
+  if (c.noCustomize.length) {
+    L.push('### Visible, but not offered in Customize', '', esc(c.noCustomizeNote), '');
+    L.push(c.noCustomize.map((x) => `\`${x}\``).join(' \u00b7 '), '');
+  }
+
+  if (c.accessNote) {
+    L.push('### Who can see a report', '', esc(c.accessNote), '');
+  }
+
+  L.push(
+    '---',
+    '',
+    '<small>Read from: `controller_reports/catalog.py` \u2014 its `SLUG_CATEGORY_MAP`, `CATEGORY_ORDER`, `CATEGORY_LABELS`, `HIDE_SLUGS`, `HIDE_TITLES`, `HIDDEN_FROM_CUSTOMIZE` and the docstring of `visible_templates`.</small>',
+    '',
+  );
+  return L.join('\n');
 }
 
 /**
@@ -507,6 +577,91 @@ function frontmatter(title: string, description: string): string {
  * its own tab bar. TABS is a plain literal in DeviceDetail.jsx, so unlike the
  * SDWAN Lite equivalent this needs no browser to enumerate correctly.
  */
+/**
+ * Screens the sidebar never points at.
+ *
+ * `NAV` is this generator's map of the console, so a page reached only by a
+ * button on another page is invisible to it. Six were, and the handbook
+ * described a console that did not have them.
+ *
+ * The list is written out because nothing in the source enumerates it — a route
+ * being absent from `NAV` is the only thing these have in common. Everything
+ * ABOUT them is still read: the label and the placement are the app's own, from
+ * the `TITLES` map in `layouts/AppLayout.jsx`, which names each route and gives
+ * the breadcrumb it sits under.
+ *
+ * `/reports/custom/:id` is deliberately not here. It renders the same component
+ * in custom mode, so it is described on the Report page rather than given a
+ * second page saying the same things.
+ */
+const ORPHANS: {
+  to: string;
+  label: string;
+  /** Folder under content/controller, from the route's crumbs in AppLayout. */
+  dir: string;
+  crumbs: string;
+  /** The page it is placed after in that folder's meta.json. */
+  after: string;
+}[] = [
+  { to: '/devices/map', label: 'Fleet map', dir: 'network', crumbs: 'Network › Devices › Map', after: 'device-detail' },
+  { to: '/devices/:id/sdlan', label: 'SDLAN Access', dir: 'network', crumbs: 'Network › Devices › SDLAN Access', after: 'fleet-map' },
+  { to: '/device-groups/tree', label: 'Device group tree', dir: 'administration', crumbs: 'Administration › Device Groups › Tree', after: 'device-groups' },
+  { to: '/network-topology/topologies/:id/graph', label: 'Topology graph', dir: 'network-topology', crumbs: 'Network Topology › Topologies › Graph', after: 'topologies' },
+  { to: '/monitoring/metrics/recover', label: 'Recover deleted metrics', dir: 'intelligence/monitoring', crumbs: 'Intelligence › Monitoring › Metrics › Recover', after: 'metrics' },
+  { to: '/reports/:slug', label: 'Report', dir: 'reports-logs', crumbs: 'Reports & Logs › Reports › one report', after: 'reports' },
+];
+
+/** Put `page` after `after` in a folder's meta.json, without disturbing the rest. */
+async function placeInMeta(dir: string, page: string, after: string): Promise<void> {
+  const metaPath = path.join(dir, 'meta.json');
+  if (!(await exists(metaPath))) return;
+  const { readFile: rf } = await import('node:fs/promises');
+  const meta = JSON.parse(await rf(metaPath, 'utf8')) as { pages: string[] };
+  if (meta.pages.includes(page)) return;
+  const at = meta.pages.indexOf(after);
+  meta.pages.splice(at < 0 ? meta.pages.length : at + 1, 0, page);
+  await writeFile(metaPath, JSON.stringify(meta, null, 2));
+}
+
+async function emitOrphans(table: RouteTable): Promise<{ total: number; grounded: number; gaps: string[] }> {
+  let total = 0;
+  let grounded = 0;
+  const gaps: string[] = [];
+
+  for (const o of ORPHANS) {
+    const r = table.match(o.to);
+    if (!r?.file) {
+      // The route is gone from App.jsx. Say so rather than quietly emitting
+      // nothing — a screen that has been removed should be removed here too.
+      gaps.push(`${o.to} (no longer in App.jsx)`);
+      continue;
+    }
+    const facts = await factsForFile(r.file);
+    const body = entryBody(
+      { section: o.crumbs, leaf: { label: o.label, to: o.to } },
+      r,
+      facts,
+      undefined,
+      // Not a menu entry: `ROUTE_PERM` does not govern it, and permSentence
+      // says exactly that when told the route is not a nav target.
+      table.permSentence(o.to, false),
+    );
+
+    const dir = path.join(OUT, ...o.dir.split('/'));
+    await mkdir(dir, { recursive: true });
+    await writeFile(
+      path.join(dir, `${slug(o.label)}.mdx`),
+      `${frontmatter(o.label, o.crumbs)}${body.md}\n`,
+    );
+    await placeInMeta(dir, slug(o.label), o.after);
+
+    total++;
+    if (body.grounded) grounded++;
+    else gaps.push(o.to);
+  }
+  return { total, grounded, gaps };
+}
+
 async function emitDeviceDetail(table: RouteTable): Promise<number> {
   const r = table.match('/devices/:id');
   if (!r?.file) return 0;

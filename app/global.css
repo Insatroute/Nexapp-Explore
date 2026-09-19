@@ -116,6 +116,41 @@ figure.shiki code {
   color: inherit;
 }
 
+/* Syntax colours must follow the PANEL, not the page.
+ *
+ * Fumadocs ships two palettes per token — `--shiki-light` and `--shiki-dark` —
+ * and picks between them on whether the PAGE is dark:
+ *
+ *     .shiki:not(…) code span       { color: var(--shiki-light) }
+ *     .dark .shiki:not(…) code span { color: var(--shiki-dark) }
+ *
+ * This panel is dark in both themes, so in the light theme it was handed the
+ * light palette: dark tokens on a dark ground, and the JavaScript and Go samples
+ * were unreadable. The static curl and JSON blocks hid the problem because none
+ * of them is language-tagged, so they carry no coloured tokens at all — the
+ * highlighted samples are rendered in the browser and never appear in the built
+ * HTML.
+ *
+ * The selector mirrors the one it overrides, one element deeper, so it wins on
+ * specificity rather than on `!important`. */
+figure.shiki:not(.not-fumadocs-codeblock *) code span,
+figure.shiki:not(.not-fumadocs-codeblock *) .line span {
+  color: var(--shiki-dark);
+  font-style: var(--shiki-dark-font-style);
+}
+
+/* Everything inside the panel sits on the panel's ground.
+ *
+ * The response sample paints its own `bg-fd-card` surface, which is white in the
+ * light theme. Left alone it put the dark palette's pale tokens on white — the
+ * same unreadable pairing as before, the other way round. Rather than chase each
+ * component that themes itself, the rule is simply that nothing inside this
+ * panel brings its own background. The copy control is exempt: its hover tint is
+ * the only background in here that should show. */
+figure.shiki *:not(button) {
+  background-color: transparent;
+}
+
 /* the copy control, moved into the header and given the word it needs */
 figure.shiki > div:first-of-type {
   top: 7px;
