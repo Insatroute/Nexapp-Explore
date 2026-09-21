@@ -776,5 +776,17 @@
     "frontend/src/components/crud/ColumnPicker.jsx": "8d63d3aca6fc44df",
     "frontend/src/pages/ReportView.jsx": "689d2d8a3abed9ba",
     "frontend/src/utils/reports.js": "06f7ebe38efc9306"
+  },
+  "/settings/maintenance": {
+    "frontend/src/auth/MeContext.js": "e807c9285a246c33",
+    "frontend/src/components/BulkBar.jsx": "c184216a393254f0",
+    "frontend/src/components/EmptyState.jsx": "58b17bc06e4a2c0f",
+    "frontend/src/components/Icon.jsx": "1892c18e9d704c96",
+    "frontend/src/components/RowMenu.jsx": "0ff46f5a2da5539c",
+    "frontend/src/components/system/MaintenanceFormModal.jsx": "bd89bbddd7cbde70",
+    "frontend/src/components/useConfirm.jsx": "87c3a6a711de2391",
+    "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
+    "frontend/src/hooks/useCurrentUser.js": "07ae92f70002218d",
+    "frontend/src/pages/MaintenanceWindows.jsx": "2d26695bd69d79b4"
   }
 }

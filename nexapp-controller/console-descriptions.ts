@@ -1078,6 +1078,8 @@ export const CURATED: Record<string, CuratedDescription> = {
     from:
       "pages/DeviceDetail.jsx \u2014 the TABS literal (14 entries) and the RANGES literal; each tab's body from the panel component it mounts, described from that component's own header comment",
     notes: {
+      "View device system context":
+        "The system-defined variables for this device \u2014 the values the controller fills in when it renders a template, shown on the Configuration tab so you can see what a variable will actually resolve to.",
       "Create device check":
         "Adds a monitoring check to this device, on the Checks tab. A check is what produces a health metric, so adding one changes what the Summary tab's Health card reports.",
       "Create device command":
@@ -1190,7 +1192,13 @@ export const CURATED: Record<string, CuratedDescription> = {
       'The map tiles come from an external host. On a firewalled controller every tile request fails and the map would be a blank grey square, so the page detects that and says so rather than looking as though it found no sites.',
     from:
       'reads pages/FleetMap.jsx — the leading note, `siteTone` (worst status wins), the log-scaled `bubble` sizing, the lazy per-site device fetch and the tile-failure detection',
-  },
+    notes: {
+      "Browse and search device geo":
+        "Every device's position in one request, from `/monitoring/geojson/` \u2014 the feed the map plots, shaped for drawing rather than for a table.",
+      "Browse and search location devices":
+        "The devices at one location (`/monitoring/location/<id>/device/`), fetched when you open a pin rather than up front, so a fleet-wide map does not carry every device list with it.",
+    },
+},
 
   '/devices/:id/sdlan': {
     text:
@@ -1199,7 +1207,19 @@ export const CURATED: Record<string, CuratedDescription> = {
       'Whether a session opens inside the page or has to open in a tab is a property of the service, not a preference. The router’s GUI sends `X-Frame-Options: DENY`, and a tunnel is a raw TCP forward with nowhere to strip that header, so it is browser-only; `ttyd` is itself a web server, so a shell renders in the frame.',
     from:
       'reads pages/SdlanAccess.jsx — the `SERVICES` table (each entry’s intent, hint, default ip/port/path and `frameable` flag), the leading note recording that these come from the controller’s `wg-*.conf`, and the Advanced form',
-  },
+    notes: {
+      "Create remote access":
+        "Adds a target. You pick the **intent** \u2014 web access, user terminal or root terminal \u2014 and the page resolves where that actually lives on a NexappOS router: web access is `https://<ip>:443/`, a user terminal is `https://<ip>:443/api/ttyd/`, and a root terminal is `https://<ip>:7681/`. Nobody should be typing a ttyd base path to get a shell. Advanced still exposes the raw target for anything else on the LAN.",
+      "Edit remote access":
+        "Changes a saved target's address, port or intent.",
+      "Delete remote access":
+        "Removes it.",
+      "Open remote access":
+        "Opens the session to that endpoint.",
+      "Close remote access":
+        "Ends it.",
+    },
+},
 
   '/device-groups/tree': {
     text:
@@ -1208,7 +1228,19 @@ export const CURATED: Record<string, CuratedDescription> = {
       'Organizations are the roots, because two groups of the same name in different organizations are two different groups. Structure only: there are no device counts here. Hierarchy answers “how many devices are under this branch” and pays for a request per node to do it, while this page draws itself from the two lists the Device Groups screen has already cached and issues no request of its own.',
     from:
       'reads pages/DeviceGroupTree.jsx — the leading note, `GroupNode` and `OrgNode` with their add/edit/delete controls, `subtreeSize`, the zoom and expand/collapse toolbar, and its use of `useListGroupsQuery` and `useListOrganizationsQuery`',
-  },
+    notes: {
+      "Browse and search devices":
+        "The devices inside each group, so a branch shows what is actually in it rather than just its name.",
+      "Browse and search templates":
+        "The templates attached at each level, which is what devices in a group inherit.",
+      "Create device group":
+        "Adds a group directly in the tree, under the branch you are looking at, so the parent is chosen by position rather than from a dropdown.",
+      "Edit device group":
+        "Renames a group or moves it. The tree supports drag and drop, so moving a branch reparents it \u2014 and everything under it moves too.",
+      "Delete device group":
+        "Removes a branch. Its devices lose whatever that group passed down, so check what is under it before deleting.",
+    },
+},
 
   '/network-topology/topologies/:id/graph': {
     text:
@@ -1217,7 +1249,11 @@ export const CURATED: Record<string, CuratedDescription> = {
       'Three things the admin’s visualiser does are kept: live updates, pushed over `ws/network-topology/topology/<pk>/` whenever the record changes; history, where choosing a date returns that day’s snapshot; and download of the NetJSON payload as a file. Choosing a date also freezes the live updates — a websocket frame overwriting the history you just asked for would be the graph quietly answering a different question.',
     from:
       'reads pages/NetTopologyGraph.jsx — the leading note, the live/`date` snapshot toggle and why it freezes updates, the websocket subscription, and the history and download paths',
-  },
+    notes: {
+      "View net topology":
+        "Fetches one topology and draws it \u2014 `/network-topology/topology/<id>/?include_unpublished=true`. The flag is what lets an unpublished topology be viewed at all, so a parse can be checked before anyone else sees it.",
+    },
+},
 
   '/monitoring/metrics/recover': {
     text:
@@ -1226,7 +1262,13 @@ export const CURATED: Record<string, CuratedDescription> = {
       'What does not come back are its charts and alert settings. Those are separate objects, the Django admin behaves the same way, and the confirmation says so rather than letting you assume otherwise.',
     from:
       'reads pages/MetricRecover.jsx — the leading note on django-reversion, the confirm dialog’s wording about charts and alert settings, and its calls to `useListDeletedMetricsQuery` and `useRecoverMetricMutation`',
-  },
+    notes: {
+      "Browse and search deleted metrics":
+        "Metrics that were deleted but are still held, the way deleted devices are.",
+      "Recover metric":
+        "Restores one \u2014 `monitoring/metric-deleted/<version>/recover/`. It reverts the stored version, so the metric comes back with its settings rather than as a blank.",
+    },
+},
 
   '/reports/:slug': {
     text:
@@ -1235,8 +1277,32 @@ export const CURATED: Record<string, CuratedDescription> = {
       '`/reports/custom/<id>` is this same page in custom mode, pointed at a saved custom report whose rows are several reports merged server-side.',
     from:
       'reads pages/ReportView.jsx — the leading note on the shared response shape, the `custom` prop the `/reports/custom/:id` route sets in App.jsx, and `RANGE_PRESETS`, `dedupeColumns` and `exportUrl` from utils/reports.js',
-  },
+    notes: {
+      "View report data":
+        "Runs a built-in report and returns its rows \u2014 `/reports/data/<slug>/`, with the filters you chose passed as query parameters.",
+      "View custom report data":
+        "The same for a report built in the customize wizard \u2014 `/reports/custom/<id>/data/`. Two endpoints because a built-in report is addressed by slug and a custom one by id.",
+    },
+},
 
+  "/settings/maintenance": {
+    text:
+      "Planned maintenance windows \u2014 periods when a device or the fleet is expected to be down, so the alerting does not treat scheduled work as a fault. Each row shows when the window starts and ends, how long it runs, its current state, and who was notified.",
+    from:
+      "pages/MaintenanceWindows.jsx \u2014 headers Window, Starts, Ends, Length, State, Users notified; calls useListMaintenanceWindowsQuery, useCancelMaintenanceWindowMutation, useDeleteMaintenanceWindowMutation; endpoints under `system/maintenance/`",
+    notes: {
+      "Browse and search maintenance windows":
+        "The scheduled windows, from `system/maintenance/`, with the state of each \u2014 upcoming, running, or finished.",
+      "Create maintenance window":
+        "Schedules one: what it covers, when it starts and how long it runs. Notifications go to the users listed on it, which is what stops planned work being reported as an outage.",
+      "Edit maintenance window":
+        "Changes a window's timing or scope (`PATCH system/maintenance/<id>/`).",
+      "Stop maintenance window":
+        "Cancels a window that is running or upcoming. Distinct from deleting it \u2014 the record stays, it simply stops applying, so the history of what was scheduled survives.",
+      "Delete maintenance window":
+        "Removes the record entirely, including from the history.",
+    },
+  },
 };
 
 /**
