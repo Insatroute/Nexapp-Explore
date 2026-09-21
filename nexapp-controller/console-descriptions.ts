@@ -982,9 +982,9 @@ export const CURATED: Record<string, CuratedDescription> = {
 },
   "/settings/email-alerts": {
     text:
-      "Which alerts are sent by email, and the templates they are sent with. Alerts can be switched on and off individually or in bulk, and the templates that carry their wording are edited here \u2014 kept separate from the rules, so message text can change without touching what counts as a problem.",
+      "Which alerts are sent by email, the templates they are sent with, and what has actually gone out. Three tabs: Alert Configurations switches individual alerts on and off, or a whole set at once; Email Templates holds the wording a receiver is sent, kept separate from the rule so message text can change without touching what counts as a problem; Alert History is the record of what was sent \u2014 when, at what level, to which target and recipients, and over which channel.",
     from:
-      "pages/EmailAlerts.jsx with AlertConfigTable and EmailTemplatesTable \u2014 calls api.setAlertEnabled, api.setAlertEnabledBulk, api.deleteEmailTemplate",
+      "pages/EmailAlerts.jsx with AlertConfigTable, EmailTemplatesTable and AlertHistoryTable (headers When, Type, Level, Target, Message, Channel, Recipients); calls api.setAlertEnabled, api.setAlertEnabledBulk, api.deleteEmailTemplate",
     notes: {
       "View alert hub":
         "The alert catalogue \u2014 every alert that can be sent, and whether it currently is.",
@@ -1010,9 +1010,9 @@ export const CURATED: Record<string, CuratedDescription> = {
 },
   "/reports": {
     text:
-      "The report catalogue: what each report covers, the category it belongs to, and when it was last updated. Reports are opened from here, and a custom report can be built with the customize wizard \u2014 choosing the columns and the devices it covers.",
+      "The report catalogue: what each report covers, the category it belongs to, and when it was last updated. The catalogue can be shown as cards or as a list \u2014 the layout switch is a view preference, not a filter, so the same reports are listed either way. Reports are opened from here, and a custom report can be built with the customize wizard, choosing the columns and the devices it covers.",
     from:
-      "pages/ReportsHub.jsx \u2014 headers Report, Category, Description, Updated; calls CustomizeWizard's api.getReportColumns, api.listReportDevices, api.createCustomReport, api.updateCustomReport",
+      "pages/ReportsHub.jsx \u2014 headers Report, Category, Description, Updated; the card/list toggle from its `rptgrid--list` view state; calls CustomizeWizard's api.getReportColumns, api.listReportDevices, api.createCustomReport, api.updateCustomReport",
     notes: {
       "Browse and search report templates":
         "The built-in reports, from `/reports/template/` \u2014 the catalogue this page lists.",
