@@ -1175,7 +1175,7 @@ export const CURATED: Record<string, CuratedDescription> = {
       "Credentials":
         "The access credentials bound to this device and the result of the last connection attempt. Secrets are never rendered \u2014 a credential's parameters hold an SSH password or key, and the page shows that one exists, not what it is.",
       "CPE":
-        "The router's own web UI, rebuilt inside the controller. Last in the list because it is a different kind of thing from the tabs before it: those read controller state, this one talks to the device. Roughly 33 pages across eight groups \u2014 Performance SLA, Policy Engine, Firewall, Network, Security, VPN, OOBM and Log & Reports. Mounted only while the tab is open, so its background polling stops when you leave.",
+        "The router's own web UI, rebuilt inside the controller. Last in the list because it is a different kind of thing from the tabs before it: those read controller state, this one talks to the device. Mounted only while the tab is open, so its background polling stops when you leave.",
     },
   },
 

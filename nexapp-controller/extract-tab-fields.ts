@@ -35,6 +35,15 @@ export interface TabFields {
   label: string;
   component: string;
   groups: TabGroup[];
+  /**
+   * The standing caveat the panel prints above its readings — on Status, that
+   * what you are reading is the device's last check-in rather than a live poll.
+   * It is the single most important thing on the tab and was nowhere in the
+   * handbook, so it is read rather than left to the reader to notice.
+   */
+  note?: string;
+  /** What the panel says when it has nothing to show, and why. */
+  empty?: { title: string; detail: string };
 }
 
 /** Slice from `open` to its matching close, ignoring comments and strings. */
@@ -182,7 +191,21 @@ export async function readTabFields(): Promise<TabFields[]> {
       const cards = cardsIn(src, src, new Set<string>());
       if (cards.length) groups.push({ label: '', cards, conditional: false });
     }
-    if (groups.length) out.push({ key: t.key, label: t.label, component: comp, groups });
+    if (!groups.length) continue;
+
+    // The panel's own hint line, and its empty state. Both are plain text in
+    // the markup — no interpolation — so they are taken verbatim.
+    const note = /<p className="[^"]*hint[^"]*">\s*([^<{][^<]*?)\s*<\/p>/.exec(src)?.[1];
+    const em = /<div className="msg">[\s\S]*?<strong>([^<]+)<\/strong>\s*<span>([^<]+)<\/span>/.exec(src);
+
+    out.push({
+      key: t.key,
+      label: t.label,
+      component: comp,
+      groups,
+      ...(note ? { note: note.replace(/\s+/g, ' ').trim() } : {}),
+      ...(em ? { empty: { title: em[1].trim(), detail: em[2].replace(/\s+/g, ' ').trim() } } : {}),
+    });
   }
   return out;
 }
@@ -196,6 +219,8 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   console.log(`${tabs.length} tabs carry readouts · ${n} labels\n`);
   for (const t of tabs) {
     console.log(`${t.label}  (${t.component})`);
+    if (t.note) console.log(`   note: ${t.note}`);
+    if (t.empty) console.log(`   empty: ${t.empty.title} — ${t.empty.detail.slice(0, 70)}…`);
     for (const g of t.groups) {
       console.log(`   ${g.label}${g.conditional ? '  · conditional' : ''}`);
       for (const k of g.cards) console.log(`      ${(k.title || '—').padEnd(16)}${k.fields.join(', ')}`);
