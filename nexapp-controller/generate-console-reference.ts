@@ -31,6 +31,8 @@ import { statusTabGuide } from './guide-status-tab.ts';
 import { trafficGuide } from './guide-traffic.ts';
 import { tabsGuide } from './guide-tabs.ts';
 import { checksGuide } from './guide-checks.ts';
+import { registrationGuide } from './guide-registration.ts';
+import { onboardingGuide } from './guide-onboarding.ts';
 import { panelGuides } from './guide-panel.ts';
 import { readReportCatalog } from './extract-report-catalog.ts';
 import { readFirmwareFacts } from './extract-firmware.ts';
@@ -465,6 +467,30 @@ async function main() {
   }
 
   await emitIndex(topLinks, toc, gaps.length, total);
+  // Registration has no screen of its own, so it gets a page of its own rather
+  // than a paragraph on Devices, which assumes it has already happened.
+  const registration = await registrationGuide();
+  if (registration) {
+    await writeFile(
+      path.join(OUT, 'registering-a-device.mdx'),
+      `${frontmatter('Registering a device', 'How a device gets into the controller.')}${registration}`,
+    );
+    total++;
+    grounded++;
+  }
+
+  // The order the first four things have to be made in. No page that documents
+  // one of them can say it, because each only knows about itself.
+  const onboarding = await onboardingGuide();
+  if (onboarding) {
+    await writeFile(
+      path.join(OUT, 'setting-up-a-site.mdx'),
+      `${frontmatter('Setting up a site', 'Organization, VPN server, template, device — in the order they have to be made.')}${onboarding}`,
+    );
+    total++;
+    grounded++;
+  }
+
   const detail = await emitDeviceDetail(table);
   const cpe = await emitCpe();
   total += detail + cpe;
@@ -1061,7 +1087,9 @@ async function writeRootMeta(menuOrder: string[]): Promise<void> {
   // menuOrder already carries the console's own ordering, with sections and
   // ungrouped items interleaved exactly as the sidebar renders them.
   const menu = menuOrder.filter((p) => dirs.has(p) || files.has(p));
-  const before = ['index', 'start', 'concepts'].filter(
+  // `registering-a-device` sits here deliberately: it is the one thing a reader
+  // needs before any page below, and every one of those assumes it is done.
+  const before = ['index', 'setting-up-a-site', 'registering-a-device', 'start', 'concepts'].filter(
     (p) => (files.has(p) || dirs.has(p)) && !menu.includes(p),
   );
   const after = ['reference'].filter((p) => dirs.has(p));
@@ -1072,7 +1100,10 @@ async function writeRootMeta(menuOrder: string[]): Promise<void> {
 
 /** A top-level entry that left the menu must not stay served. */
 async function removeStaleTopLevel(owned: string[]): Promise<void> {
-  const keep = new Set([...owned, 'index']);
+  // `registering-a-device` is written by this generator but is not a menu
+  // entry, so the sweep that removes departed menu items deleted it on the same
+  // run that created it.
+  const keep = new Set([...owned, 'index', 'registering-a-device', 'setting-up-a-site']);
   for (const e of await readdir(OUT, { withFileTypes: true })) {
     if (!e.isFile() || !e.name.endsWith('.mdx')) continue;
     const base = e.name.replace(/\.mdx$/, '');
