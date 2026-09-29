@@ -633,7 +633,94 @@ async function reportExtras(): Promise<string> {
 async function firmwareExtras(): Promise<string> {
   const f = await readFirmwareFacts();
   if (!f) return '';
-  const L: string[] = ['', '## How an upgrade runs', ''];
+  const L: string[] = [];
+
+  // ---- the three things people actually come here to do, in the order they
+  // have to happen: a build needs a category, and a mass upgrade needs a build.
+  L.push('', '## Rolling out firmware', '');
+  if (f.buildAbout) L.push(cell(f.buildAbout), '');
+  L.push(
+    'Three things, and they nest: a **category** groups builds, a **build** is one version within a category, and an **image** is the file for one board type. Nothing can be flashed until all three exist.',
+    '',
+  );
+
+  L.push('### 1. Create a category', '', '<Steps>', '');
+  L.push(
+    '<Step>', '', '### Open Categories', '',
+    'On **Firmware**, choose the **Categories** tab, then add one.', '',
+    '</Step>', '',
+    '<Step>', '', '### Name it and set its scope', '',
+    f.categoryFields.length
+      ? `The form asks for ${f.categoryFields.map((x) => `**${cell(x.label)}**`).join(', ')}.`
+      : 'Give it a name.',
+    '',
+  );
+  for (const h of f.categoryFields.flatMap((x) => x.hints.map((y) => y.text))) {
+    L.push(`- ${cell(h)}`);
+  }
+  L.push('', '</Step>', '', '</Steps>', '');
+
+  L.push('### 2. Create a build and upload its images', '', '<Steps>', '');
+  L.push(
+    '<Step>', '', '### Add the build', '',
+    `On **Firmware › Builds**, choose **Add build**.` +
+      (f.buildFields.length
+        ? ` It asks for ${f.buildFields.map((x) => `**${cell(x.label)}**`).join(', ')}.`
+        : ''),
+    '',
+  );
+  for (const h of f.buildFields.flatMap((x) => x.hints.map((y) => y.text))) {
+    if (/auto-recognise/i.test(h)) L.push(`The **OS identifier** matters beyond this form: ${cell(h.charAt(0).toLowerCase() + h.slice(1))}`, '');
+  }
+  L.push(
+    '</Step>', '',
+    '<Step>', '', '### Upload one image per board type', '',
+    'Images are added after the build is saved, not while creating it. Each image carries the board types it fits, which is what stops it being offered to hardware it does not suit — pick the board, or let it be detected from the file name.',
+    '',
+    '</Step>', '', '</Steps>', '',
+  );
+
+  L.push('### 3. Upgrade the fleet, or one device', '', '<Steps>', '');
+  L.push(
+    '<Step>', '', '### Open the build and choose Mass upgrade', '',
+    'Mass upgrade starts from a **build**, not from a list of devices. Open the build you want everything on.',
+    '',
+    '</Step>', '',
+    '<Step>', '', '### Read the dry run before committing', '',
+    'Nothing is flashed yet. The controller counts who would be affected, in two groups:',
+    '',
+  );
+  if (f.massCounts.length) {
+    L.push('| Group | What it means |', '| --- | --- |');
+    const why = [
+      'Devices already running an older build in this category. These are the ones a mass upgrade is for.',
+      'Devices whose board type matches one of the images but which have no firmware record yet. Included only if you choose to.',
+    ];
+    f.massCounts.forEach((c, i) => L.push(`| ${cell(c)} | ${why[i] ?? ''} |`));
+    L.push('');
+  }
+  L.push(
+    'That gives you two choices: upgrade only the matching devices, or upgrade all of them including the ones with no firmware record. Both counts are shown on the buttons, so you can see the blast radius before choosing.',
+    '',
+    '</Step>', '',
+    '<Step>', '', '### Watch it run', '',
+    f.massNote ? cell(f.massNote) : 'Each device is flashed and reboots.',
+    '',
+    `The batch appears under **Firmware › Mass upgrades** with a status per device.`,
+    '',
+    '</Step>', '',
+    '<Step>', '', '### Or upgrade a single device', '',
+    `For one device, skip all of this: open it from **Network › Devices** and use its **Firmware** tab. Same images, same flags, one device.`,
+    '',
+    '</Step>', '', '</Steps>', '',
+  );
+
+  L.push(
+    '<Callout type="warn">A mass upgrade is scoped by **category**, not by a selection. Every device running an older build in that category is in range — which is what makes categories worth setting up carefully before the first rollout.</Callout>',
+    '',
+  );
+
+  L.push('', '## How an upgrade runs', '');
 
   L.push(
     'Every controller-driven flash goes through one entry point \u2014 a single device, a mass upgrade, a scheduled one, the Django admin form and the REST API all arrive there. That entry point takes a configuration backup of the device first and decides from its outcome whether the flash may proceed at all, so a device whose config could not be captured is not reflashed.',

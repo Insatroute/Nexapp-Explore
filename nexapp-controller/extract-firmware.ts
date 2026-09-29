@@ -24,6 +24,7 @@ import { readFile } from 'node:fs/promises';
 import * as path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { CONTROLLER, FE } from './config.ts';
+import { readFormFields, clean, type FormField } from './read-form-fields.ts';
 
 export interface UpgradeFlag {
   flag: string;
@@ -54,9 +55,20 @@ export interface FirmwareFacts {
   checkEvents: string[];
   /** Seconds of history suppressed on a device's first pull. */
   firstPullGuard?: number;
+  /** The form that creates a category. */
+  categoryFields: FormField[];
+  /** The form that creates a build. */
+  buildFields: FormField[];
+  /** What the build page says a build is and how to use it. */
+  buildAbout?: string;
+  /** The two groups the mass-upgrade dry run counts, and what it warns. */
+  massCounts: string[];
+  massNote?: string;
 }
 
 const PANEL = path.join(FE, 'components', 'DeviceFirmwarePanel.jsx');
+const CATEGORY = path.join(FE, 'pages', 'FwCategoryForm.jsx');
+const BUILD = path.join(FE, 'pages', 'FwBuildForm.jsx');
 const CONSTANTS = path.join(CONTROLLER, 'nexapp_firmware', 'constants.py');
 const MODELS = path.join(CONTROLLER, 'nexapp_firmware', 'models.py');
 const UPGRADER = path.join(
@@ -85,8 +97,8 @@ function frozenset(src: string, name: string): string[] {
 }
 
 export async function readFirmwareFacts(): Promise<FirmwareFacts | undefined> {
-  const [panel, constants, models, upgrader] = await Promise.all(
-    [PANEL, CONSTANTS, MODELS, UPGRADER].map(read),
+  const [panel, constants, models, upgrader, categorySrc, buildSrc] = await Promise.all(
+    [PANEL, CONSTANTS, MODELS, UPGRADER, CATEGORY, BUILD].map(read),
   );
   if (!panel && !constants) return undefined;
 
@@ -126,7 +138,26 @@ export async function readFirmwareFacts(): Promise<FirmwareFacts | undefined> {
     ? guard.split('*').reduce((a, b) => a * Number(b.trim()), 1)
     : undefined;
 
+  // The dry run counts two groups before anything is flashed. Their labels are
+  // the clearest statement of who a mass upgrade actually reaches.
+  const massCounts = [...buildSrc.matchAll(/<div className="massrow"><span>([^<]+)<\/span>/g)]
+    .map((m) => clean(m[1]));
+  const massNote = [...buildSrc.matchAll(/<p className="hint"[^>]*>\s*([^<{][^<]*?)\s*<\/p>/g)]
+    .map((m) => clean(m[1]))
+    .find((t) => /flashed with the image/i.test(t));
+  const buildAbout = (() => {
+    const m = /<p className="hint"[^>]*>([\s\S]*?)<\/p>/.exec(
+      buildSrc.slice(buildSrc.indexOf('sec__t">About')),
+    );
+    return m ? clean(m[1].replace(/<[^>]*>/g, '')) : undefined;
+  })();
+
   return {
+    categoryFields: readFormFields(categorySrc),
+    buildFields: readFormFields(buildSrc),
+    buildAbout,
+    massCounts,
+    massNote,
     flags,
     batchStatuses: statusChoices(upgrader, 'AbstractBatchUpgradeOperation'),
     deviceStatuses: statusChoices(upgrader, 'AbstractUpgradeOperation'),
@@ -153,5 +184,10 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     console.log(`failed : ${f.failedEvents.join(', ')}`);
     console.log(`checks : ${f.checkEvents.join(', ')}`);
     console.log(`first-pull guard: ${f.firstPullGuard}s`);
+    console.log(`\ncategory form: ${f.categoryFields.map((x) => x.label).join(', ')}`);
+    console.log(`build form   : ${f.buildFields.map((x) => x.label).join(', ')}`);
+    console.log(`mass counts  : ${f.massCounts.join(' | ')}`);
+    console.log(`mass note    : ${f.massNote ?? '-'}`);
+    console.log(`build about  : ${f.buildAbout ?? '-'}`);
   }
 }
