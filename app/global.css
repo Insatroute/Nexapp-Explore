@@ -271,3 +271,51 @@ div:has(figure.shiki) > [role='tablist'] [role='tab'][data-active] > div {
   border-radius: 7px;
   font-weight: 600;
 }
+
+/* --- task guides ---------------------------------------------------------
+ * The generated pages carry two kinds of content: reference, which is read by
+ * scanning, and a guide, which is read one step at a time with the console open
+ * beside it. Fumadocs already draws the stepper; these are the adjustments that
+ * make a long guide approachable rather than a wall.
+ * ---------------------------------------------------------------------- */
+
+/* The step marker reads as a position in a sequence, so it is filled rather
+   than tinted — a grey disc on a grey rail is hard to count down. */
+#nd-page .fd-step::before {
+  background: var(--color-fd-primary);
+  color: var(--color-fd-primary-foreground);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+#nd-page .fd-steps {
+  border-inline-start-color: var(--color-fd-border);
+}
+
+/* A step's own heading sits tight to its marker: the default heading rhythm
+   pushes it down far enough to break the link between the two. */
+#nd-page .fd-step > h3:first-child,
+#nd-page .fd-step > h4:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+  font-size: 1.02rem;
+  letter-spacing: -0.01em;
+}
+#nd-page .fd-step {
+  padding-bottom: 6px;
+}
+
+/* Cards inside a step are choices, not navigation — they sit closer together
+   and do not need the full card rhythm between them. */
+#nd-page .fd-step .card,
+#nd-page .fd-step [class*='card'] {
+  margin-block: 0;
+}
+
+/* A field table folded into an accordion should fill it, with the same
+   hairline treatment the page's other tables have. */
+#nd-page [data-radix-collection-item] table,
+#nd-page details table {
+  width: 100%;
+  margin-block: 8px 4px;
+}
