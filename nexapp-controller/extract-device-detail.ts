@@ -16,10 +16,28 @@ import { pathToFileURL } from 'node:url';
 import { FE } from './config.ts';
 import { clean } from './read-form-fields.ts';
 
+/** The identity strip on the left of the header, left to right. */
+export interface DeviceIdentity {
+  /** The back link's own aria-label, when it is there. */
+  back?: string;
+  /** The live dot beside the name. */
+  pulse: boolean;
+  /** The model badge beside the name. */
+  model: boolean;
+  mac: boolean;
+  /** The serial, appended to the MAC rather than given a slot of its own. */
+  serial: boolean;
+}
+
 export interface DeviceDetailFacts {
   tabs: string[];
   /** Quick actions in the header rail, described by their own tooltips. */
   actions: string[];
+  /** The readouts between the name and the buttons, in the console's order. */
+  vitals: string[];
+  identity: DeviceIdentity;
+  /** What a SIM chip says when it is present but not carrying traffic. */
+  simNotes: string[];
   /** Columns of the Summary tab's interface table. */
   interfaceColumns: string[];
   /** What the port map's colours mean. */
@@ -37,7 +55,11 @@ export async function readDeviceDetailFacts(): Promise<DeviceDetailFacts | undef
 
   // Bounded to the header rail: `title` is a common attribute, and reading the
   // whole file for it collects tooltips from every table cell on the page.
-  const railAt = src.indexOf('dhero__actions');
+  //
+  // Anchored on `className="…"` rather than the bare class name, because the
+  // JSX comments in this header cite these classes by name — slicing from the
+  // bare word starts the block inside a comment and cuts the markup short.
+  const railAt = src.indexOf('className="dhero__actions"');
   // Bounded by where the rail closes, not by a character count: a fixed window
   // stopped just short of Reboot, which is the most consequential button on it.
   const railEnd = railAt < 0 ? -1 : src.indexOf('{confirmDialog}', railAt);
@@ -49,6 +71,36 @@ export async function readDeviceDetailFacts(): Promise<DeviceDetailFacts | undef
   // A link, not a button, so it carries its label as text rather than a title.
   if (/SDLAN Access/.test(rail)) actions.push('SDLAN Access \u2014 reach this device\u2019s own services through the controller');
 
+  // The readouts, in source order — which is the order they are laid out in,
+  // and the order matters: Signal is deliberately first.
+  const vitalsAt = src.indexOf('className="dhero__vitals"');
+  const vitalsEnd = vitalsAt < 0 ? -1 : src.indexOf('className="dhero__actions"', vitalsAt);
+  const vitalsBlock =
+    vitalsAt < 0 ? '' : src.slice(vitalsAt, vitalsEnd < 0 ? vitalsAt + 4000 : vitalsEnd);
+  const vitals = [...vitalsBlock.matchAll(/<span>([A-Z][^<{]{2,30})<\/span>/g)].map((m) =>
+    clean(m[1]),
+  );
+
+  // A SIM chip's two failure tooltips. Both are template literals opening with
+  // `SIM ${s.slot}`, so the slot number is replaced by a placeholder rather
+  // than written down as 1.
+  const simNotes = [...vitalsBlock.matchAll(/`SIM \$\{s\.slot\} ([^`]+)`/g)].map((m) =>
+    clean(`A SIM ${m[1]}`),
+  );
+
+  // The identity strip. Each piece is conditional in the JSX, so what is
+  // recorded is which pieces the console renders at all — the values are the
+  // device's own and are never written down.
+  const idAt = src.indexOf('className="dhero__id"');
+  const idBlock = idAt < 0 || vitalsAt < 0 ? '' : src.slice(idAt, vitalsAt);
+  const identity: DeviceIdentity = {
+    back: /aria-label="([^"]+)"/.exec(idBlock)?.[1],
+    pulse: /dhero__pulse/.test(idBlock),
+    model: /dhero__model/.test(idBlock),
+    mac: /mac_address/.test(idBlock),
+    serial: /SN \$\{serial\}/.test(idBlock),
+  };
+
   const legend = [...src.matchAll(/className="lgk lgk--[a-z]+">([^<]+)</g)].map((m) => clean(m[1]));
 
   // The interface table's headers, taken from the block the legend introduces.
@@ -56,7 +108,7 @@ export async function readDeviceDetailFacts(): Promise<DeviceDetailFacts | undef
   const table = tableAt < 0 ? '' : src.slice(tableAt, tableAt + 1500);
   const interfaceColumns = [...table.matchAll(/<th[^>]*>([^<]+)<\/th>/g)].map((m) => clean(m[1]));
 
-  return { tabs, actions, interfaceColumns, legend };
+  return { tabs, actions, vitals, identity, simNotes, interfaceColumns, legend };
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

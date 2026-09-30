@@ -47,7 +47,7 @@ export async function deviceDetailGuide(): Promise<string> {
     '',
     '### Read the header first',
     '',
-    'Status, Config and the management IP sit side by side at the top, and they answer different questions. **Status** is what the device reports about itself. **Config** is whether the configuration the controller pushed actually applied. A device can be online with a failed configuration, and offline with a perfectly good one — so read both before deciding what is broken.',
+    'Status, Config and the management IP sit side by side at the top, and they answer different questions. **Status** is what the device reports about itself. **Config** is whether the configuration the controller pushed actually applied. A device can be online with a failed configuration, and offline with a perfectly good one — so read both before deciding what is broken. On a cellular device a fourth readout, **Signal**, sits ahead of them — see *What the header shows* below.',
     '',
     '</Step>',
     '',
@@ -89,6 +89,58 @@ export async function deviceDetailGuide(): Promise<string> {
     '',
   );
 
+  // ---- what the header shows (identity + vitals)
+  //
+  // The buttons were documented long before the rest of the header was, which
+  // left the strip an operator actually reads first — the name, the hardware
+  // identity, and the Signal readout that only appears on a cellular device —
+  // undescribed.
+  if (d.vitals.length || d.identity.mac) {
+    L.push('### What the header shows', '', '#### The identity strip, on the left', '');
+
+    const pieces: string[] = [];
+    if (d.identity.back) pieces.push(`the chevron is **${cell(d.identity.back)}** — it leaves the device, it does not step to the next one`);
+    if (d.identity.pulse) pieces.push('the dot beside the name is the same reading as **Status**, not a third signal');
+    if (d.identity.model) pieces.push('the badge after the name is the device’s **model**');
+    L.push(`Left to right: ${pieces.join('; ')}.`, '');
+
+    if (d.identity.mac) {
+      L.push(
+        d.identity.serial
+          ? 'Under the name sit the two hardware identities: the **MAC address**, and the **serial number** after `SN`. The serial is appended to that line rather than given a readout of its own, and the line clips with an ellipsis — hover it and the tooltip carries both in full. A device that has never reported its NetJSON has no serial to show, and the console leaves it out entirely rather than printing a dash, so a missing `SN` means *never checked in*, not *no serial*.'
+          : 'Under the name sits the device’s **MAC address**.',
+        '',
+      );
+    }
+
+    L.push(
+      '#### The readouts, in the middle',
+      '',
+      `${d.vitals.length} of them, in this order: ${d.vitals.map((v) => `**${cell(v)}**`).join(' · ')}.`,
+      '',
+    );
+
+    if (d.vitals.some((v) => /^Signal$/i.test(v))) {
+      L.push(
+        '**Signal** is the one that is not always there, and it is first on purpose: on a cellular router the radio is the most likely explanation for the other two — a device goes Offline and its configuration stops applying *because* the link dropped. An ethernet-only device shows no Signal slot at all.',
+        '',
+        'What decides whether a SIM appears is whether a card is **present**, not whether it has a usable signal: a card that has lost service blanks every reading but keeps its ICCID, IMSI and IMEI. So an empty set of bars means *a card is in the slot and has no service* — a different fault from an empty slot, which shows nothing. Where a device reports two SIMs, both chips are shown side by side in slot order.',
+        '',
+        'A chip is drawn as live only when the modem is registered with the carrier **and** its interface is up. The two can disagree, and hovering the chip says which:',
+        '',
+      );
+      // No blank line between the bullets: a blank one makes MDX render the
+      // list loose, and these two are a pair of tooltips, not two paragraphs.
+      for (const n of d.simNotes) L.push(`- ${cell(n)}`);
+      L.push('');
+    }
+
+    L.push(
+      '**Status** and **Config** answer different questions and are worth reading together — Status is what the device says about itself, Config is whether what the controller pushed actually took. **Management IP** is the address the controller reaches it on; the remote-access actions in the rail go through it, so a device with no management IP has none of them.',
+      '',
+    );
+  }
+
   // ---- header actions
   if (d.actions.length) {
     L.push(
@@ -104,6 +156,8 @@ export async function deviceDetailGuide(): Promise<string> {
       L.push(`| ${cell(rest.length ? name : a.replace(/^(\w+)\b.*/, '$1'))} | ${cell(rest.length ? rest.join(' — ') : a)} |`);
     }
     L.push(
+      '',
+      'The refresh button at the end of the rail is not in that table: it re-fetches the device rather than acting on it. Everything on this page except the path labels is what the device last reported, so that button is how you find out whether it is still true.',
       '',
       '<Callout type="warn">Root access opens a root shell on the router and is audited. Reboot takes the device offline — neither asks a second time on a device someone else is relying on.</Callout>',
       '',
@@ -162,7 +216,7 @@ export async function deviceDetailGuide(): Promise<string> {
   L.push(
     '---',
     '',
-    '<small>Read from: the `TABS` literal, the header rail’s own tooltips, the port-map legend and the interface table in `pages/DeviceDetail.jsx`.</small>',
+    '<small>Read from: the `TABS` literal, the header’s identity strip, its readout labels, the SIM chips’ own tooltips, the rail’s button tooltips, the port-map legend and the interface table in `pages/DeviceDetail.jsx`.</small>',
     '',
   );
   return L.join('\n');
