@@ -20,6 +20,7 @@ import { readVpnFacts } from './extract-vpn.ts';
 import { readTemplateFacts } from './extract-templates.ts';
 import { readRegistrationFacts } from './extract-registration.ts';
 import { navPaths } from './extract-nav.ts';
+import { withStepFigures } from './page-shots.ts';
 import { cell } from './mdx.ts';
 
 export async function onboardingGuide(): Promise<string | undefined> {
@@ -213,5 +214,12 @@ export async function onboardingGuide(): Promise<string | undefined> {
     '<small>Read from: the organization form in `pages/OrgForm.jsx`; the backend requirements in `pages/VpnForm.jsx`; the template purposes in `pages/TemplateWizard.jsx`; and the registration settings in `config/base/multitenancy.py`.</small>',
     '',
   );
-  return L.join('\n');
+  return withStepFigures(L.join('\n'), {
+    'Create the organization': { src: 'admin/organizations/form-new.png', alt: 'The new organization form', caption: 'Administration › Organizations › Add organization — Name and Slug, then the Device registration section with the shared secret left empty to be generated.' },
+    'Create the VPN server': { src: 'network/vpn-servers/form-new.png', alt: 'The new VPN server form', caption: 'Network › Configuration › VPN Servers › Add VPN server — the Requirements card says what the chosen backend needs before Save is allowed.' },
+    'Create the VPN-client template': { src: 'network/templates/wizard.png', alt: 'The template wizard', caption: 'Network › Configuration › Templates › Add template — choose Connect to a VPN in the first step.' },
+    'Register the device': { src: 'network/devices/list.png', alt: 'The device inventory', caption: 'Once it has registered, the router is a row in Network › Devices.' },
+    'Get the organization’s shared secret': { src: 'onboarding/org-secret.png', alt: 'An organization’s registration settings', caption: 'The organization’s page — Registration enabled, and the Shared secret, masked until you press the eye or copy it with the copy button.' },
+    'Allow the serial, if the organization requires it': { src: 'admin/allowed-serials/form-new.png', alt: 'Allowing a serial number', caption: 'Administration › Users & Organizations › Allowed Serial Numbers › Add serial number.' },
+  });
 }

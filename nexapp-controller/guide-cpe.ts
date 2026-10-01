@@ -177,8 +177,13 @@ export interface ShotPlace {
 }
 
 /** The picture for `file`, if it was captured — and nothing if it was not. */
+/** Pictures already placed beside a step, per screen — so the closing section shows only the rest. */
+const placed = new Map<string, Set<string>>();
+
 function figure(place: ShotPlace | undefined, file: string): string[] {
   if (!place?.have.has(file)) return [];
+  if (!placed.has(place.dir)) placed.set(place.dir, new Set());
+  placed.get(place.dir)!.add(file);
   const sh = place.shots.find((x) => x.file === file);
   // Captioned, because a picture with no words under it leaves the reader to
   // work out which state it shows.
@@ -199,8 +204,17 @@ export function screenshotSection(
   have: Set<string>,
 ): string[] {
   const missing = shots.filter((sh) => !have.has(sh.file));
-  if (!missing.length) return [];
+  // Captured, but no step on the page shows it — a drawer reached from a
+  // sub-tab or a card the step text does not walk through. Shown here rather
+  // than dropped, which is what happened once it stopped being "missing".
+  const done = placed.get(dir);
+  const unplaced = shots.filter((sh) => have.has(sh.file) && !done?.has(sh.file));
+  if (!missing.length && !unplaced.length) return [];
   const L = ['## Screenshots', ''];
+  for (const sh of unplaced) {
+    L.push(`<img src="/kb/img/cpe/${dir}/${sh.file}" alt=${JSON.stringify(sh.alt)} />`, '', `*${sh.what}*`, '');
+  }
+  if (!missing.length) return L;
   L.push(
     missing.length === shots.length
       ? '<Callout type="warn">None captured yet. Screenshots have to come from a running controller with real devices on it, so they are taken by hand rather than generated. These are the shots this page is waiting for — drop them in `public/img/cpe/' +

@@ -53,10 +53,15 @@ import { panelGuides } from './guide-panel.ts';
 import { readReportCatalog } from './extract-report-catalog.ts';
 import { readFirmwareFacts } from './extract-firmware.ts';
 import { policyGuide } from './guide-policy.ts';
+import { shotSection, type Shot } from './shots.ts';
 import { vpnGuide } from './guide-vpn.ts';
 import { templatesGuide } from './guide-templates.ts';
 import { devicesGuide } from './guide-devices.ts';
 import { deviceDetailGuide } from './guide-device-detail.ts';
+import { adminGuide } from './guide-admin.ts';
+import { ipamGuide } from './guide-ipam.ts';
+import { topologyGuide } from './guide-topology.ts';
+import { settingsGuide } from './guide-settings.ts';
 import { CURATED, COMMON_NOTES } from './console-descriptions.ts';
 import { APP_ROOT, KB, OUT, URL_BASE, requireController } from './config.ts';
 import { unescapedMdx } from './mdx.ts';
@@ -575,11 +580,18 @@ async function main() {
  * one would drift with nothing to notice. Read on every run, they cannot.
  */
 async function extrasFor(route: string | undefined): Promise<string> {
-  if (route === '/reports') return reportExtras();
+  // The catalogue section is generated; the task guide (reports-notes.ts) follows it.
+  if (route === '/reports') return `${await reportExtras()}${await adminGuide(route)}`;
   if (route === '/firmware') return firmwareExtras();
   if (route === '/vpn') return vpnGuide();
   if (route === '/templates') return templatesGuide();
   if (route === '/devices') return devicesGuide();
+  // Administration: fields read from each form, guidance from admin-notes.ts.
+  const admin = route
+    ? (await adminGuide(route)) || (await ipamGuide(route)) || (await topologyGuide(route))
+      || (await settingsGuide(route))
+    : '';
+  if (admin) return admin;
   // Policy Engine protocols share one form, one save path and one verification
   // route, so they share one guide, filled from each protocol's own field table.
   const policy = /^\/policy-engine\/([a-z0-9-]+)$/.exec(route ?? '');
@@ -646,6 +658,33 @@ async function reportExtras(): Promise<string> {
  * reports back — and three of those four sources are Django, which the facts
  * extractor never reads.
  */
+/**
+ * Firmware screenshots. The guide above them is read from source; these are
+ * not, so they are declared here and shown only once the file is on disk.
+ */
+const FIRMWARE_SHOTS: Shot[] = [
+  {
+    file: 'builds.png', alt: 'The Builds tab',
+    what: 'The **Builds** tab. Each row is one firmware version for one category, with the **OS identifier** that decides which hardware it will be offered to — the row reading a dash there is the one that will not auto-match anything.',
+  },
+  {
+    file: 'categories.png', alt: 'The Categories tab',
+    what: 'The **Categories** tab. **Shared** means every organization can use it; the **Devices** count is the scope, and a category reading “all” is one with no device restriction rather than one with none attached.',
+  },
+  {
+    file: 'form-build.png', alt: 'The New build form',
+    what: 'Creating a build. **Category** and **Version** are required, and the **Firmware images** panel says “Save the build first” — images attach to a saved build, so this is a two-step form whether or not you expected one.',
+  },
+  {
+    file: 'form-category.png', alt: 'The New category form',
+    what: 'Creating a category. **Scope** is a checkbox per device and is optional: left empty a mass upgrade targets **all** devices in the category, so ticking nothing is the widest setting rather than the narrowest.',
+  },
+  {
+    file: 'mass-upgrades.png', alt: 'The Mass upgrades tab',
+    what: 'The **Mass upgrades** tab — one row per batch, with its build, category, status and start time. Open a row to see how far each device got.',
+  },
+];
+
 async function firmwareExtras(): Promise<string> {
   const f = await readFirmwareFacts();
   if (!f) return '';
@@ -835,6 +874,9 @@ async function firmwareExtras(): Promise<string> {
     );
   }
 
+  L.push(...(await shotSection('firmware', '', FIRMWARE_SHOTS,
+    (m) => console.log(`  firmware: ${m}`), '##')));
+
   L.push(
     '---',
     '',
@@ -968,7 +1010,7 @@ async function emitOrphans(table: RouteTable): Promise<{ total: number; grounded
     await mkdir(dir, { recursive: true });
     await writeFile(
       path.join(dir, `${slug(o.label)}.mdx`),
-      `${frontmatter(o.label, o.crumbs)}${body.md}\n`,
+      `${frontmatter(o.label, o.crumbs)}${body.md}\n${await extrasFor(o.to)}`,
     );
     await placeInMeta(dir, slug(o.label), o.after);
 

@@ -47,10 +47,11 @@
  *   --allow-writes    also capture applied.png, which SAVES a record
  *   --headed          watch it work, for when a selector needs tuning
  */
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readCpeMenu, type CpePage, type CpeSection } from '../nexapp-controller/extract-cpe.ts';
+import { FE } from '../nexapp-controller/config.ts';
 
 /**
  * As much of Playwright's surface as this script uses. Declared here rather
@@ -87,6 +88,7 @@ interface Chromium {
 
 const APP_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(APP_ROOT, 'public', 'img', 'cpe');
+const FE_CPE = path.join(FE, 'components', 'cpe');
 
 const slug = (s: string) =>
   s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -163,6 +165,97 @@ async function playwright(): Promise<{ chromium: Chromium }> {
   }
 }
 
+/**
+ * Can this screen's row Delete be clicked safely?
+ *
+ * Only when EVERY `onDelete=` handler on it resolves to a function whose body
+ * asks first. On IPS, AntiSpam, Antivirus and the Instashield screens some
+ * handlers call the RPC inline — `onDelete={() => secCall('delete-profile',
+ * …)}` — and clicking one destroys a record on the device.
+ *
+ * A page-level "does this screen have a confirm dialog anywhere" test is NOT
+ * enough: those screens do have confirmations, for other lists. The question
+ * has to be asked of each handler.
+ *
+ * Deliberately conservative: anything this cannot PROVE goes through a
+ * confirm counts as unguarded, and the screen loses its delete.png. A missing
+ * screenshot is a gap; a deleted record is not recoverable.
+ */
+function deleteIsGuarded(src: string): boolean {
+  const total = (src.match(/onDelete=/g) ?? []).length;
+  if (!total) return false;
+
+  // Each handler, brace-matched rather than windowed. A fixed window missed
+  // IPS's longest handler entirely, and a handler this cannot read must count
+  // against the screen, not be skipped.
+  const handlers: string[] = [];
+  for (const m of src.matchAll(/onDelete=\{/g)) {
+    const open = m.index + m[0].length - 1;
+    let depth = 0;
+    let end = -1;
+    for (let i = open; i < src.length; i++) {
+      const c = src[i];
+      if (c === '{') depth++;
+      else if (c === '}' && --depth === 0) { end = i; break; }
+    }
+    if (end < 0) return false;
+    handlers.push(src.slice(open + 1, end));
+  }
+  if (handlers.length !== total) return false;
+
+  // A local whose body asks first. The body is brace-matched from the `{`
+  // that opens it, skipping the parameter list — bounding it by "the next
+  // declaration" instead cut at the first `const` INSIDE the function, which
+  // is usually `const ok = await confirm(…)`, and so hid the very thing being
+  // looked for.
+  const bodyOf = (from: number): string => {
+    const paren = src.indexOf('(', from);
+    if (paren < 0) return '';
+    let pd = 0;
+    let after = -1;
+    for (let i = paren; i < src.length; i++) {
+      if (src[i] === '(') pd++;
+      else if (src[i] === ')' && --pd === 0) { after = i + 1; break; }
+    }
+    if (after < 0) return '';
+    const open = src.indexOf('{', after);
+    if (open < 0) return '';
+    let depth = 0;
+    let quote: string | null = null;
+    for (let i = open; i < src.length; i++) {
+      const c = src[i];
+      const prev = src[i - 1];
+      if (quote) { if (c === quote && prev !== '\\') quote = null; continue; }
+      if (c === '"' || c === "'" || c === '`') { quote = c; continue; }
+      if (c === '{') depth++;
+      else if (c === '}' && --depth === 0) return src.slice(open, i + 1);
+    }
+    return '';
+  };
+
+  const guarded = new Set<string>();
+  for (const m of src.matchAll(/\b(?:const|function)\s+([A-Za-z_$][\w$]*)\s*=?\s*(?:async\s*)?(?=\()/g)) {
+    if (/\bconfirm\s*\(/.test(bodyOf(m.index))) guarded.add(m[1]);
+  }
+
+  // Every handler must be a plain call to one of those. An inline RPC —
+  // `() => secCall('delete-profile', …)` — is not, and neither is anything
+  // whose shape this does not recognise.
+  return handlers.every((h) => {
+    // A handler that confirms inside itself, rather than calling a named
+    // function that does — `onDelete={async () => { const ok = await
+    // confirm({…}) …}}`, which is how DNS and DHCP writes its relay-pool
+    // delete. Safe, and worth recognising so the screen keeps its shot.
+    if (/\bconfirm\s*\(/.test(h)) return true;
+
+    const call =
+      /^\s*\(\s*\)\s*=>\s*([A-Za-z_$][\w$]*)\s*\(/.exec(h) ??
+      /^\s*\(\s*[\w$]*\s*\)\s*=>\s*([A-Za-z_$][\w$]*)\s*\(/.exec(h) ??
+      /^\s*([A-Za-z_$][\w$]*)\s*$/.exec(h);
+    return Boolean(call && guarded.has(call[1]));
+  });
+}
+
 /** The identifying fields in the device header, blanked before a shot. */
 const MASK_CSS = `
   .dhero__name, .dhero__sub, .dhv .mono { color: transparent !important; position: relative; }
@@ -179,12 +272,37 @@ async function main() {
   // --only is reported on any machine rather than only on one that has the
   // browser installed.
   const menu = await readCpeMenu();
-  const wanted: Array<{ section: CpeSection; page: CpePage; dir: string }> = [];
+  const wanted: Array<{
+    section: CpeSection;
+    page: CpePage;
+    dir: string;
+    /** Whether this screen asks before deleting. See `safeToOpenDelete`. */
+    confirms: boolean;
+  }> = [];
   for (const section of menu) {
     for (const page of section.pages) {
       const dir = `${slug(section.label)}/${slug(page.label)}`;
       if (o.only && dir !== o.only) continue;
-      wanted.push({ section, page, dir });
+
+      // DELETING IS NOT ALWAYS GUARDED.
+      //
+      // On IPS, AntiSpam, Antivirus and the Instashield screens a row's Delete
+      // fires the RPC immediately — `onDelete={() => secCall('delete-profile',
+      // …)}` with no confirm dialog. Clicking it to photograph a dialog that
+      // does not exist would destroy a real record on the device.
+      //
+      // So the delete shot is attempted ONLY where the screen's own source
+      // shows a confirmation that removes something. That is the same fact the
+      // handbook prints as "Deleting asks first: …", read from the component.
+      const componentSrc = page.component
+        ? await readFile(
+            path.join(FE_CPE, page.component),
+            'utf8',
+          ).catch(() => '')
+        : '';
+      const confirms = Boolean(componentSrc) && deleteIsGuarded(componentSrc);
+
+      wanted.push({ section, page, dir, confirms });
     }
   }
   if (!wanted.length) {
@@ -222,7 +340,8 @@ async function main() {
   let captured = 0;
   const skipped: string[] = [];
 
-  for (const { section, page: cpe, dir } of wanted) {
+  let unguarded = 0;
+  for (const { section, page: cpe, dir, confirms } of wanted) {
     console.log(`${section.label} › ${cpe.label}`);
     try {
       // The shell holds the active page in React state, not in the URL, so a
@@ -247,9 +366,10 @@ async function main() {
         await page.waitForTimeout(400);
       }
 
-      // The delete confirmation, opened and dismissed. Nothing is deleted.
+      // The delete confirmation, opened and dismissed — only where the source
+      // proves there IS one to open. Never on a screen that deletes outright.
       const rowMenu = page.locator('[aria-label^="Actions for"]').first();
-      if (await rowMenu.count()) {
+      if (confirms && (await rowMenu.count())) {
         await rowMenu.click();
         const del = page.getByRole('menuitem', { name: /^(delete|remove)\b/i }).first();
         if (await del.count()) {
@@ -262,6 +382,7 @@ async function main() {
         await page.keyboard.press('Escape').catch(() => {});
       }
 
+      if (!confirms) unguarded++;
       if (!o.allowWrites) skipped.push(`${dir}/applied.png`);
     } catch (e) {
       // One screen failing must not cost the other forty-four. The controller
@@ -273,6 +394,12 @@ async function main() {
   await browser.close();
 
   console.log(`\n${captured} image(s) written under public/img/cpe/`);
+  if (unguarded) {
+    console.log(
+      `${unguarded} screen(s) delete a row with no confirmation, so no delete.png was attempted there.\n` +
+        `That is a property of the console, not of this script — see the handbook's "Deleting asks first" lines.`,
+    );
+  }
   if (skipped.length) {
     console.log(
       `${skipped.length} applied.png shot(s) not taken — that one needs a real save.\n` +

@@ -12,6 +12,7 @@
  */
 import { readVpnFacts } from './extract-vpn.ts';
 import { cell } from './mdx.ts';
+import { shotSection } from './page-shots.ts';
 
 
 export async function vpnGuide(): Promise<string> {
@@ -256,12 +257,10 @@ export async function vpnGuide(): Promise<string> {
   L.push('| Devices never pick it up | No VPN-client template names it, or none is assigned. | Create the template and assign it. |', '');
 
   // ---- 11. screenshots
-  L.push(
-    '### Screenshots',
-    '',
-    '<Callout type="warn">None yet. Screenshots cannot be generated from the source the rest of this page is read from — they have to be captured from a running controller, which needs credentials and a decision about putting production data in the repository. Until that is set up, this section is deliberately empty rather than quietly missing.</Callout>',
-    '',
-  );
+  L.push(...(await shotSection('network/vpn-servers', [
+    { file: 'list.png', what: 'The VPN servers list — Name, Host, Backend, Organization, Certificate and Modified, with Add VPN server.', alt: 'The VPN servers list' },
+    { file: 'form-new.png', what: 'The New VPN server form with the OpenVPN backend chosen — Identity and Connection, and on the right the Details and Requirements cards showing that a certificate authority is required.', alt: 'A new VPN server' },
+  ])));
 
   L.push(
     '---',

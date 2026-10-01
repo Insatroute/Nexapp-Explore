@@ -1,0 +1,22 @@
+{
+  "at": "2026-10-01T11:53:01.245Z",
+  "device": null,
+  "masked": true,
+  "results": [
+    {
+      "dir": "dashboard/dashboard",
+      "file": "page.png",
+      "ok": true
+    },
+    {
+      "dir": "dashboard/dashboard",
+      "file": "uplinks.png",
+      "ok": true
+    },
+    {
+      "dir": "dashboard/dashboard",
+      "file": "traffic.png",
+      "ok": true
+    }
+  ]
+}

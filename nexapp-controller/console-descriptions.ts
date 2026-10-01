@@ -98,17 +98,17 @@ export const CURATED: Record<string, CuratedDescription> = {
   },
   '/radius/nas': {
     text:
-      'The RADIUS clients — the network access servers permitted to ask this controller to authenticate a user. An entry is a shared secret plus the address the request will arrive from, scoped to an organization.',
+      "The FreeRADIUS client list (its `nas` table): each entry is a network access server’s address, shared secret and type, scoped to an organization. Whether FreeRADIUS reads its clients from this table depends on the FreeRADIUS server’s own configuration; inside the controller the entries are used to look up the shared secret for Change of Authorization.",
     from: 'calls useListNasQuery, useCreateNasMutation, useUpdateNasMutation, useDeleteNasMutation, useListOrganizationsQuery',
     notes: {
       "Browse and search NAS":
-        "The RADIUS clients, from `radius-admin/nas/`. A row is one network access server allowed to ask this controller to authenticate a user \u2014 its address and shared secret, scoped to an organization.",
+        "The NAS entries, from `radius-admin/nas/` — address, short name, type and shared secret, scoped to an organization.",
       "Create NAS":
-        "Registers a new client. Until a NAS exists here with the right secret, its authentication requests are refused before any user is even looked up.",
+        "Adds an entry. **Short name** is required by the server even though the form does not mark it.",
       "Edit NAS":
         "Changes an entry \u2014 `PATCH radius-admin/nas/<id>/`. Rotating the shared secret here means rotating it on the device too, or it stops authenticating.",
       "Delete NAS":
-        "Removes a client. Requests from that address stop being accepted.",
+        "Removes the entry from the `nas` table.",
     },
 },
   '/groups': {
@@ -236,142 +236,142 @@ export const CURATED: Record<string, CuratedDescription> = {
   },
   "/security/threatshield-ip": {
     text:
-      "IP reputation blocking and brute-force protection: drop traffic from known-bad addresses, and ban a source after a set number of failed attempts.\n\nScoped like the rest of Security: fleet-wide, or narrowed to an organization or a single device.",
+      "IP reputation blocking and brute-force protection settings: drop traffic from known-bad addresses, and ban a source after a set number of failed attempts.\n\nScope (fleet-wide, an organization or one device) only marks a record as a template or ties it to one router. **Saving does not change any router** — nothing on this page deploys.",
     from:
       "pages/security/tabs.js descriptor for key 'threatshield-ip': resource 'security/threatshield', noun 'policy', and its columns/fields arrays (field names read from each endpoint's OPTIONS response, per the file's own note)",
     notes: {
       "Browse and search resource":
-        "Lists policies from `GET /api/v1/security/threatshield/`, with columns Name, Scope, State.",
+        "The records of this type. The search box and the organization picker do not narrow this list — the server ignores them.",
       "Edit resource":
-        "Creates and edits a policy through the shared resource form. Fields: IP reputation blocking, Auto-update lists, Brute-force protection, Ban after failures.",
+        "Changes the stored record. Saving does not send anything to a router.",
       "Delete resource":
-        "Removes a policy via `DELETE /api/v1/security/threatshield/<id>/`.",
+        "Deletes the stored record. Nothing is sent to any router, and copies already applied from a template remain.",
     },
   },
   "/security/ips": {
     text:
-      "Intrusion prevention. The oinkcode is a Snort subscription identifier \u2014 it is a licence code rather than a secret, which is why the form treats it as plain text.\n\nScoped like the rest of Security: fleet-wide, or narrowed to an organization or a single device.",
+      "Intrusion prevention settings. The Oinkcode (a Snort subscription code) is write-only: the server never returns it, so the box is always empty when editing.\n\nScope (fleet-wide, an organization or one device) only marks a record as a template or ties it to one router. **Saving does not change any router** — nothing on this page deploys.",
     from:
       "pages/security/tabs.js descriptor for key 'ips': resource 'security/ips', noun 'policy', and its columns/fields arrays (field names read from each endpoint's OPTIONS response, per the file's own note)",
     notes: {
       "Browse and search resource":
-        "Lists policies from `GET /api/v1/security/ips/`, with columns Name, Policy, Chain, Scope, State.",
+        "The records of this type. The search box and the organization picker do not narrow this list — the server ignores them.",
       "Edit resource":
-        "Creates and edits a policy through the shared resource form. Fields: Rule policy, Chain, Oinkcode.",
+        "Changes the stored record. Saving does not send anything to a router.",
       "Delete resource":
-        "Removes a policy via `DELETE /api/v1/security/ips/<id>/`.",
+        "Deletes the stored record. Nothing is sent to any router, and copies already applied from a template remain.",
     },
   },
   "/security/antivirus": {
     text:
-      "Which protocols are scanned, how large a file will still be inspected, and whether hits are quarantined.\n\nScoped like the rest of Security: fleet-wide, or narrowed to an organization or a single device.",
+      "Which protocols are scanned, how large a file will still be inspected, and whether hits are quarantined.\n\nScope (fleet-wide, an organization or one device) only marks a record as a template or ties it to one router. **Saving does not change any router** — nothing on this page deploys.",
     from:
       "pages/security/tabs.js descriptor for key 'antivirus': resource 'security/antivirus', noun 'policy', and its columns/fields arrays (field names read from each endpoint's OPTIONS response, per the file's own note)",
     notes: {
       "Browse and search resource":
-        "Lists policies from `GET /api/v1/security/antivirus/`, with columns Name, Max file (MB), Scope, State.",
+        "The records of this type. The search box and the organization picker do not narrow this list — the server ignores them.",
       "Edit resource":
-        "Creates and edits a policy through the shared resource form. Fields: Scan HTTP, Scan SMTP, Scan FTP, Scan on access, Max file size (MB), Quarantine, Auto-update signatures.",
+        "Changes the stored record. Saving does not send anything to a router.",
       "Delete resource":
-        "Removes a policy via `DELETE /api/v1/security/antivirus/<id>/`.",
+        "Deletes the stored record. Nothing is sent to any router, and copies already applied from a template remain.",
     },
   },
   "/security/antispam": {
     text:
-      "Mail filtering, pointed at a relay host with optional SASL authentication.\n\nScoped like the rest of Security: fleet-wide, or narrowed to an organization or a single device.",
+      "Mail filtering through a relay host. Only the SASL username can be set from this form; the SASL switch and password cannot.\n\nScope (fleet-wide, an organization or one device) only marks a record as a template or ties it to one router. **Saving does not change any router** — nothing on this page deploys.",
     from:
       "pages/security/tabs.js descriptor for key 'antispam': resource 'security/antispam', noun 'policy', and its columns/fields arrays (field names read from each endpoint's OPTIONS response, per the file's own note)",
     notes: {
       "Browse and search resource":
-        "Lists policies from `GET /api/v1/security/antispam/`, with columns Name, Service, Relay host, State.",
+        "The records of this type. The search box and the organization picker do not narrow this list — the server ignores them.",
       "Edit resource":
-        "Creates and edits a policy through the shared resource form. Fields: Service, Relay host, Port, SASL username.",
+        "Changes the stored record. Saving does not send anything to a router.",
       "Delete resource":
-        "Removes a policy via `DELETE /api/v1/security/antispam/<id>/`.",
+        "Deletes the stored record. Nothing is sent to any router, and copies already applied from a template remain.",
     },
   },
   "/security/webfilter": {
     text:
-      "Category-based web filtering, plus custom rules for anything the categories do not cover.\n\nScoped like the rest of Security: fleet-wide, or narrowed to an organization or a single device.",
+      "Category-based web filtering. Blocked categories and custom rules cannot be entered from this form — the server wants lists and refuses text.\n\nScope (fleet-wide, an organization or one device) only marks a record as a template or ties it to one router. **Saving does not change any router** — nothing on this page deploys.",
     from:
       "pages/security/tabs.js descriptor for key 'webfilter': resource 'security/webfilter', noun 'policy', and its columns/fields arrays (field names read from each endpoint's OPTIONS response, per the file's own note)",
     notes: {
       "Browse and search resource":
-        "Lists policies from `GET /api/v1/security/webfilter/`, with columns Name, Scope, State.",
+        "The records of this type. The search box and the organization picker do not narrow this list — the server ignores them.",
       "Edit resource":
-        "Creates and edits a policy through the shared resource form. Fields: Blocked categories, Custom rules.",
+        "Changes the stored record. Saving does not send anything to a router.",
       "Delete resource":
-        "Removes a policy via `DELETE /api/v1/security/webfilter/<id>/`.",
+        "Deletes the stored record. Nothing is sent to any router, and copies already applied from a template remain.",
     },
   },
   "/security/address-group": {
     text:
-      "Named sets of addresses, reused by the policies above instead of repeating a list in each one. Unlike the other tabs this is a plain organization-owned record \u2014 there is no fleet-wide/device scope and no enabled state.\n\nScoped like the rest of Security: fleet-wide, or narrowed to an organization or a single device.",
+      "Named sets of addresses, owned by an organization. Nothing in the controller references address groups yet, and the addresses cannot be entered from this form — the server wants a list and refuses text.",
     from:
       "pages/security/tabs.js descriptor for key 'address-group': resource 'security/address-group', noun 'address group', and its columns/fields arrays (field names read from each endpoint's OPTIONS response, per the file's own note)",
     notes: {
       "Browse and search resource":
-        "Lists address groups from `GET /api/v1/security/address-group/`, with columns Name, Description, Organization.",
+        "The records of this type. The search box and the organization picker do not narrow this list — the server ignores them.",
       "Edit resource":
-        "Creates and edits a address group through the shared resource form. Fields: Addresses, Description.",
+        "Changes the stored record. Saving does not send anything to a router.",
       "Delete resource":
-        "Removes a address group via `DELETE /api/v1/security/address-group/<id>/`.",
+        "Deletes the stored record. Nothing is sent to any router, and copies already applied from a template remain.",
     },
   },
   "/security/profile": {
     text:
-      "Security profiles \u2014 the bundle a policy applies.\n\nScoped like the rest of Security: fleet-wide, or narrowed to an organization or a single device.",
+      "Security profiles. A profile cannot be created from this page — its required type is not on the form; create profiles in the Django admin under Security › Security Profiles.\n\nScope (fleet-wide, an organization or one device) only marks a record as a template or ties it to one router. **Saving does not change any router** — nothing on this page deploys.",
     from:
       "pages/security/tabs.js descriptor for key 'profile': resource 'security/profile', noun 'policy', and its columns/fields arrays (field names read from each endpoint's OPTIONS response, per the file's own note)",
     notes: {
       "Browse and search resource":
-        "Lists policies from `GET /api/v1/security/profile/`, with columns Name, Scope, State.",
+        "The records of this type. The search box and the organization picker do not narrow this list — the server ignores them.",
       "Edit resource":
-        "Creates and edits a policy through the shared resource form. Fields: Name, Enabled.",
+        "Changes the stored record. Saving does not send anything to a router.",
       "Delete resource":
-        "Removes a policy via `DELETE /api/v1/security/profile/<id>/`.",
+        "Deletes the stored record. Nothing is sent to any router, and copies already applied from a template remain.",
     },
   },
   "/security/policy": {
     text:
-      "The security policies themselves, tying the profiles above to the traffic they govern.\n\nScoped like the rest of Security: fleet-wide, or narrowed to an organization or a single device.",
+      "Security policies. This form sets only the name, scope and Enabled; a new policy is LAN → WAN, Allow, with no profiles until edited in the Django admin.\n\nScope (fleet-wide, an organization or one device) only marks a record as a template or ties it to one router. **Saving does not change any router** — nothing on this page deploys.",
     from:
       "pages/security/tabs.js descriptor for key 'policy': resource 'security/policy', noun 'policy', and its columns/fields arrays (field names read from each endpoint's OPTIONS response, per the file's own note)",
     notes: {
       "Browse and search resource":
-        "Lists policies from `GET /api/v1/security/policy/`, with columns Name, Scope, State.",
+        "The records of this type. The search box and the organization picker do not narrow this list — the server ignores them.",
       "Edit resource":
-        "Creates and edits a policy through the shared resource form. Fields: Name, Enabled.",
+        "Changes the stored record. Saving does not send anything to a router.",
       "Delete resource":
-        "Removes a policy via `DELETE /api/v1/security/policy/<id>/`.",
+        "Deletes the stored record. Nothing is sent to any router, and copies already applied from a template remain.",
     },
   },
   "/pki/authorities": {
     text:
-      "The CAs the controller issues from. Each belongs to an organization, and the list shows the key length, digest and expiry so a CA nearing its end date is visible without opening it.\n\nEach record belongs to an organization.",
+      "The certificate authorities the controller issues from, each in one organization; the list shows key length, digest and expiry so a CA nearing its end date is visible without opening it. A CA can be created new or imported.",
     from:
       "pages/pki/tabs.js descriptor for key 'authorities': resource 'controller/ca', noun 'authority', and its columns/fields arrays (field names read from each endpoint's OPTIONS response, per the file's own note)",
     notes: {
       "Browse and search resource":
         "Lists authorities from `GET /api/v1/controller/ca/`, with columns Name, Organization, Key length, Digest, Valid until.",
       "Edit resource":
-        "Creates and edits a authority through the shared resource form. Fields: Name, Organization.",
+        "Opens the full form, but only **Name**, **Organization** and **Notes** are saved when editing; other changes are ignored.",
       "Delete resource":
-        "Removes a authority via `DELETE /api/v1/controller/ca/<id>/`.",
+        "Deletes the CA **with every certificate it signed, every VPN server using it, and those servers’ VPN templates**.",
     },
   },
   "/pki/certificates": {
     text:
-      "Certificates issued from those CAs, each showing which authority signed it and whether it is still valid.\n\nEach record belongs to an organization.",
+      "Certificates issued from those CAs. **State** shows only Valid or Revoked — an expired certificate still shows Valid. A certificate’s organization must match its CA’s, and is empty only when the CA is shared.",
     from:
       "pages/pki/tabs.js descriptor for key 'certificates': resource 'controller/cert', noun 'certificate', and its columns/fields arrays (field names read from each endpoint's OPTIONS response, per the file's own note)",
     notes: {
       "Browse and search resource":
         "Lists certificates from `GET /api/v1/controller/cert/`, with columns Name, Organization, Authority, Key length, Digest, Valid until, State.",
       "Edit resource":
-        "Creates and edits a certificate through the shared resource form. Fields: Name, Organization, CA.",
+        "Opens the full form, but only **Name**, **Organization** and **Notes** are saved when editing.",
       "Delete resource":
-        "Removes a certificate via `DELETE /api/v1/controller/cert/<id>/`.",
+        "Deletes the certificate; a VPN server or device VPN client using it is deleted with it.",
     },
   },
   "/app-intelligence/traffic": {
@@ -383,23 +383,23 @@ export const CURATED: Record<string, CuratedDescription> = {
       "Browse and search resource":
         "Lists traffic records from `GET /api/v1/dpi/traffic/`, with columns Application, Category, Protocol, Download, Upload, Total, Flows, Device, From, To.",
       "Edit resource":
-        "Creates and edits a traffic record through the shared resource form. Read-only in practice \u2014 these records are written by the engine, not by hand.",
+        "Not available here. The table is read-only and its API endpoint accepts no writes \u2014 these records are written by the DPI engine.",
       "Delete resource":
-        "Removes a traffic record via `DELETE /api/v1/dpi/traffic/<id>/`.",
+        "Not available. The API endpoint is read-only (`ReadOnlyModelViewSet`), so a delete is refused; the table offers no delete.",
     },
   },
   "/app-intelligence/discovered": {
     text:
-      "Hosts the DPI engine has seen behind a router but that were never registered \u2014 hostname, MAC, address, how much they moved, and when they were first and last seen.\n\nRead-only: these rows are produced by the DPI engine.",
+      "Every MAC address a router\u2019s DPI engine has reported, with the address it reported for it, the traffic counted against it, and when it was first and last seen. A row is a MAC the engine reported \u2014 not necessarily a host behind that router.\n\nRead-only: these rows are produced by the DPI engine.",
     from:
       "pages/appintel/tabs.js descriptor for key 'discovered': resource 'dpi/devices', noun 'discovered device', and its columns/fields arrays (field names read from each endpoint's OPTIONS response, per the file's own note)",
     notes: {
       "Browse and search resource":
         "Lists discovered devices from `GET /api/v1/dpi/devices/`, with columns Device, Hostname, MAC address, IP address, Status, Total download, Total upload, Type, First seen, Last seen.",
       "Edit resource":
-        "Creates and edits a discovered device through the shared resource form. Read-only in practice \u2014 these records are written by the engine, not by hand.",
+        "Not available here. The table is read-only and its API endpoint accepts no writes \u2014 these records are written by the DPI engine.",
       "Delete resource":
-        "Removes a discovered device via `DELETE /api/v1/dpi/devices/<id>/`.",
+        "Not available. The API endpoint is read-only (`ReadOnlyModelViewSet`), so a delete is refused; the table offers no delete.",
     },
   },
   "/app-intelligence/snapshots": {
@@ -411,9 +411,9 @@ export const CURATED: Record<string, CuratedDescription> = {
       "Browse and search resource":
         "Lists snapshots from `GET /api/v1/dpi/snapshots/`, with columns Device, Flow count, Identified, Unknown, Devices, Memory, Uptime, CPU, Timestamp.",
       "Edit resource":
-        "Creates and edits a snapshot through the shared resource form. Read-only in practice \u2014 these records are written by the engine, not by hand.",
+        "Not available here. The table is read-only and its API endpoint accepts no writes \u2014 these records are written by the DPI engine.",
       "Delete resource":
-        "Removes a snapshot via `DELETE /api/v1/dpi/snapshots/<id>/`.",
+        "Not available. The API endpoint is read-only (`ReadOnlyModelViewSet`), so a delete is refused; the table offers no delete.",
     },
   },
   "/app-intelligence/applications": {
@@ -425,21 +425,21 @@ export const CURATED: Record<string, CuratedDescription> = {
       "Browse and search resource":
         "The applications the DPI engine recognises. This tab is marked `custom` in its descriptor, so unlike its siblings it is drawn by a component of its own rather than from a column list.",
       "Edit resource":
-        "Changes an application entry.",
+        "Not available here. The table is read-only and its API endpoint accepts no writes \u2014 these records are written by the DPI engine.",
       "Delete resource":
-        "Removes one.",
+        "Not available. The API endpoint is read-only (`ReadOnlyModelViewSet`), so a delete is refused; the table offers no delete.",
     },
 },
   "/sdlan": {
     text:
-      "Where a host behind a router actually is, and whether you can reach it right now \u2014 without knowing which router it sits behind. Each row is a saved remote-access target: the site and router it is reached through, the LAN endpoint and protocol, and the path the controller would take to it.\n\nThe per-device panel at `/devices/:id/sdlan` answers the narrower question, \"what can I reach behind THIS router\". Same rows and the same endpoint: the viewset filters by device only when `device_id` is passed, so dropping the parameter returns everything the user's organizations can see.\n\n**A row is a link, not a tunnel.** It opens through the controller's own reverse proxy at `/sdlan-proxy/<scheme>/<ip>:<port>/`, so there is no port to allocate, no session to expire and nothing to clean up when a tab closes \u2014 which means a row can be middle-clicked, bookmarked and re-opened. The proxy reaches the LAN address from the CONTROLLER side, so you need no VPN of your own; the precondition is instead that the controller has a route into that LAN, which is what the **Path** column reports.\n\nTwo protocol details are worth knowing. **SSH is not raw SSH** \u2014 on NexappOS it is ttyd, a root shell served over HTTPS as a WebSocket, which is why it opens in a tab like everything else. **TELNET is the one target no proxy can rescue**: raw TCP with no HTTP framing, so there is nothing for nginx to reverse-proxy and nothing for a browser to render. It stays addable and hands you the command instead of a tab.",
+      "Remote-access targets behind routers, across the fleet: each row names a LAN endpoint (address, port, protocol) reached through a router, with the path the controller would take. HTTP rows, and HTTPS rows not on port 443, open through a short-lived proxy session (5 minutes by default, counted down in **Session**); Terminal rows and HTTPS on 443 go through the router gateway; **Root** rows are superuser-only and audited. TELNET can no longer be added, and existing TELNET rows cannot be opened.",
     from:
       "pages/Sdlan.jsx header comment (the reverse-proxy design, the ttyd meaning of SSH, the TELNET limitation and the device_id filter note) plus its table headers Site, Group, Router, Target, Protocol, LAN endpoint, Path, Status, Session; endpoints from api/client.js",
     notes: {
       "Browse and search remote access":
         "The saved targets, from `GET /admin/remote-access/api/entries/`. This page omits the `device_id` parameter the per-device panel sends, which is what turns the same endpoint into a fleet-wide list.",
       "Create remote access":
-        "Adds a target: the router, the LAN address and port, and what you intend to reach \u2014 a web UI or a root shell. The stored model holds three protocols plus a `use_tls` flag, because the scheme cannot be guessed from the port, so that one choice is unfolded into the wire fields on save.",
+        "Adds a target: Router GUI (HTTPS), HTTP, **Terminal** (admin CLI) or **Root** shell.",
       "Edit remote access":
         "Changes a saved target \u2014 `PATCH /admin/remote-access/api/entries/<id>/`.",
       "Delete remote access":
@@ -447,7 +447,7 @@ export const CURATED: Record<string, CuratedDescription> = {
       "Open proxy session":
         "Opens a proxy session to the LAN endpoint (`POST /admin/remote-access/api/proxy/open/`), which is what makes the host reachable from here.",
       "Close proxy session":
-        "Ends that session (`POST /admin/remote-access/api/proxy/close/<id>/`). Sessions are not left open implicitly.",
+        "Revokes a proxy session with ✕. Leaving the page does not revoke it — it lapses at the end of its time limit.",
       "Browse and search devices":
         "The routers a target can sit behind \u2014 the picker on the create form.",
       "Browse and search groups":
@@ -492,7 +492,7 @@ export const CURATED: Record<string, CuratedDescription> = {
   },
   "/ha/devices": {
     text:
-      "High availability for the ROUTERS: which devices are paired, which of a pair currently holds the virtual IP, and what VRRP thinks the state is. Rows carry the peer, the role, the virtual IP and when the device was last polled and last synced, so a pair that has stopped talking shows up as a stale timestamp rather than silence.\n\nThis is one of three unrelated HA subjects the console groups together \u2014 the routers' pairs here, the controller's own two servers under HA Controller, and the DC/DR sites under DR Control Panel.",
+      "HA router pairs, one row per pair — the primary router — with that router’s VRRP state, the virtual IP and the last poll. **Set up HA** configures a pair from the primary, which sets up its peer over SSH; rows are polled every 60 seconds while enabled.",
     from:
       "pages/HaDevices.jsx \u2014 headers Device, Organization, Peer, Role, Status, Virtual IP, VRRP state, Last polled, Last sync; status filter All/Enabled/Configuring/Disabled/Unconfigured/Error; calls useListHaDevicesQuery, usePollHaDeviceMutation, useDeleteHaDeviceMutation, and HaSetupDrawer's create/setup mutations",
     notes: {
@@ -503,26 +503,26 @@ export const CURATED: Record<string, CuratedDescription> = {
       "Create HA device":
         "Registers a device as part of a pair. Pairing itself is done by *Set up HA device*, which configures both sides.",
       "Delete HA device":
-        "Removes a device from HA. Its peer is left without a partner, so the pair stops being a pair \u2014 check the peer afterwards.",
+        "Deletes only the controller’s tracking row. Keepalived on both routers is untouched and the pair keeps running.",
       "Poll HA device":
-        "Asks a device for its current HA state now rather than waiting for the next scheduled poll \u2014 the way to confirm a pair after changing it.",
+        "Reads the pair’s state now. The scheduled poll covers only enabled rows; other rows are updated only by this.",
       "Set up HA device":
-        "Runs the pairing itself, in the setup drawer: pick the peer and the interfaces, and the controller configures both sides.",
+        "Opens the setup drawer: primary router, peer, one heartbeat interface and a virtual IP; **Create & deploy** configures both routers through the primary.",
     },
   },
   "/ha/controller": {
     text:
-      "High availability for the CONTROLLER'S OWN pair \u2014 not the routers'. It reports which node holds the VIP, which PostgreSQL node is primary, and whether the management plane is up, alongside a log of the events that got it there.\n\nFailover actions are driven from this page, and their progress is polled while they run.",
+      "The controller’s own high availability: database replication state, nodes and history. The one action is a superuser-only manual database switchover, confirmed by typing `switchover`; failover is not offered here.",
     from:
       "pages/HaController.jsx \u2014 its own header comment says \"the controller's OWN pair, not the routers'\"; renders VIP holder, PostgreSQL role and Management plane; calls useDcdrStatusQuery, useDcdrActionMutation, useDcdrActionProgressQuery, useListDcdrEventsQuery",
     notes: {
       "Browse and search dcdr events":
-        "The event log behind the status \u2014 what failed over, when, and whether it completed. The page's status cards say where things stand now; this says how they got there.",
+        "Switchover and failover history. There is no search; a switchover that fails is removed from the history.",
     },
 },
   "/ha/dr": {
     text:
-      "This data centre and the disaster-recovery site it streams to \u2014 the page you open to answer one question: is the data safe.\n\nIt reports the replication state between the two sites along with task workers, database connections, database size, management-plane health, uptime and last-seen for each. The admin page it replaces laid the same API response out field by field and put the verdict last; here the verdict leads.",
+      "This data centre and the disaster-recovery site it streams to — the page you open to answer one question: is the data safe. It leads with the replication verdict; task workers, database connections, database size, management-plane health and uptime are shown for the site serving the page only — the other site shows a note instead. Read-only.",
     from:
       "pages/HaDrPanel.jsx \u2014 its header comment describes the layout it replaces (dcdr_fabric.html); renders Task workers, DB connections, Database size, Management plane, Uptime, Last seen; calls useDcdrStatusQuery",
   },
@@ -535,7 +535,7 @@ export const CURATED: Record<string, CuratedDescription> = {
       "Browse and search location records":
         "The location list in table form, from `controller/location/` \u2014 as opposed to the GeoJSON feed the map draws from, which is the same records shaped for plotting.",
       "Create location":
-        "Adds a place: a name, an organization, a type and coordinates. **Coordinates are what put a device on the fleet map** \u2014 a location without them exists but cannot be shown.",
+        "Adds a location: name, organization, type and coordinates; coordinates are optional when **Is mobile** is ticked.",
       "Edit location":
         "Changes a location. Moving the coordinates moves every device placed there.",
       "Delete location":
@@ -581,7 +581,7 @@ export const CURATED: Record<string, CuratedDescription> = {
       "Browse and search online users":
         "Administrators signed in right now, from `/accesslog/online-users/` \u2014 the \"active in the last 15 minutes\" list at the bottom.",
       "View dashboard charts":
-        "The donut charts, from `/monitoring/dashboard/?time=\u2026` \u2014 device health, models and firmware versions for the selected window.",
+        "The fleet traffic chart and the Total-traffic sparkline, from `/monitoring/dashboard/?time=…`. The health, model and firmware rings are computed from the device list and have no time window.",
       "View wan uplinks":
         "The uplinks-up count, from `/monitoring/wan-uplinks/`. Distinct from device health: a device can be online while one of its WAN links is down.",
       "View data usage":
@@ -664,7 +664,7 @@ export const CURATED: Record<string, CuratedDescription> = {
   },
   "/topologies": {
     text:
-      "The SD-WAN fabric \u2014 the overlay you design and deploy, as opposed to the physical estate under Network. A row is one topology: its type, the overlay subnet it uses, how many hubs and spokes it has, which features are on, and whether it is up.",
+      "The SD-WAN fabric — the overlay you design and deploy, as opposed to the physical estate under Network. A row is one topology: its type, status, overlay subnet, device, hub and spoke counts, and features. **Status** is the lifecycle state — Draft, Computed, Validated, Deploying, Deployed, Undeploying or Error — not whether tunnels are up.",
     from:
       "pages/TopologyList.jsx \u2014 headers Name, Type, Status, Overlay subnet, Hubs, Spokes, Devices, Features; calls the topology queries plus TopologyEditDrawer's api.updateTopology",
     notes: {
@@ -673,9 +673,9 @@ export const CURATED: Record<string, CuratedDescription> = {
       "View topology":
         "Opens one fabric \u2014 its hubs, spokes and the features enabled on it.",
       "Edit topology":
-        "Changes a fabric: its type, overlay subnet, and which devices are hubs or spokes. The overlay subnet is the one to be careful with \u2014 it is the address space the tunnels are built in.",
+        "Changes name, overlay subnet (locked while deployed), MTU, session mode, cipher and the mesh / BGP / OSPF / QoS options. The type cannot be changed; device roles are changed per device on the Devices tab. Saving changes the controller only — recompute and redeploy to reach routers.",
       "Delete topology":
-        "Removes the fabric. The tunnels it defines stop being deployed, so the overlay it provided goes away.",
+        "Starts an undeploy that disables the overlay on each router, then deletes the topology and its device rows — even if some routers could not be reached, which then keep their overlay configuration.",
     },
 },
   "/network-topology/topologies": {
@@ -724,18 +724,18 @@ export const CURATED: Record<string, CuratedDescription> = {
 },
   "/radius/group": {
     text:
-      "RADIUS user groups \u2014 the named buckets that check and reply attributes are attached to, so a rule can be written once for a group instead of per user. One group per organization can be the default, which is what an otherwise unmatched user falls into.",
+      "RADIUS groups of an organization. One group per organization is the **default**: it is given automatically to a user who joins the organization and is not already in one of its groups. Group names are unique across the whole controller.",
     from:
       "pages/RadiusGroups.jsx \u2014 headers Name, Organization, Default, Created",
     notes: {
       "Browse and search RADIUS groups":
         "The named buckets check and reply attributes attach to, from `radius-admin/group/`. Writing a rule against a group rather than a username is what stops the same rule being repeated per user.",
       "Create RADIUS groups":
-        "Adds a group. One group per organization can be marked default, which is where an otherwise unmatched user lands.",
+        "Adds a group. Names must be unique across all organizations, not just this one; the description is limited to 64 characters by the server.",
       "Edit RADIUS groups":
         "Renames a group or changes which one is the default.",
       "Delete RADIUS groups":
-        "Removes a group. The check and reply attributes written against it are what stop applying, so look at those pages first.",
+        "Deletes the group with its group checks, group replies and users’ memberships. The default group cannot be deleted.",
     },
 },
   "/radius/check": {
@@ -751,7 +751,7 @@ export const CURATED: Record<string, CuratedDescription> = {
       "Edit RADIUS checks":
         "Changes an attribute, operator or value.",
       "Delete RADIUS checks":
-        "Removes a condition. Anything it was blocking now authenticates, so this loosens access rather than tightening it.",
+        "Removes the check row from `radcheck`; it no longer applies from the next authentication.",
     },
 },
   "/radius/reply": {
@@ -767,7 +767,7 @@ export const CURATED: Record<string, CuratedDescription> = {
       "Edit RADIUS replies":
         "Changes a returned attribute.",
       "Delete RADIUS replies":
-        "Stops that parameter being returned. The user still authenticates; the NAS just applies its own default instead.",
+        "Removes the reply row from `radreply`.",
     },
 },
   "/radius/accounting": {
@@ -777,7 +777,7 @@ export const CURATED: Record<string, CuratedDescription> = {
       "pages/RadiusAccounting.jsx \u2014 headers User, NAS, IP, Client MAC, Started, Duration, In, Out, State",
     notes: {
       "Browse and search RADIUS sessions":
-        "The session record \u2014 who connected, through which NAS, for how long, and how much traffic passed. Read-only and not by choice: the view is a `ListAPIView`, so there is no detail route and no write, which is why a row does not open.",
+        "RADIUS accounting sessions, from `radius/sessions/`. Only the newest page is reachable here (the endpoint returns no total), and sessions stopped more than 365 days ago are deleted daily.",
     },
 },
   "/radius/post-auth": {
@@ -801,61 +801,61 @@ export const CURATED: Record<string, CuratedDescription> = {
       "Create RADIUS batch":
         "Generates or imports a set of users in one operation. The strategy decides which; the credentials it produces are retrievable from the row afterwards, until they expire.",
       "Delete RADIUS batch":
-        "Removes the batch record. Check what it created before deleting \u2014 the record is the only place the generated credentials are listed.",
+        "Deletes the batch **and every user account in it** — including an existing account a CSV row matched by email. This cannot be undone.",
     },
 },
   "/tacacs/servers": {
     text:
-      "The TACACS+ servers this controller runs: what they listen on, whether authentication and accounting are enabled, the deploy mode, and whether the running configuration matches what has been asked for \u2014 a pending count means changes are staged but not yet reloaded.",
+      "The TACACS+ server configuration this controller runs for routers to authenticate against, one per organization: port, authentication and accounting switches, deploy mode, and status. Saving an enabled configuration rebuilds and reloads the daemon at once; **Pending** counts changes not yet pushed to routers in manual deploy mode.",
     from:
       "pages/TacacsServers.jsx \u2014 headers Organization, Listen, Auth, Accounting, Deploy mode, Status, Pending, Last reload; calls TacacsServerDrawer's useUpdateTacacsServerMutation",
     notes: {
       "Browse and search TACACS+ servers":
-        "The TACACS+ servers this controller runs, from `tacacs/server/` \u2014 what they listen on, whether authentication and accounting are on, and whether the running config matches what has been asked for.",
+        "The server configurations, from `tacacs/server/`. There is no search box and the page does not poll.",
       "Edit TACACS+ server":
-        "Changes a server's settings. The change is staged rather than live \u2014 the **Pending** count is what tells you a reload is owed.",
+        "Changes a configuration. Saving an enabled one rebuilds and reloads the daemon immediately; in manual deploy mode it also raises **Pending**.",
       "Apply or push TACACS+ server":
-        "Pushes the staged configuration and reloads the server, which is what clears Pending and updates Last reload.",
+        "**Deploy to routers** pushes the configuration to routers and clears **Pending**; it does not reload the daemon.",
       "Refresh TACACS+ server":
-        "Re-reads the server's current state rather than waiting for the page to poll \u2014 the way to confirm a reload actually took.",
+        "**Reload** reloads the daemon and updates **Last reload**; it does not clear **Pending**.",
     },
 },
   "/tacacs/client": {
     text:
-      "The other side: this controller acting as a TACACS+ CLIENT, so administrators sign in to it against a TACACS+ server. It records which servers are used, the timeout, whether local logins remain possible as a fallback, and which surfaces the login applies to.\n\nShared configuration, and superuser-only \u2014 a mistake here can lock everyone out, which is why local logins exist as a switch.",
+      "This controller acting as a TACACS+ CLIENT, so administrators can sign in to the console with TACACS+ accounts. A configuration holds up to three servers (primary, secondary, tertiary), the authentication type and timeout. Local accounts always keep working; the shared (no-organization) configuration is superuser-only.",
     from:
       "pages/TacacsClient.jsx \u2014 headers Organization, Servers, Auth, Timeout, Local logins, Surfaces, Status; calls the TACACS client queries plus TacacsClientDrawer's client and client-server mutations",
     notes: {
       "Browse and search TACACS+ clients":
         "This controller acting as a TACACS+ CLIENT, from `tacacs/client/` \u2014 so administrators sign in to the console against a TACACS+ server rather than a local account.",
       "Create TACACS+ client":
-        "Sets up that authentication. **Local logins** is the switch to think about first: with it off, a TACACS+ outage locks everyone out of the console, including you.",
+        "Adds a configuration. Only **Web UI login** is used by the controller’s sign-in; several other switches on the panel are stored but not read by it.",
       "Edit TACACS+ client":
-        "Changes the timeout, the fallback behaviour, or which surfaces the login applies to.",
+        "Changes the servers, authentication type, timeout or switches.",
       "Delete TACACS+ client":
-        "Stops the console authenticating against TACACS+ and returns it to local accounts.",
+        "Stops TACACS+ sign-in for that configuration. Local accounts were never replaced; accounts created by a TACACS+ sign-in have no local password and can no longer sign in.",
       "Create TACACS+ client server":
         "Adds one server to the client's list (`tacacs/client-server/`). More than one is how you survive a single server going away.",
       "Edit TACACS+ client server":
-        "Changes a server's address, secret or order in that list.",
+        "Changes a server’s address, port or secret. Its position is fixed by its slot — primary, secondary or tertiary.",
       "Delete TACACS+ client server":
         "Removes a server from the list. Removing the last one leaves the client with nothing to authenticate against.",
     },
 },
   "/tacacs/rules": {
     text:
-      "Command authorization: which commands a group may or may not run. Each rule is a pattern, an action and an order \u2014 order matters, because the first matching rule decides.",
+      "Command authorization rules: for one CPE user group, whether a command (with an argument pattern) is permitted or denied. Rules are written into the daemon configuration lowest **Order** first within each enabled group; a command no rule covers gets the group’s default service.",
     from:
       "pages/TacacsRules.jsx \u2014 headers Order, Group, Command, Pattern, Action; calls TacacsRuleDrawer's create/update mutations",
     notes: {
       "Browse and search TACACS+ rules":
         "Command authorization rules, from `tacacs/command-rule/` \u2014 which commands a group may or may not run.",
       "Create TACACS+ rule":
-        "Adds a rule. **Order matters**: the first rule whose pattern matches decides, so a broad allow placed above a narrow deny makes the deny unreachable.",
+        "Adds a rule. The argument pattern cannot be empty — use `.*` for any arguments.",
       "Edit TACACS+ rule":
         "Changes a pattern, action or position.",
       "Delete TACACS+ rule":
-        "Removes a rule. Whatever it was denying now falls through to the next matching rule.",
+        "Removes the rule from the daemon configuration at the next rebuild.",
       "Browse and search CPE user groups":
         "The groups a rule can be written against \u2014 the router-side user groups, not the console's permission groups.",
     },
@@ -871,14 +871,14 @@ export const CURATED: Record<string, CuratedDescription> = {
       "Create TACACS+ group settings":
         "Gives a device group its own shared secret. Keeping it per group is what lets a secret be rotated for part of the fleet without touching the rest.",
       "Edit TACACS+ group settings":
-        "Changes a secret. It is not live on the devices until it is deployed \u2014 **Last deployed** is the column that says whether it is.",
+        "Changes a group’s secret. In Auto-deploy mode it is pushed to routers immediately; in manual mode it waits for a deploy — **Last deployed** shows when.",
       "Delete TACACS+ group settings":
-        "Removes the group's secret, leaving its devices with nothing to authenticate with.",
+        "Removes the group’s secret. Its routers fall back to the server’s default secret, but only after the next rebuild and deploy — deleting triggers neither.",
     },
 },
   "/tacacs/sessions": {
     text:
-      "Who is logged in through TACACS+ right now: the user, the device, where they connected from, at what privilege level, and how long they have been there.",
+      "TACACS+ sessions — open and ended — with user, device, address, type, privilege, start time and duration. Read-only. **Source IP** is the router’s address, not the user’s computer.",
     from:
       "pages/TacacsSessions.jsx \u2014 headers User, Device, Source IP, Type, Privilege, Started, Duration, State",
     notes: {
@@ -888,7 +888,7 @@ export const CURATED: Record<string, CuratedDescription> = {
 },
   "/tacacs/accounting": {
     text:
-      "The TACACS+ command log \u2014 every command run, by whom, on which device, at what privilege and from where. The audit trail that command authorization is written against.",
+      "The TACACS+ accounting log: logins, configuration changes and — when **Audit CLI commands** is on — the commands run, by whom, on which device. Read-only. **Source IP** is the router’s address.",
     from:
       "pages/TacacsAccounting.jsx \u2014 headers When, User, Device, Source IP, Event, Command / detail, Priv, Action",
     notes: {
@@ -898,20 +898,20 @@ export const CURATED: Record<string, CuratedDescription> = {
 },
   "/credentials": {
     text:
-      "How the controller logs in to devices in order to push configuration \u2014 the SSH credentials themselves. A credential has a connection type and an organization, and can be set to attach automatically to new devices in that organization rather than being applied by hand.\n\nSSH keypairs are generated here, so a private key never has to be pasted in from elsewhere.",
+      "The SSH credentials the controller uses to log in to devices. A credential has a connection type and an organization. With **Auto add** on, saving it attaches it to every existing device that has a configuration in that organization (in every organization, if none is set) as well as to new ones.\n\nAn Ed25519 key pair can be generated here: the private key fills the form and is stored when the credential is saved; the public key is shown once and has to be installed on devices yourself, e.g. through a template into `/etc/dropbear/authorized_keys`.",
     from:
       "pages/CredentialList.jsx \u2014 headers Name, Organization, Connection type, Auto add, Created, Modified; calls the credential queries plus CredentialFormModal's api.generateSshKeypair, api.createCredential, api.updateCredential",
     notes: {
       "Browse and search credentials":
         "The SSH credentials the controller uses to reach devices. A credential is bound to devices through a connection, which is what the device's own Credentials tab manages.",
       "Create credential":
-        "Adds one. **Auto add** is the field that matters: with it set, the credential attaches to every new device in that organization, which is what stops a freshly registered device sitting unreachable.",
+        "Adds one. With **Auto add** on it attaches to existing and new devices in its organization — or in all organizations when none is set.",
       "Edit credential":
         "Changes a credential. Devices already bound to it pick the change up on their next connection attempt.",
       "Delete credential":
-        "Removes it. Any device whose only connection used it can no longer be reached, so check the device Credentials tabs first.",
+        "Removes it and every device connection using it; devices with no other credential can no longer be reached over SSH.",
       "Generate ssh keypair":
-        "Creates a keypair in place, so the private half is never carried in from somewhere else.",
+        "Generates an unencrypted Ed25519 key pair on the controller. The private key goes into the form; the public key must be installed on devices separately — nothing installs it.",
     },
   },
   "/monitoring/wifi-sessions": {
@@ -1032,12 +1032,12 @@ export const CURATED: Record<string, CuratedDescription> = {
 },
   "/logs/access": {
     text:
-      "Sign-ins, sign-outs and failed attempts. Scoped per user: a non-superuser sees only their own rows.",
+      "Sign-ins, sign-outs and failed attempts. A non-superuser sees their own rows plus failed attempts made with their username or email.",
     from:
       "pages/AccessLog.jsx \u2014 its header comment: \"Sign-ins, sign-outs and failed attempts\", with the same per-user scoping rule as the activity log",
     notes: {
       "Browse and search access log":
-        "Sign-ins, sign-outs and failed attempts. Scoped per user: a non-superuser sees only their own rows.",
+        "Sign-ins, sign-outs and failed sign-ins. A non-superuser sees their own rows plus failed attempts made with their username or email.",
     },
 },
   "/logs/activity": {
@@ -1064,12 +1064,12 @@ export const CURATED: Record<string, CuratedDescription> = {
 },
   "/logs/firmware": {
     text:
-      "Upgrade lifecycle events, synced from each device's own `/etc/ns-update-audit.jsonl`. The record of what a device did during an upgrade, taken from the device rather than inferred from the controller's side of it.",
+      "Upgrade lifecycle events: synced from each device’s own `/etc/ns-update-audit.jsonl`, plus the controller’s own completed / failed / aborted entries. By default the page shows only finished successes and failures.",
     from:
       "pages/FirmwareLog.jsx \u2014 its header comment: \"Upgrade lifecycle events synced from each device's /etc/ns-update-audit.jsonl\"",
     notes: {
       "Browse and search firmware log":
-        "Upgrade lifecycle events, synced from each device's own `/etc/ns-update-audit.jsonl` \u2014 taken from the device rather than inferred from the controller's side of the upgrade.",
+        "Firmware upgrade outcomes, from the devices and from the controller’s own completed/failed/aborted entries. By default only finished successes and failures are shown.",
     },
 },
   "/devices/:id": {
@@ -1194,7 +1194,7 @@ export const CURATED: Record<string, CuratedDescription> = {
       'reads pages/FleetMap.jsx — the leading note, `siteTone` (worst status wins), the log-scaled `bubble` sizing, the lazy per-site device fetch and the tile-failure detection',
     notes: {
       "Browse and search device geo":
-        "Every device's position in one request, from `/monitoring/geojson/` \u2014 the feed the map plots, shaped for drawing rather than for a table.",
+        "Sites — locations that have devices — with device counts per status, for the map.",
       "Browse and search location devices":
         "The devices at one location (`/monitoring/location/<id>/device/`), fetched when you open a pin rather than up front, so a fleet-wide map does not carry every device list with it.",
     },
@@ -1202,14 +1202,14 @@ export const CURATED: Record<string, CuratedDescription> = {
 
   '/devices/:id/sdlan': {
     text:
-      'Reaching one router’s own services through the controller. Opened from the **SDLAN Access** button on a device’s page.\n\n' +
+      "Remote access behind one router: saved entries for the Router GUI, Root access or Telnet, each opened in a browser tab or in a dialog on the page. Only Router GUI is always opened in a tab." +
       'The page is built around intent rather than wire protocol: you choose what you want to reach and it fills in where that lives on a NexappOS router — the router GUI on `443`, a user terminal at `/api/ttyd/`, a root shell on `7681`. Those targets are taken from the controller’s own `wg-*.conf`, which is how the admin’s Web Access, Terminal and Root buttons have always reached them. **Advanced** still exposes the raw target, for anything else on the LAN behind the router.\n\n' +
       'Whether a session opens inside the page or has to open in a tab is a property of the service, not a preference. The router’s GUI sends `X-Frame-Options: DENY`, and a tunnel is a raw TCP forward with nowhere to strip that header, so it is browser-only; `ttyd` is itself a web server, so a shell renders in the frame.',
     from:
       'reads pages/SdlanAccess.jsx — the `SERVICES` table (each entry’s intent, hint, default ip/port/path and `frameable` flag), the leading note recording that these come from the controller’s `wg-*.conf`, and the Advanced form',
     notes: {
       "Create remote access":
-        "Adds a target. You pick the **intent** \u2014 web access, user terminal or root terminal \u2014 and the page resolves where that actually lives on a NexappOS router: web access is `https://<ip>:443/`, a user terminal is `https://<ip>:443/api/ttyd/`, and a root terminal is `https://<ip>:7681/`. Nobody should be typing a ttyd base path to get a shell. Advanced still exposes the raw target for anything else on the LAN.",
+        "Adds an entry — Router GUI, Root access or Telnet — with its address, port and open type.",
       "Edit remote access":
         "Changes a saved target's address, port or intent.",
       "Delete remote access":
@@ -1217,7 +1217,7 @@ export const CURATED: Record<string, CuratedDescription> = {
       "Open remote access":
         "Opens the session to that endpoint.",
       "Close remote access":
-        "Ends it.",
+        "Closing a dialog frees its tunnel. Browser tabs are not closed from here; idle tunnels are removed after 10 minutes by default.",
     },
 },
 
@@ -1264,7 +1264,7 @@ export const CURATED: Record<string, CuratedDescription> = {
       'reads pages/MetricRecover.jsx — the leading note on django-reversion, the confirm dialog’s wording about charts and alert settings, and its calls to `useListDeletedMetricsQuery` and `useRecoverMetricMutation`',
     notes: {
       "Browse and search deleted metrics":
-        "Metrics that were deleted but are still held, the way deleted devices are.",
+        "The deleted metrics that can be recovered, from every organization; there is no search.",
       "Recover metric":
         "Restores one \u2014 `monitoring/metric-deleted/<version>/recover/`. It reverts the stored version, so the metric comes back with its settings rather than as a blank.",
     },
@@ -1272,7 +1272,7 @@ export const CURATED: Record<string, CuratedDescription> = {
 
   '/reports/:slug': {
     text:
-      'One page renders every report in the catalog. Reached by opening a report from Reports.\n\n' +
+      "One report from the catalogue, or a saved custom report. Range presets go up to 1 year (100 days for DPI-based reports); export is Excel (.xlsx) or PDF and does not apply the search box. A custom report lists one row per device — when the same device appears in several of its reports, the first report’s row is kept." +
       'It can, because every report service already answers with the same shape — title, period, generated_at, all_columns, devices — and the backend’s `_pick_report_fns` maps every slug onto it. So this is not a per-report template; it is the table those services were always describing. Range presets, search, sorting, column hiding, paging and CSV export are therefore identical on every report.\n\n' +
       '`/reports/custom/<id>` is this same page in custom mode, pointed at a saved custom report whose rows are several reports merged server-side.',
     from:

@@ -27,6 +27,25 @@ export const cell = (s: string): string =>
     .trim();
 
 /**
+ * Text safe INSIDE a code span — `` `…` `` — which is not the same thing.
+ *
+ * A code span is already literal to MDX, so `cell`'s backslashes stop being
+ * escapes and start being characters: a JSON example came out of a field table
+ * reading `\{"site": "mumbai"\}`, backslashes and all. What still has to be
+ * escaped is the pipe, because the table is split into columns before any
+ * span is read, and the newline, because it would end the row.
+ *
+ * A backtick cannot be escaped inside a span at all, so one is replaced with
+ * the typographic quote rather than silently closing the span early.
+ */
+export const code = (s: string): string =>
+  s
+    .replace(/\s*\n\s*/g, ' ')
+    .replace(/`/g, '’')
+    .replace(/\|/g, '\\|')
+    .trim();
+
+/**
  * Every `{`, `}` or `<` in generated content that is not escaped and not part
  * of a tag this generator wrote itself.
  *

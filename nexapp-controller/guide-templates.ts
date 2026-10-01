@@ -10,6 +10,7 @@
 import { readTemplateFacts } from './extract-templates.ts';
 import { describeField } from './read-form-fields.ts';
 import { cell } from './mdx.ts';
+import { shotSection } from './page-shots.ts';
 
 
 export async function templatesGuide(): Promise<string> {
@@ -164,12 +165,11 @@ export async function templatesGuide(): Promise<string> {
   );
 
   // ---- 11
-  L.push(
-    '### Screenshots',
-    '',
-    '<Callout type="warn">None yet. Screenshots cannot be generated from the source the rest of this page is read from — they have to be captured from a running controller, which needs credentials and a decision about putting production data in the repository. Until that is set up, this section is deliberately empty rather than quietly missing.</Callout>',
-    '',
-  );
+  L.push(...(await shotSection('network/templates', [
+    { file: 'list.png', what: 'The Templates tab — type, backend, VPN, tags, the Default and Required flags and how many devices each is applied on.', alt: 'The templates list' },
+    { file: 'wizard.png', what: 'Step 1 of the Create template wizard — Purpose: Connect to a VPN, Standard settings, Network and interfaces, or Start from blank.', alt: 'The template wizard' },
+    { file: 'backups.png', what: 'The Backup templates tab — per-device configuration snapshots with their organization, source device, source and coverage.', alt: 'Backup templates' },
+  ])));
 
   L.push(
     '---',

@@ -8,6 +8,7 @@
  * assumes it has already happened.
  */
 import { readRegistrationFacts } from './extract-registration.ts';
+import { withStepFigures } from './page-shots.ts';
 import { cell } from './mdx.ts';
 
 export async function registrationGuide(): Promise<string | undefined> {
@@ -207,5 +208,9 @@ export async function registrationGuide(): Promise<string | undefined> {
     '<small>The controller half is read from source: the organization configuration settings in `config/base/multitenancy.py`; `generate_key` in `config/base/device.py`; `CONSISTENT_REGISTRATION` and `HARDWARE_ID_ENABLED` in `config/settings.py`; and the register view’s updatable fields and admission gate in `config/controller/views.py`. The router half — the SD Controller page, its fields and its Live Status tiles — is written from the device’s own interface, because that firmware is not in this repository and so cannot be generated or checked by the build.</small>',
     '',
   );
-  return L.filter((x) => x !== '').length ? L.join('\n') : undefined;
+  if (!L.filter((x) => x !== '').length) return undefined;
+  return withStepFigures(L.join('\n'), {
+    'The admission gate, if the organization uses one': { src: 'admin/allowed-serials/list.png', alt: 'Allowed serial numbers', caption: 'Administration › Users & Organizations › Allowed Serial Numbers — a serial listed with auto-admit joins at once; one listed without it waits for an admin.' },
+    'It appears in Devices': { src: 'network/devices/list.png', alt: 'The device inventory', caption: 'Network › Devices after registration — Status, Config and Admission tell you where the router is in the process.' },
+  });
 }

@@ -29,6 +29,7 @@ import { readRouteTable } from './extract-routes.ts';
 import { sourceFilesFor } from './extract-page-facts.ts';
 import { CURATED } from './console-descriptions.ts';
 import { CPE_NOTES } from './cpe-field-notes.ts';
+import { GUIDE_REGISTRY } from './guide-admin.ts';
 import { FE } from './config.ts';
 
 // fileURLToPath, not `new URL(...).pathname`: this repo's path contains a space,
@@ -88,6 +89,21 @@ async function currentState(): Promise<Lock> {
     const key = `cpe:${noteKey}`;
     primaryOf.set(key, rel(abs));
     state[key] = { [rel(abs)]: h };
+  }
+  // The Administration guide notes, under `admin:<route>`, each pinned to every
+  // file it was written against — frontend files are named relative to
+  // `frontend/src/`, backend ones relative to the repository.
+  const guided = GUIDE_REGISTRY.flatMap(({ root, notes }) =>
+    Object.entries(notes).map(([r, n]) => [`${root}:${r}`, n] as const));
+  for (const [key, n] of guided) {
+    const files: Record<string, string> = {};
+    for (const f of n.from) {
+      const abs = (await exists(path.join(FE, f))) ? path.join(FE, f) : path.join(CONTROLLER, f);
+      const h = await hash(abs);
+      if (h) files[rel(abs)] = h;
+    }
+    if (n.from[0]) primaryOf.set(key, Object.keys(files)[0] ?? n.from[0]);
+    state[key] = files;
   }
   return state;
 }

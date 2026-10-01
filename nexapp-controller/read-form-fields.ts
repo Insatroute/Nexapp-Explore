@@ -95,6 +95,21 @@ export function plainText(s: string): string {
   return out.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
+/**
+ * Inline markup inside a hint, as markdown. A hint such as
+ * `no <code>http://</code> and no trailing slash` or `targets <b>all</b>`
+ * otherwise reached the page half-escaped. Only MATCHED pairs are converted;
+ * a lone `<word>` is a placeholder and is left for the renderer's own rule.
+ */
+export function inlineMarkup(t: string): string {
+  return t
+    .replace(/<br\s*\/?>/gi, ' ')
+    .replace(/<(b|strong)>([\s\S]*?)<\/\1>/gi, '**$2**')
+    .replace(/<(i|em)>([\s\S]*?)<\/\1>/gi, '*$2*')
+    .replace(/<code>([\s\S]*?)<\/code>/gi, '`$1`')
+    .replace(/<([a-z][\w-]*)\b[^>]*>([\s\S]*?)<\/\1>/gi, '$2');
+}
+
 /** Hints inside one field's block, in the order the form declares them. */
 function hintsIn(block: string): FormHint[] {
   const out: FormHint[] = [];
@@ -118,6 +133,7 @@ function hintsIn(block: string): FormHint[] {
   // A conditional names its special cases first and its default last, so the
   // wording that applies normally would otherwise arrive at the end.
   out.reverse();
+  for (const h of out) h.text = clean(inlineMarkup(h.text));
   const seen = new Set<string>();
   return out.filter((h) => !seen.has(h.text) && seen.add(h.text));
 }
@@ -130,21 +146,42 @@ function hintsIn(block: string): FormHint[] {
  */
 export function readFormFields(src: string, pickers: string[] = []): FormField[] {
   const alt = pickers.length ? `|<(?:${pickers.join('|')})\\b([\\s\\S]*?)\\/>` : '';
-  const re = new RegExp(`<label className="lab( req)?"[^>]*>([^<]+)<\\/label>${alt}`, 'g');
-  const boundary = new RegExp(`<label className="lab${pickers.length ? `|<(?:${pickers.join('|')})\\b` : ''}`);
+  // The class is usually a literal, but one form writes it as a template —
+  // UserForm's Flags row is `` className={`lab${isNew ? ' req' : ''}`} ``.
+  // Matching only the literal form skipped that label, and its four checkboxes
+  // (Active, Staff, Superuser, 2FA) were swept into the PREVIOUS field's block
+  // and documented as part of Bio.
+  //
+  // `req` is read from either spelling, so a sometimes-required label is still
+  // marked required.
+  const LAB = String.raw`<label className=(?:"lab( req)?"|\{\`lab\$\{[^}]*?(req)[^}]*?\}\`\}|\{\`lab[^\`]*\`\})`;
+  const re = new RegExp(`${LAB}[^>]*>([^<]+)<\\/label>${alt}`, 'g');
+  const boundary = new RegExp(
+    `<label className=(?:"lab|\\{\`lab)${pickers.length ? `|<(?:${pickers.join('|')})\\b` : ''}`,
+  );
 
   const fields: FormField[] = [];
   const seen = new Set<string>();
   for (const m of src.matchAll(re)) {
-    const picker = m[3];
-    const label = clean(picker ? (/label="([^"]+)"/.exec(picker)?.[1] ?? '') : (m[2] ?? ''));
-    if (!label || seen.has(label)) continue;
-    seen.add(label);
+    // LAB contributes two groups — `req` from the literal class and from the
+    // template — so the label text and the picker shift along by one each.
+    const reqLiteral = m[1];
+    const reqTemplate = m[2];
+    const text = m[3];
+    const picker = m[4];
+    const label = clean(picker ? (/label="([^"]+)"/.exec(picker)?.[1] ?? '') : (text ?? ''));
+    if (!label) continue;
 
     const field: FormField = {
       label,
-      required: picker ? /\brequired=\{[^}]+\}/.test(picker) : Boolean(m[1]),
-      requiredSometimes: picker ? /\brequired=\{[^}]+\}/.test(picker) : false,
+      required: picker
+        ? /\brequired=\{[^}]+\}/.test(picker)
+        : Boolean(reqLiteral || reqTemplate),
+      // A template class only says `req` under a condition — `lab${isNew ?
+      // ' req' : ''}` is required when adding and not when editing.
+      requiredSometimes: picker
+        ? /\brequired=\{[^}]+\}/.test(picker)
+        : Boolean(reqTemplate),
       hints: [],
     };
 
@@ -176,6 +213,21 @@ export function readFormFields(src: string, pickers: string[] = []): FormField[]
       if (checks.length) field.checks = checks;
       if (/\breadOnly\b/.test(block)) field.readOnly = true;
     }
+
+    // Deduped on what the row CONTAINS, not on its label alone.
+    //
+    // A form may use one label twice for two different rows: UserForm has an
+    // "Email" row for the address and a second "Email" row holding "Mark email
+    // as verified", and the same for "Password". Skipping by label dropped the
+    // second of each, and with it the only mention of those controls.
+    const signature = [
+      label,
+      (field.checks ?? []).map((c) => c.label).join('|'),
+      field.hints.map((h) => h.text).join('|'),
+      field.placeholder ?? '',
+    ].join('\u241f');
+    if (seen.has(signature)) continue;
+    seen.add(signature);
     fields.push(field);
   }
   return fields;

@@ -8,6 +8,7 @@
  */
 import { readDeviceFacts } from './extract-devices.ts';
 import { cell } from './mdx.ts';
+import { shotSection, type PageShot } from './page-shots.ts';
 
 
 export async function devicesGuide(): Promise<string> {
@@ -194,19 +195,71 @@ export async function devicesGuide(): Promise<string> {
     '',
   );
 
+  // ---- 10b: the dialogs, field by field — hand-written, checked against the
+  // drawers named in the footer and the device model's validators.
+  L.push(...DIALOGS);
+
   // ---- 11
-  L.push(
-    '### Screenshots',
-    '',
-    '<Callout type="warn">None yet. Screenshots cannot be generated from the source the rest of this page is read from — they have to be captured from a running controller, which needs credentials and a decision about putting production data in the repository. Until that is set up, this section is deliberately empty rather than quietly missing.</Callout>',
-    '',
-  );
+  L.push(...(await shotSection(SHOT_DIR, SHOTS)));
 
   L.push(
     '---',
     '',
-    '<small>Read from: `COLUMNS`, `HEALTH`, `REFRESH_SECS`, the `AdmissionCell` rules and the CSV export in `pages/DeviceList.jsx`; the accepted CSV header in `components/DeviceImportDrawer.jsx`.</small>',
+    '<small>Read from: `COLUMNS`, `HEALTH`, `REFRESH_SECS`, the `AdmissionCell` rules and the CSV export in `pages/DeviceList.jsx`; the accepted CSV header in `components/DeviceImportDrawer.jsx`; the dialogs in `components/ApplyTemplateDrawer.jsx`, `ChangeGroupDrawer.jsx` and `DeviceRecoverModal.jsx`; name and MAC rules from `config/validators.py` and `config/base/device.py`.</small>',
     '',
   );
   return L.join('\n');
 }
+
+// ---------------------------------------------------------------- dialogs
+
+const DIALOGS: string[] = [
+  '### Import devices (CSV)',
+  '',
+  'Opened from the **⋮** menu (More device actions) → **Import devices**. Devices normally register themselves; import is for creating records ahead of time.',
+  '',
+  '| Field | Required | Example | What it is for |',
+  '| --- | --- | --- | --- |',
+  '| Organization | Yes | — | Every device in this import is created in the organization you pick. **Import** stays greyed out until one is chosen. |',
+  '| CSV file | — | `devices.csv` | Loads a file into **Rows**; you can also paste rows directly. |',
+  '| Rows | Yes | `name,mac_address` then `branch-01,00:1A:2B:3C:4D:5E` | The first line is the header. `name` and `mac_address` (or `mac`) are required columns; `model` and `notes` are optional. Values are split on commas — quoted fields are not supported. |',
+  '',
+  '**Checked on save, per row** (the result lists each failure; the rest are still created):',
+  '',
+  '- **name** — a hostname (letters, digits, hyphens, dots) or a MAC address: *Must be either a valid hostname or mac address.* With the default setting it must also be unique in the organization (ignoring case): *Device with this Name and Organization already exists.*',
+  '- **mac_address** — six pairs of hex digits separated by `:` or `-`: *Must be a valid mac address.* Unique within the organization.',
+  '- **model** — up to 64 characters.',
+  '',
+  'A header without `name` and `mac_address` is refused before anything is sent: *header must include "name" and "mac_address" columns*. The toasts read *Imported N devices.* and *N devices could not be imported.*',
+  '',
+  '### Apply templates',
+  '',
+  'Tick devices, then open the **gear** menu (Configuration actions) → **Apply template**. Two tabs:',
+  '',
+  '- **Apply template** — pick templates from the device organization’s list (shared templates included; required ones are badged). **Apply as**: **Add to existing templates** keeps what each device has and adds these; **Replace existing templates** removes every template currently on those devices and leaves only these. You confirm *Apply N templates to N devices?*. The toast says *… Each device pulls the new config on its next checkin.*',
+  '- **Apply backup template** — push one stored configuration backup to the selected devices. You confirm *Push this backup to N devices?*; progress is tracked under **Config Compare → Pushed Config**.',
+  '',
+  '### Change device group',
+  '',
+  'Tick devices, then **gear** menu → **Change group**. Pick a **Device group**, or **— No group —** to remove them from their group. A group belongs to one organization, so the picker is disabled when the selection spans more than one. The toast reads *… were moved to ‹group›.* or *… were removed from their group.*; a failure lists the devices that could not be moved and leaves the drawer open.',
+  '',
+  '### Backup template',
+  '',
+  'Tick devices, then **gear** menu → **Backup template**. A backup is **queued** per device: *Config backup queued for N devices. A snapshot is saved under Templates → Backup Templates only if the config changed since the last one.*',
+  '',
+  '### Admit selected devices',
+  '',
+  'For organizations that use serial admission: tick devices that are pending or were rejected, then **gear** menu → **Admit selected devices**. A rejected (deactivated) device is re-activated and a pending one is let in; the toast reads *… are now allowed to connect. It can take a minute to come online.* There is no confirmation step.',
+  '',
+  '### Delete and recover',
+  '',
+  'A row’s **⋮ → Delete**, or tick devices and press the **bin** icon. The confirmation says *Its configuration and monitoring history are removed. This cannot be undone.* — but a deleted device **can** be brought back: **⋮** (More device actions) → **Recover deleted** lists recoverable devices, each with **Recover** (*Recovered “‹name›”.*).',
+  '',
+];
+
+// ------------------------------------------------------------- screenshots
+
+const SHOT_DIR = 'network/devices';
+const SHOTS: PageShot[] = [
+  { file: 'list.png', what: 'The device inventory — the status tiles (All / Online / Problem / Offline / Unknown) with counts, search, the gear menu, SDLAN Access, the bin and the more-actions menu, Columns and Auto refresh, and the table.', alt: 'The device inventory' },
+];
