@@ -21,7 +21,8 @@ import { fileURLToPath } from 'node:url';
  * debugging one — resolved the controller to a sibling of the wrong directory
  * and failed with a path that does not exist.
  */
-const APP_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+/** The docs app's own root — where `content/` is written and `public/` lives. */
+export const APP_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 export const CONTROLLER = path.resolve(
   // Default: a sibling of the docs app, i.e. both repos in one workspace dir.

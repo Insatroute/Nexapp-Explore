@@ -23,7 +23,8 @@
     "controller:nav": "node --experimental-strip-types ./nexapp-controller/extract-nav.ts",
     "controller:routes": "node --experimental-strip-types ./nexapp-controller/extract-routes.ts",
     "serve": "bash ./scripts/serve.sh",
-    "check:descriptions": "node --experimental-strip-types ./nexapp-controller/check-descriptions.ts"
+    "check:descriptions": "node --experimental-strip-types ./nexapp-controller/check-descriptions.ts",
+    "capture:cpe": "node --experimental-strip-types ./scripts/capture-cpe.ts"
   },
   "dependencies": {
     "fumadocs-core": "^16.15.7",

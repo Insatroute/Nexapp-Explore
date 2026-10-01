@@ -28,6 +28,8 @@ import { CONTROLLER, requireController } from './config.ts';
 import { readRouteTable } from './extract-routes.ts';
 import { sourceFilesFor } from './extract-page-facts.ts';
 import { CURATED } from './console-descriptions.ts';
+import { CPE_NOTES } from './cpe-field-notes.ts';
+import { FE } from './config.ts';
 
 // fileURLToPath, not `new URL(...).pathname`: this repo's path contains a space,
 // which the URL form percent-encodes into a directory that does not exist.
@@ -73,6 +75,19 @@ async function currentState(): Promise<Lock> {
       if (h) files[rel(f)] = h;
     }
     if (Object.keys(files).length) state[route] = files;
+  }
+  // The CPE screen notes, pinned the same way: each to the one component it
+  // was written against, under `cpe:<file>`. A CPE screen is not a route, so
+  // the route table cannot find it.
+  for (const noteKey of Object.keys(CPE_NOTES)) {
+    // `CpeSecShieldPage.jsx#CpeSecShieldIpPage` pins to the file.
+    const file = noteKey.split('#')[0];
+    const abs = path.join(FE, 'components', 'cpe', file);
+    const h = await hash(abs);
+    if (!h) continue;
+    const key = `cpe:${noteKey}`;
+    primaryOf.set(key, rel(abs));
+    state[key] = { [rel(abs)]: h };
   }
   return state;
 }

@@ -195,6 +195,29 @@ export function flatten(nav: NavSection[]): {
 // Run directly for a quick look: node --experimental-strip-types scripts/extract-nav.ts
 // pathToFileURL, not string concat: this repo's path contains a space, which the
 // URL form percent-encodes, so a raw `file://${argv[1]}` comparison never matches.
+/**
+ * Route -> the path a reader clicks to reach it, as the sidebar nests it.
+ *
+ * "Administration \u203a Users & Organizations \u203a Organizations", not
+ * "Administration \u203a Organizations". The guides used to write these out by
+ * hand, and the one that was wrong sent a tester looking for an Organizations
+ * entry directly under Administration, where there is only the disclosure that
+ * holds it. Read from `NAV` so it cannot drift from the menu again.
+ */
+export async function navPaths(): Promise<Map<string, string>> {
+  const out = new Map<string, string>();
+  for (const s of await readNav()) {
+    for (const item of s.items) {
+      const head = [s.section, item.label].filter(Boolean) as string[];
+      if (item.to) out.set(item.to, head.join(' \u203a '));
+      for (const kid of item.children ?? []) {
+        if (kid.to) out.set(kid.to, [...head, kid.label].join(' \u203a '));
+      }
+    }
+  }
+  return out;
+}
+
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const nav = await readNav();
   const flat = flatten(nav);

@@ -31,6 +31,16 @@ export interface FormField {
   placeholder?: string;
   /** What a select's blank option says, e.g. "Shared (all organizations)". */
   blank?: string;
+  /**
+   * Checkboxes that share one row label, each with its own caption and hint.
+   *
+   * The organization form's "Registration" row holds two: "Registration
+   * enabled" and "Require serial admission". Read as one field they collapsed
+   * into a row label with somebody else's help text attached — the KB told a
+   * reader that a field called **Registration** meant "only devices with a
+   * pre-approved serial number may register", which is the OTHER checkbox.
+   */
+  checks?: Array<{ label: string; hint?: string }>;
   readOnly?: boolean;
 }
 
@@ -57,6 +67,12 @@ export function quotedStrings(s: string): string[] {
     if (c !== "'" && c !== '"') continue;
     let text = '';
     for (i++; i < s.length && s[i] !== c; i++) {
+      // `\u2019` is one character, not a `u` and four digits.
+      if (s[i] === '\\' && s[i + 1] === 'u' && /^[0-9a-fA-F]{4}$/.test(s.slice(i + 2, i + 6))) {
+        text += String.fromCharCode(parseInt(s.slice(i + 2, i + 6), 16));
+        i += 5;
+        continue;
+      }
       if (s[i] === '\\') { i++; text += s[i] ?? ''; continue; }
       text += s[i];
     }
@@ -146,6 +162,18 @@ export function readFormFields(src: string, pickers: string[] = []): FormField[]
       if (ph) field.placeholder = clean(ph);
       const blank = /\{\s*value:\s*''\s*,\s*label:\s*'([^']+)'/.exec(block)?.[1];
       if (blank) field.blank = clean(blank);
+
+      // Each checkbox in the row, with the hint that sits under IT rather than
+      // the first one found anywhere in the block.
+      const checks: Array<{ label: string; hint?: string }> = [];
+      const marks = [...block.matchAll(/<label className="check__t"[^>]*>([^<]+)<\/label>/g)];
+      for (const [i, cm] of marks.entries()) {
+        const until = i + 1 < marks.length ? marks[i + 1].index : block.length;
+        const own = block.slice(cm.index, until);
+        const hint = /className="hint">\s*([^<]+?)\s*</.exec(own)?.[1];
+        checks.push({ label: clean(cm[1]), ...(hint ? { hint: clean(hint) } : {}) });
+      }
+      if (checks.length) field.checks = checks;
       if (/\breadOnly\b/.test(block)) field.readOnly = true;
     }
     fields.push(field);

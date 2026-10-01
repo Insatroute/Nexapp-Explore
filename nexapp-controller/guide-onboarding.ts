@@ -19,21 +19,27 @@ import { readFormFields } from './read-form-fields.ts';
 import { readVpnFacts } from './extract-vpn.ts';
 import { readTemplateFacts } from './extract-templates.ts';
 import { readRegistrationFacts } from './extract-registration.ts';
+import { navPaths } from './extract-nav.ts';
 import { cell } from './mdx.ts';
 
 export async function onboardingGuide(): Promise<string | undefined> {
-  const [orgSrc, vpn, tpl, reg] = await Promise.all([
+  const [orgSrc, vpn, tpl, reg, nav] = await Promise.all([
     readFile(path.join(FE, 'pages', 'OrgForm.jsx'), 'utf8').catch(() => ''),
     readVpnFacts(),
     readTemplateFacts(),
     readRegistrationFacts(),
+    navPaths(),
   ]);
   if (!orgSrc || !vpn || !tpl || !reg) return undefined;
+
+  /** Where a route sits in the sidebar, read from NAV rather than written out. */
+  const where = (to: string, fallback: string) => nav.get(to) ?? fallback;
 
   const orgFields = readFormFields(orgSrc);
   const orgReq = orgFields.filter((f) => f.required).map((f) => f.label);
   const secretField = orgFields.find((f) => /secret/i.test(f.label));
   const regField = orgFields.find((f) => /registration/i.test(f.label));
+  const regChecks = regField?.checks ?? [];
   const vpnReq = vpn.fields.filter((f) => f.required && !f.requiredSometimes).map((f) => f.label);
   const vpnPurpose = tpl.purposes.find((p) => p.key === 'vpn');
   const L: string[] = [];
@@ -74,11 +80,18 @@ export async function onboardingGuide(): Promise<string | undefined> {
     '',
     '### Create the organization',
     '',
-    `**Administration › Organizations › Add organization.**${orgReq.length ? ` Only ${orgReq.map((r) => `**${cell(r)}**`).join(' and ')} ${orgReq.length === 1 ? 'is' : 'are'} required.` : ''}`,
+    `**${cell(where('/organizations', 'Administration › Organizations'))} › Add organization.**${orgReq.length ? ` Only ${orgReq.map((r) => `**${cell(r)}**`).join(' and ')} ${orgReq.length === 1 ? 'is' : 'are'} required.` : ''}`,
     '',
-    regField?.hints.length
-      ? `Two fields on this form decide whether devices can join it at all. **${cell(regField.label)}** — ${cell(regField.hints[0].text)}`
+    // Each checkbox with the hint that belongs to IT. The two under
+    // "Registration" are separate settings, and pairing the row label with the
+    // second one's hint told readers a field called Registration meant
+    // "pre-approved serial number only".
+    regChecks.length
+      ? `Under **${cell(regField?.label ?? 'Registration')}**, ${regChecks.length === 1 ? 'one setting decides' : `${['', 'one', 'two', 'three', 'four'][regChecks.length] ?? String(regChecks.length)} settings decide`} whether devices can join this organization at all:`
       : '',
+    '',
+    ...regChecks.map((c) => `- **${cell(c.label)}** — ${cell(c.hint ?? '')}`),
+    '',
     secretField?.hints.length
       ? `**${cell(secretField.label)}** — ${cell(secretField.hints[0].text)} Note it down; you will put it on the router in step 4.`
       : '',
@@ -138,7 +151,7 @@ export async function onboardingGuide(): Promise<string | undefined> {
     '',
     '### Get the organization’s shared secret',
     '',
-    '**Administration › Organizations**, open the one the device belongs to. The secret is on that form.',
+    `**${cell(where('/organizations', 'Administration › Organizations'))}**, open the one the device belongs to. The secret is on that form.`,
     '',
     'While you are there, check that registration is enabled for it — a device with the right secret still cannot join an organization that has it switched off.',
     '',

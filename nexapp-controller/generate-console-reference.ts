@@ -27,6 +27,22 @@ import { readNav, navComments, type NavSection, type NavLeaf } from './extract-n
 import { readRouteTable, type RouteRec, type RouteTable } from './extract-routes.ts';
 import { factsForFile, type PageFacts } from './extract-page-facts.ts';
 import { readCpeMenu } from './extract-cpe.ts';
+import { CPE_NOTES } from './cpe-field-notes.ts';
+import {
+  readCpeApplyFacts,
+  readCpePageDetail,
+  readCpeSubPages,
+  readSlaHealthFacts,
+} from './extract-cpe-page.ts';
+import {
+  cpeOverviewGuide,
+  cpePageGuide,
+  cpeSubPagesGuide,
+  screenshotSection,
+  shotsFor,
+    notesKeyFor,
+  stagesUci,
+} from './guide-cpe.ts';
 import { statusTabGuide } from './guide-status-tab.ts';
 import { trafficGuide } from './guide-traffic.ts';
 import { tabsGuide } from './guide-tabs.ts';
@@ -42,7 +58,7 @@ import { templatesGuide } from './guide-templates.ts';
 import { devicesGuide } from './guide-devices.ts';
 import { deviceDetailGuide } from './guide-device-detail.ts';
 import { CURATED, COMMON_NOTES } from './console-descriptions.ts';
-import { OUT, KB, URL_BASE, requireController } from './config.ts';
+import { APP_ROOT, KB, OUT, URL_BASE, requireController } from './config.ts';
 import { unescapedMdx } from './mdx.ts';
 
 const slug = (s: string) =>
@@ -1030,9 +1046,17 @@ async function emitDeviceDetail(table: RouteTable): Promise<number> {
  * The CPE tab's own navigation — the largest surface in the console and the only
  * one the sidebar never reaches, because it sits two levels down: Devices → a
  * device → the CPE tab.
+ *
+ * The shape of what is emitted is the point: a folder per section and a page per
+ * screen, in the order `CPE_MENU` lists them, so the handbook's sidebar is the
+ * router's own sidebar. Seven pages each holding its section's screens as
+ * headings read fine as a catalogue but did not line up with the thing being
+ * documented — an operator looking at *Policy Engine › BGP* in the console had
+ * to find a heading part-way down a page here.
  */
 async function emitCpe(): Promise<number> {
   const menu = await readCpeMenu();
+  const apply = await readCpeApplyFacts();
   const all = menu.flatMap((s) => s.pages);
   const withCalls = all.filter((p) => p.calls.length);
   const methods = withCalls.reduce((n, p) => n + p.calls.length, 0);
@@ -1042,10 +1066,14 @@ async function emitCpe(): Promise<number> {
   const dynamic = all.reduce((n, p) => n + p.dynamicCalls, 0);
 
   const dir = path.join(OUT, 'network', 'cpe');
+  // Rebuilt from scratch, not written over: earlier runs put each section in a
+  // flat `<section>.mdx`, and a folder and a flat page of the same name are two
+  // routes for one thing. Removing the tree is also what keeps a section
+  // deleted upstream from lingering here.
+  await rm(dir, { recursive: true, force: true });
   await mkdir(dir, { recursive: true });
 
-  // An earlier run emitted this as a single flat page; a folder and a flat page
-  // of the same name are two routes for one thing.
+  // An earlier run emitted the whole tab as a single flat page.
   await rm(path.join(OUT, 'network', 'cpe-pages.mdx'), { force: true });
 
   // ---- index
@@ -1059,9 +1087,19 @@ async function emitCpe(): Promise<number> {
     'The CPE tab is the router\u2019s own web interface rebuilt inside the controller. Everything else in',
     'this handbook describes CONTROLLER state; these pages talk to the device itself, over RPCD.',
     '',
-    'Each entry mirrors a page the classic device form already ships and names the `(tab, subtab)` pair',
+    'The sidebar under this page is the CPE tab\u2019s own sidebar: the same sections, holding the same',
+    'screens, in the same order. What you see on the left in the console is what you see on the left',
+    'here, so a screen can be found by the path you already know rather than by searching for it.',
+    '',
+    'Each screen mirrors a page the classic device form already ships and names the `(tab, subtab)` pair',
     'that page switches on \u2014 which is what lets an entry not yet rebuilt in React open the real,',
     'working classic page instead of being a dead menu row.',
+    '',
+    '<Callout type="warn">**Policy Engine means two different things.** The one in the controller\u2019s own',
+    'sidebar is a FLEET tool \u2014 a policy there can be scoped fleet-wide, to an organization, or to one',
+    'device, so a single edit reaches every router at once. The one in *this* tree is this one router,',
+    'edited directly. The protocol names are identical in both, so check which sidebar you are in before',
+    'following a procedure.</Callout>',
     '',
     `<Callout type="info">${all.length - all.filter((p) => !p.built).length} of ${all.length} pages are rebuilt in React. ${withCalls.length} of them name the RPCD methods they call, ${methods} in total; the remaining ${all.length - withCalls.length} reach the router another way \u2014 \`CpeSlaSettingsPage\` says so itself: \u201cThis page is NOT a straight RPCD proxy\u201d.${dynamic ? (dynamic === 1 ? ' One further call site picks its method at runtime, so it cannot be named here.' : ` A further ${dynamic} call sites pick their method at runtime, so they cannot be named here.`) : ''}</Callout>`,
     '',
@@ -1069,40 +1107,157 @@ async function emitCpe(): Promise<number> {
   for (const sec of menu) {
     const n = sec.pages.reduce((a, p) => a + p.calls.length, 0);
     idx.push(
-      `- [${sec.label}](${URL_BASE}/network/cpe/${slug(sec.label)}) \u2014 ${sec.pages.length} pages` +
-        (n ? `, ${n} RPCD methods` : ''),
+      `- [${sec.label}](${URL_BASE}/network/cpe/${slug(sec.label)}) \u2014 ${sec.pages.length} screen${sec.pages.length === 1 ? '' : 's'}` +
+        (n ? `, ${n} RPCD method${n === 1 ? '' : 's'}` : ''),
     );
   }
-  idx.push('', '---', '', '<small>Read from: the `CPE_MENU` literal in `components/cpe/cpeMenu.js`, and the RPCD method names each page component calls.</small>', '');
+  idx.push('', ...cpeOverviewGuide(apply));
+  idx.push('', '---', '', '<small>Read from: the `CPE_MENU` literal in `components/cpe/cpeMenu.js`, the RPCD method names each page component calls, and `components/cpe/CpePendingBar.jsx`.</small>', '');
   await writeFile(path.join(dir, 'index.mdx'), idx.join('\n'));
 
-  // ---- one page per section
-  const order: string[] = ['index'];
+  // ---- a folder per section, a page per screen
+  const order: string[] = [];
   for (const sec of menu) {
+    const secSlug = slug(sec.label);
+    const secDir = path.join(dir, secSlug);
+    await mkdir(secDir, { recursive: true });
     const n = sec.pages.reduce((a, p) => a + p.calls.length, 0);
-    const L = [
-      frontmatter(sec.label, `CPE \u203a ${sec.label}`),
+
+    // Slugs are made unique within the section rather than globally: two
+    // sections may legitimately hold a screen of the same name, and they are
+    // different pages in different folders.
+    const taken = new Set<string>(['index', 'meta']);
+    const slugs = sec.pages.map((pg) => {
+      let s = slug(pg.label) || 'page';
+      for (let i = 2; taken.has(s); i++) s = `${slug(pg.label)}-${i}`;
+      taken.add(s);
+      return s;
+    });
+
+    // The section's own page: the list of its screens, in the console's order.
+    const S = [
+      frontmatter(sec.label, `CPE \u203a ${sec.label} \u2014 ${sec.pages.length} screen${sec.pages.length === 1 ? '' : 's'} of the router\u2019s own UI.`),
       '<Cards>',
-      `  <Card title="Pages" description="${sec.pages.length}" />`,
+      `  <Card title="Where it is" description="Devices \u203a a device \u203a CPE \u203a ${sec.label}" />`,
+      `  <Card title="Screens" description="${sec.pages.length}" />`,
       `  <Card title="RPCD methods" description="${n}" />`,
       '</Cards>',
       '',
     ];
-    let group: string | undefined;
-    for (const pg of sec.pages) {
-      if (pg.group && pg.group !== group) { L.push(`## ${esc(pg.group)}`, ''); group = pg.group; }
-      L.push(`### ${esc(pg.label)}`, '');
+    let listedGroup: string | undefined;
+    S.push('<Cards>');
+    for (const [i, pg] of sec.pages.entries()) {
+      if (pg.group && pg.group !== listedGroup) {
+        S.push('</Cards>', '', `## ${esc(pg.group)}`, '', '<Cards>');
+        listedGroup = pg.group;
+      }
+      const blurb = pg.purpose ?? (pg.calls.length
+        ? `${pg.calls.length} RPCD method${pg.calls.length === 1 ? '' : 's'} on the router.`
+        : 'Reaches the router without naming RPCD methods in its own source.');
+      S.push(
+        `  <Card title=${JSON.stringify(pg.label)} href="${URL_BASE}/network/cpe/${secSlug}/${slugs[i]}" description=${JSON.stringify(blurb)} />`,
+      );
+    }
+    S.push('</Cards>', '', '---', '', '<small>Read from: the `CPE_MENU` literal in `components/cpe/cpeMenu.js`.</small>', '');
+    await writeFile(path.join(secDir, 'index.mdx'), S.join('\n'));
+
+    // One page per screen.
+    for (const [i, pg] of sec.pages.entries()) {
+      const where = `Devices \u203a a device \u203a CPE \u203a ${sec.label}${pg.group ? ` \u203a ${pg.group}` : ''} \u203a ${pg.label}`;
+      const L = [
+        frontmatter(pg.label, pg.purpose ?? `CPE \u203a ${sec.label} \u203a ${pg.label}`),
+        '<Cards>',
+        `  <Card title="Where it is" description=${JSON.stringify(where)} />`,
+      ];
+      // The console's own heading for the screen, when the menu calls it
+      // something shorter \u2014 the menu says "Health Dashboard", the page itself
+      // says "SLA Health Dashboard", and a reader matching one to the other
+      // needs to be told they are the same screen.
+      if (pg.heading && pg.heading !== pg.label) {
+        L.push(`  <Card title="On screen" description=${JSON.stringify(pg.heading)} />`);
+      }
+      L.push(
+        `  <Card title="RPCD methods" description="${pg.calls.length}${pg.dynamicCalls ? ` (+${pg.dynamicCalls} chosen at runtime)` : ''}" />`,
+        '</Cards>',
+        '',
+      );
+
+      const subs = pg.component ? await readCpeSubPages(pg.component, pg.exportName) : [];
+
+      // The purpose is the page's `description`, which the theme already prints
+      // under the title — printing it again in the body said everything twice.
+      //
+      // The second sentence is only true of a screen that HAS sub-tabs. Event
+      // Log Settings is one card and no tabs, and was being told its missing
+      // purpose would be found in sub-tabs that are not there.
+      if (!pg.purpose) {
+        L.push(
+          subs.length
+            ? '<Callout type="warn">This screen does not describe itself in its own source, so there is no one-line purpose to quote. It is divided into sub-tabs, and those describe themselves — they are listed below.</Callout>'
+            : '<Callout type="warn">This screen does not describe itself in its own source, so there is no one-line purpose to quote. What it holds is below.</Callout>',
+          '',
+        );
+      }
+
+      if (!pg.built) {
+        L.push(
+          '<Callout type="warn">Not rebuilt in React yet. Opening it hands off to the router\u2019s own classic page, which is a working page rather than a dead menu row.</Callout>',
+          '',
+        );
+      }
+
+      const detail = pg.component ? await readCpePageDetail(pg.component, pg.exportName) : undefined;
+      // One screen computes a verdict rather than listing what the router
+      // returned, and needs its thresholds spelt out. `readSlaHealthFacts`
+      // returns undefined for every other component, so this stays general.
+      const sla = pg.component ? await readSlaHealthFacts(pg.component) : undefined;
+      // Screenshots: the slot is generated, the picture is not. Whichever
+      // files exist under public/img/cpe/<section>/<screen>/ are shown beside
+      // the step they illustrate; the rest are listed as a capture list at the
+      // end, so the gap is actionable instead of silent. See
+      // public/img/cpe/README.md.
+      const shotDir = `${secSlug}/${slugs[i]}`;
+      const have = new Set(
+        await readdir(path.join(APP_ROOT, 'public', 'img', 'cpe', shotDir)).catch(() => []),
+      );
+      const shots = detail ? shotsFor(detail, pg.label, stagesUci(detail, apply)) : [];
+      L.push(...cpePageGuide(pg, detail, apply, sla, { dir: shotDir, have, shots }));
+
+      // A screen whose tab strip dispatches to other components is really
+      // several screens; each is read and written up separately. Empty for
+      // every ordinary screen, so this costs them nothing.
+      // Already read above, before the no-purpose callout, which has to know
+      // whether this screen has sub-tabs at all.
+      // Whether a save here stages UCI. Computed rather than imported: the same
+      // test lives inside cpePageGuide, and guide-cpe.ts is shared with another
+      // workstream where this helper has already moved once.
+      // The console's own rule (STAGING_SERVICES), over the screen and its
+      // tabs — the old every-write-stages test told DDoS's reader every save
+      // was staged while the same page said ns.threatshield commits on save.
+      const staged = stagesUci(detail, apply) || subs.some((sp) => stagesUci(sp.detail, apply));
+      // A shell whose tabs come from inline sections has no contents of its
+      // own, so cpePageGuide emits no "What is on this screen" and the page
+      // opens on troubleshooting — L2TP and NAT read as though the screen had
+      // nothing on it. The tab labels are known here, so say them.
+      if (subs.length && !L.some((line) => line === '## What is on this screen')) {
+        const at = L.indexOf('## When it does not work');
+        const intro = [
+          '## What is on this screen',
+          '',
+          `It is divided into ${subs.length} sub-tabs, which the CPE menu does not list: ${subs
+            .map((sp) => `**${cell(sp.label)}**`)
+            .join(' \u00b7 ')}. Each is below.`,
+          '',
+        ];
+        L.splice(at < 0 ? L.length : at, 0, ...intro);
+      }
+
+      L.push(...cpeSubPagesGuide(subs, staged, notesKeyFor(pg) ? CPE_NOTES[notesKeyFor(pg)!] : undefined));
+
+      L.push('## How it reaches the router', '');
       if (pg.admin?.tab) {
         const sub = pg.admin.subtab ? `, subtab \`${pg.admin.subtab}\`` : '';
         L.push(`Mirrors the classic device form\u2019s \`${pg.admin.tab}\` tab${sub}.`, '');
-      }
-      if (pg.dynamicCalls) {
-        L.push(
-          pg.dynamicCalls === 1
-            ? 'One further call site on this page picks its method at runtime.'
-            : `${pg.dynamicCalls} further call sites on this page pick their method at runtime.`,
-          '',
-        );
       }
       if (pg.calls.length) {
         L.push(
@@ -1114,10 +1269,37 @@ async function emitCpe(): Promise<number> {
       } else {
         L.push('Reaches the router without naming RPCD methods in its own source, so none are listed here.', '');
       }
+      if (pg.dynamicCalls) {
+        L.push(
+          pg.dynamicCalls === 1
+            ? 'One further call site on this screen picks its method at runtime, so it cannot be named here.'
+            : `${pg.dynamicCalls} further call sites on this screen pick their method at runtime, so they cannot be named here.`,
+          '',
+        );
+      }
+
+      // Whatever was not captured, as a list to capture from.
+      if (detail) L.push(...screenshotSection(shots, shotDir, have));
+
+      L.push(
+        '---',
+        '',
+        `<small>Read from: \`components/cpe/cpeMenu.js\`${pg.component ? ` and \`components/cpe/${pg.component}\`` : ''}${notesKeyFor(pg) && CPE_NOTES[notesKeyFor(pg)!] ? '; the protocol notes, examples and troubleshooting from `nexapp-controller/cpe-field-notes.ts`, pinned to that component' : ''}.</small>`,
+        '',
+      );
+      await writeFile(path.join(secDir, `${slugs[i]}.mdx`), L.join('\n'));
     }
-    L.push('---', '', '<small>Read from: `components/cpe/cpeMenu.js` and each page component.</small>', '');
-    await writeFile(path.join(dir, `${slug(sec.label)}.mdx`), L.join('\n'));
-    order.push(slug(sec.label));
+
+    // Explicit order, not alphabetical: this list IS the console's menu order,
+    // which is the whole reason the tree is shaped this way.
+    // `index` is deliberately NOT in `pages`: Fumadocs already makes a folder's
+    // index.mdx the folder's own link, so listing it added a child repeating
+    // the folder's name — "Performance SLA" nested inside "Performance SLA".
+    await writeFile(
+      path.join(secDir, 'meta.json'),
+      JSON.stringify({ title: sec.label, pages: slugs }, null, 2),
+    );
+    order.push(secSlug);
   }
   await writeFile(path.join(dir, 'meta.json'), JSON.stringify({ title: 'CPE', pages: order }, null, 2));
 
@@ -1133,7 +1315,8 @@ async function emitCpe(): Promise<number> {
     }
     await writeFile(metaPath, JSON.stringify(meta, null, 2));
   }
-  return 1 + menu.length;
+  // The tab's index, a page per section, and a page per screen.
+  return 1 + menu.length + all.length;
 }
 
 /** Prose authored in the controller repo, if that directory exists yet. */

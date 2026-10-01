@@ -788,5 +788,53 @@
     "frontend/src/features/toast/useToast.js": "da8b7cad7911dcf1",
     "frontend/src/hooks/useCurrentUser.js": "07ae92f70002218d",
     "frontend/src/pages/MaintenanceWindows.jsx": "2d26695bd69d79b4"
+  },
+  "cpe:CpeBgpPage.jsx": {
+    "frontend/src/components/cpe/CpeBgpPage.jsx": "a31661db08693bbb"
+  },
+  "cpe:CpeFwZonesPage.jsx": {
+    "frontend/src/components/cpe/CpeFwZonesPage.jsx": "04be6b12afc9afc7"
+  },
+  "cpe:CpeNetInterfacesPage.jsx": {
+    "frontend/src/components/cpe/CpeNetInterfacesPage.jsx": "8663a1ca04315426"
+  },
+  "cpe:CpeNetRoutesPage.jsx": {
+    "frontend/src/components/cpe/CpeNetRoutesPage.jsx": "2cd1b4a072f59a42"
+  },
+  "cpe:CpeNetMwanPage.jsx": {
+    "frontend/src/components/cpe/CpeNetMwanPage.jsx": "510b75565358bb5d"
+  },
+  "cpe:CpeNetDdnsPage.jsx": {
+    "frontend/src/components/cpe/CpeNetDdnsPage.jsx": "f2e6da7f3ce270c0"
+  },
+  "cpe:CpeSecShieldPage.jsx#CpeSecShieldIpPage": {
+    "frontend/src/components/cpe/CpeSecShieldPage.jsx": "17f485aafc3cbb4c"
+  },
+  "cpe:CpeSecShieldPage.jsx#CpeSecDdosPage": {
+    "frontend/src/components/cpe/CpeSecShieldPage.jsx": "17f485aafc3cbb4c"
+  },
+  "cpe:CpeSecIpsPage.jsx": {
+    "frontend/src/components/cpe/CpeSecIpsPage.jsx": "43909b2cb15756e2"
+  },
+  "cpe:CpeSecAntiSpamPage.jsx": {
+    "frontend/src/components/cpe/CpeSecAntiSpamPage.jsx": "1783b3e1678eb109"
+  },
+  "cpe:CpeVpnOvpnRwPage.jsx": {
+    "frontend/src/components/cpe/CpeVpnOvpnRwPage.jsx": "922e8a3e46c23290"
+  },
+  "cpe:CpeVpnOvpnTunnelPage.jsx": {
+    "frontend/src/components/cpe/CpeVpnOvpnTunnelPage.jsx": "4f39eb26d2cb3f33"
+  },
+  "cpe:CpeVpnTunnelsPage.jsx#CpeVpnWgTunnelPage": {
+    "frontend/src/components/cpe/CpeVpnTunnelsPage.jsx": "974765390d9d7475"
+  },
+  "cpe:CpeVpnGoaheadPage.jsx#CpeVpnGrePage": {
+    "frontend/src/components/cpe/CpeVpnGoaheadPage.jsx": "61a00c546459d7a6"
+  },
+  "cpe:CpeVpnOobmPage.jsx": {
+    "frontend/src/components/cpe/CpeVpnOobmPage.jsx": "9f5b4e662e42038d"
+  },
+  "cpe:CpeVpnGoaheadPage.jsx#CpeVpnVxlanPage": {
+    "frontend/src/components/cpe/CpeVpnGoaheadPage.jsx": "61a00c546459d7a6"
   }
 }

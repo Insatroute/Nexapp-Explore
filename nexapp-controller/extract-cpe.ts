@@ -18,6 +18,7 @@ import { readFile } from 'node:fs/promises';
 import * as path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { FE } from './config.ts';
+import { exportScope } from './extract-cpe-page.ts';
 
 export interface CpePage {
   key: string;
@@ -54,6 +55,28 @@ export interface CpePage {
   built: boolean;
   /** Set when the page sits in a sub-group inside its section. */
   group?: string;
+  /**
+   * The heading the page puts at the top of itself, which is not always the
+   * label the menu uses for it — the menu says "Health Dashboard", the page
+   * says "SLA Health Dashboard".
+   */
+  heading?: string;
+  /**
+   * The page's own one-line description of itself, under that heading.
+   *
+   * Written for the operator by whoever built the page, so it is a better
+   * statement of what the page is FOR than anything this generator could infer
+   * from the RPCD methods it calls.
+   */
+  purpose?: string;
+  /** The component file that renders it, for the page's own provenance line. */
+  component?: string;
+  /**
+   * The named export the menu loads from that file, when it is not the
+   * default — `m.CpeSecShieldIpPage`. Three screens share one file, and only
+   * this says which part of it is this screen.
+   */
+  exportName?: string;
 }
 export interface CpeSection {
   key: string;
@@ -196,16 +219,39 @@ const literalsIn = (s: string): string[] =>
 const VERB_LED =
   /'((?:add|edit|delete|remove|create|get|set|list|enable|disable|start|stop|restart|reload|apply|clear|flush|import|export|upload|download|test|run|scan|update|reset|renew|revoke|generate|check|save)-[a-z0-9-]+)'/g;
 
+/**
+ * The `<PageHead>` a CPE page opens with: its heading and its own description.
+ *
+ * Bounded to the element, because `title` and `desc` are also props of the
+ * `Card`s further down the page — reading the file for them collects a card's
+ * blurb and prints it as if it described the whole page. Only string literals
+ * are taken: a `title={…}` is computed from the record being edited and has
+ * nothing stable to write down.
+ */
+function headOf(src: string): { heading?: string; purpose?: string } {
+  const at = src.indexOf('<PageHead');
+  if (at < 0) return {};
+  const end = src.indexOf('/>', at);
+  const head = src.slice(at, end < 0 ? at + 800 : end);
+  return {
+    heading: /\btitle="([^"]+)"/.exec(head)?.[1],
+    purpose: /\bdesc="([^"]+)"/.exec(head)?.[1],
+  };
+}
+
 async function callsIn(
   dir: string,
   componentFile: string,
-): Promise<{ calls: string[]; dynamicCalls: number }> {
+  exportName?: string,
+): Promise<{ calls: string[]; dynamicCalls: number; heading?: string; purpose?: string }> {
   let src: string;
   try {
     src = await readFile(path.join(dir, componentFile), 'utf8');
   } catch {
     return { calls: [], dynamicCalls: 0 };
   }
+  // Only this screen's part of a file that holds several.
+  if (exportName) src = exportScope(src, exportName) || src;
 
   const found = new Set<string>();
   const add = (lit: string) => {
@@ -268,7 +314,7 @@ async function callsIn(
   // 4. the floor
   for (const m of src.matchAll(VERB_LED)) found.add(m[1]);
 
-  return { calls: [...found].sort(), dynamicCalls: dynamic };
+  return { calls: [...found].sort(), dynamicCalls: dynamic, ...headOf(src) };
 }
 
 export async function readCpeMenu(): Promise<CpeSection[]> {
@@ -278,8 +324,14 @@ export async function readCpeMenu(): Promise<CpeSection[]> {
 
   // component identifier -> the file it is lazily imported from
   const byComponent = new Map<string, string>();
+  const byExport = new Map<string, string>();
   for (const m of src.matchAll(/const\s+([A-Za-z0-9_]+)\s*=\s*lazy\(\s*\(\)\s*=>\s*import\(\s*'\.\/([^']+)'/g)) {
     byComponent.set(m[1], m[2]);
+    // `.then((m) => ({ default: m.CpeSecShieldIpPage }))` — a named export.
+    const named = /^\s*\)\s*\.then\(\s*\(?\s*\w+\s*\)?\s*=>\s*\(\s*\{\s*default:\s*\w+\.([A-Za-z0-9_]+)/.exec(
+      src.slice(m.index + m[0].length, m.index + m[0].length + 200),
+    )?.[1];
+    if (named) byExport.set(m[1], named);
   }
 
   // `component: CpeBgpPage` is a React component, not data. Only its PRESENCE
@@ -307,16 +359,22 @@ export async function readCpeMenu(): Promise<CpeSection[]> {
     for (const item of sec.items ?? []) {
       // Two shapes, per the file's own note: a page, or a sub-group of pages.
       const make = async (e: any, group?: string): Promise<CpePage> => {
-        const found = e.componentName
-          ? await callsIn(dir, byComponent.get(e.componentName) ?? '')
-          : { calls: [], dynamicCalls: 0 };
+        const file = e.componentName ? byComponent.get(e.componentName) : undefined;
+        const exportName = e.componentName ? byExport.get(e.componentName) : undefined;
+        const found = file
+          ? await callsIn(dir, file, exportName)
+          : { calls: [], dynamicCalls: 0, heading: undefined, purpose: undefined };
         return {
+          ...(file ? { component: file } : {}),
+          ...(exportName ? { exportName } : {}),
           key: e.key,
           label: e.label,
           admin: e.admin,
           built: !!e.built,
           calls: found.calls,
           dynamicCalls: found.dynamicCalls,
+          ...(found.heading ? { heading: found.heading } : {}),
+          ...(found.purpose ? { purpose: found.purpose } : {}),
           ...(group ? { group } : {}),
         };
       };
